@@ -250,4 +250,6 @@ export const tokens: readonly Token[] = [
   { naam: 'pagina-micro-ruimte', pad: 'pagina.micro-ruimte', laag: 'componenten', waarde: "1.5rem" },
   { naam: 'merk-hoogte', pad: 'merk.hoogte', laag: 'componenten', waarde: "1.75rem" },
   { naam: 'merk-hoogte-breed', pad: 'merk.hoogte-breed', laag: 'componenten', waarde: "2rem" },
+  { naam: 'statement-cap', pad: 'statement.cap', laag: 'componenten', waarde: "8.9cqi" },
+  { naam: 'statement-cap-breed', pad: 'statement.cap-breed', laag: 'componenten', waarde: "7.4cqi" },
 ];

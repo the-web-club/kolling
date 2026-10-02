@@ -100,6 +100,26 @@ Let op: de oorspronkelijke opdracht voor deze pagina zei "geen social-iconen". D
 
 Door de twee extra regels liep 320 bij 568 vier pixels over. De regelafstand binnen een blok gaat daarom onder 44 rem hoogte naar `ruimte.1` en de blokafstand naar `ruimte.5`. Alle acht formaten passen weer, met minimaal 16 px over.
 
+## Copy van het statement
+
+De kop is "Houtwerken & meubels" / "uit Ommen." De intro zei eerst vrijwel hetzelfde als de kop; die herhaalt nu niet meer en voegt toe waar en hoe het gemaakt wordt: "Op maat gemaakt in eigen werkplaats aan de Strangeweg. De website volgt. Een idee bespreken kan nu al."
+
+In de kop staat een ampersand, in de paginatitel en de description staat "en". Een `&` is een typografische keuze die in display werkt; in een zoekresultaat leest "houtwerken en meubels" beter.
+
+De langere kop paste niet meer. De lettergrootte werd begrensd door de viewport, maar het raster stopt bij 90 rem met groeien, dus op brede schermen liep de regel buiten zijn kolom en brak hij af naar drie regels. De grens is nu de kolombreedte zelf: `.statement` is een container en de kop gebruikt `min(tekstmaat, var(--statement-cap))` in `cqi`. Daarmee staat de kop op elk formaat op precies twee regels, met `text-wrap: nowrap` zodat er niets ongewild afbreekt.
+
+De caps staan op 8,9 cqi mobiel en 7,4 cqi vanaf 48 rem. Dat is krapper dan strikt nodig: bij de exacte waarde bleef op 320 px maar 2 px over, en de terugvalfont is iets breder per teken dan Instrument Sans. Nu is de smalste marge 17 px.
+
+| Formaat     | Kop    | Marge naast de kop |
+| ----------- | ------ | ------------------ |
+| 320 × 568   | 26 px  | 17 px              |
+| 390 × 844   | 32 px  | 28 px              |
+| 768 × 1024  | 53 px  | 43 px              |
+| 1440 × 900  | 101 px | 84 px              |
+| 1920 × 1080 | 101 px | 84 px              |
+
+Dat de kop boven 1440 px niet meer groeit is juist: het raster doet dat ook niet.
+
 ## Wat open staat
 
 1. **Woordmerk als SVG.** Het huidige `d-logo.svg` is een export met een ingesloten bitmap van 1065 px breed en een luminantiemasker. `pnpm og` rendert daaruit `woordmerk.png` op 480 px, het OG-beeld en het favicon. Een echte outline-SVG maakt die stap onnodig en is scherper op elk formaat.

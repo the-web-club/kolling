@@ -8,13 +8,13 @@ import { haalInstellingen, isBekend } from '@/lib/content';
 const instellingen = await haalInstellingen();
 const { adres, telefoon } = instellingen;
 
-const titel = 'Kolling, houten maatwerk uit Ommen';
+const titel = 'Kolling, houtwerken en meubels uit Ommen';
 const beschrijving =
-  'Meubels en houtwerk op maat, gemaakt in eigen werkplaats in Ommen. De website volgt; een idee bespreken kan nu al via 06 13 62 22 76.';
+  'Houtwerken en meubels op maat, gemaakt in eigen werkplaats in Ommen. De website volgt; een idee bespreken kan nu al via 06 13 62 22 76.';
 
-const statement = ['Houten maatwerk', 'uit Ommen.'];
+const statement = ['Houtwerken & meubels', 'uit Ommen.'];
 const intro =
-  'Meubels en houtwerk op maat, gemaakt in eigen werkplaats aan de Strangeweg. De website volgt. Een idee bespreken kan nu al.';
+  'Op maat gemaakt in eigen werkplaats aan de Strangeweg. De website volgt. Een idee bespreken kan nu al.';
 
 const heeftEmail = isBekend(instellingen.email);
 
@@ -165,17 +165,23 @@ const microregel = isBekend(instellingen.kvk)
   }
 
   .statement {
+    container-type: inline-size;
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: var(--ruimte-stapel-lg) var(--ruimte-goot);
     align-content: center;
   }
 
+  /* De kop staat op twee regels die niet mogen afbreken. De bovengrens is
+     daarom de kolombreedte (cqi), niet de viewport: voorbij 90rem groeit het
+     raster niet meer mee, een vw-maat wel. */
   h1 {
+    --cap: var(--statement-cap);
     grid-column: 1 / -1;
-    font-size: var(--tekst-display-grootte);
+    font-size: min(var(--tekst-display-grootte), var(--cap));
     line-height: var(--tekst-display-regelhoogte);
     letter-spacing: var(--tekst-display-spatiering);
+    text-wrap: nowrap;
   }
 
   .regel:first-child > span {
@@ -321,7 +327,11 @@ const microregel = isBekend(instellingen.kvk)
       gap: var(--pagina-blok-ruimte-breed) var(--ruimte-goot);
     }
 
-    h1,
+    h1 {
+      --cap: var(--statement-cap-breed);
+      grid-column: 2 / span 10;
+    }
+
     .intro {
       grid-column: 2 / span 8;
     }
@@ -347,7 +357,7 @@ const microregel = isBekend(instellingen.kvk)
     }
 
     h1 {
-      font-size: var(--tekst-display-kort-grootte);
+      font-size: min(var(--tekst-display-kort-grootte), var(--cap));
       line-height: var(--tekst-display-kort-regelhoogte);
       letter-spacing: var(--tekst-display-kort-spatiering);
     }
@@ -371,7 +381,7 @@ const microregel = isBekend(instellingen.kvk)
 
   @media (max-height: 30rem) {
     h1 {
-      font-size: var(--tekst-kop3-grootte);
+      font-size: min(var(--tekst-kop3-grootte), var(--cap));
       line-height: var(--tekst-kop3-regelhoogte);
       letter-spacing: var(--tekst-kop3-spatiering);
     }
