@@ -55,8 +55,11 @@ const HEROBEELD = {
   <section>
     <SectieIntro label="Werk" kop="Uitgelicht werk">
       <p>
-        Hieronder staat werk zoals het uit de werkplaats komt. De beelden zijn nog impressies;
-        eigen projectfoto&rsquo;s volgen.
+        Per stuk gemaakt, dus geen twee projecten zijn gelijk. Bij elk project staat waar het van
+        is en hoe groot het is.
+      </p>
+      <p class="aanduiding">
+        De beelden zijn nog impressies. Eigen projectfoto&rsquo;s volgen.
       </p>
     </SectieIntro>
     <WerkRaster projecten={uitgelicht} />
@@ -66,10 +69,10 @@ const HEROBEELD = {
   </section>
 
   <section>
-    <SectieIntro label="Maatwerk" kop="Wat we maken">
+    <SectieIntro label="Maatwerk" kop="Wat Thomas maakt">
       <p>
-        Vier soorten werk, met per soort een eigen aanpak. Je leest per categorie wat er mogelijk
-        is en hoe een opdracht verloopt.
+        Vier soorten werk, elk met een eigen aanpak. Per categorie lees je wat er mogelijk is, voor
+        wie het meestal is en hoe een opdracht verloopt.
       </p>
     </SectieIntro>
     <div class="diensten">
@@ -113,10 +116,10 @@ const HEROBEELD = {
   </section>
 
   <section class="tintstrook">
-    <SectieIntro label="Edities" kop="Edities in beperkte oplage">
+    <SectieIntro label="Edities" kop="Ook Thomas heeft zo zijn ideeën">
       <p>
-        Naast maatwerk komen er eigen ontwerpen in beperkte oplage. De collectie is nog in
-        ontwikkeling en er is nog niets te koop.
+        Naast opdrachten werkt hij aan eigen ontwerpen, die in een beperkte oplage worden gemaakt.
+        Die collectie is nog in ontwikkeling, dus er is nog niets te koop.
       </p>
       <p>
         <TekstLink href="/edities" variant="intekenend">Wat Edities worden</TekstLink>
@@ -125,8 +128,8 @@ const HEROBEELD = {
   </section>
 
   <CtaStrook
-    kop="Bespreek je idee"
-    tekst="Stuur je idee met maten en foto's van de ruimte. Je hoort binnen twee werkdagen wat er mogelijk is."
+    kop="Wat heb je in gedachten?"
+    tekst="Een maat, een foto van de ruimte, of alleen een idee dat nog niet rond is. Dat is genoeg om te beginnen."
   />
 </Basis>
 
@@ -134,6 +137,11 @@ const HEROBEELD = {
   .verder {
     grid-column: 1 / -1;
     margin-block-start: var(--ruimte-stapel-lg);
+  }
+
+  .aanduiding {
+    font-size: var(--tekst-klein-grootte);
+    color: var(--kleur-voorgrond-subtiel);
   }
 
   .diensten {

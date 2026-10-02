@@ -8,11 +8,11 @@ alwaysApply: false
 
 ## Copy
 
-1. Nederlands, je-vorm, korte zinnen, persoonlijk en concreet. Materiaal, aandacht en de maker dragen het verhaal.
-2. Geen superlatieven, geen uitroeptekens, geen gedachtestreepjes, geen Engelse marketingtermen, geen emoji.
-3. Eén H1 per pagina. Koppen beschrijven de inhoud, niet de vorm.
-4. Geen opvultekst om een woordenaantal te halen. Geen visueel verborgen SEO-tekst.
-5. Een lead-tekst is maximaal twee zinnen.
+De stem, de toon en de redactieregels staan in `80-copy.mdc`. Dat bestand is leidend voor alle publieke tekst; hier gelden alleen de structurele eisen.
+
+1. Nederlands, je-vorm. Eén H1 per pagina en koppen die de inhoud beschrijven, niet de vorm.
+2. Geen opvultekst om een woordenaantal te halen. Geen visueel verborgen SEO-tekst.
+3. Een lead-tekst is maximaal twee zinnen.
 
 ## Contentmodel
 

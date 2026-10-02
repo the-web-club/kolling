@@ -67,6 +67,8 @@ Elke vraag noemt in `paginas[]` op welke routes ze hoort. Zo staat een algemeen 
 
 NAP, telefoon (weergave en E.164), Instagram, CTA-teksten en SEO-fallbacks. Hier staan ook de velden die nog onbekend zijn, met de waarde `[VUL IN]`: `juridischeNaam`, `email`, `kvk` en `geo`.
 
+`beweringen[]` in dit bestand is voor open vragen die niet bij één pagina horen, zoals de reactietermijn op een aanvraag. Ze komen bovenaan in `docs/FEITENCHECK.md` onder "Site-breed".
+
 Die markering doet twee dingen. Op `/privacy` verschijnt een zichtbaar blok dat de tekst nog niet af is, en in de structured data wordt een onbekend veld gewoon weggelaten. Vervang `[VUL IN]` zodra de gegevens er zijn; verder is er geen code die mee moet veranderen.
 
 ## Een project toevoegen

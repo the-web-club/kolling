@@ -36,6 +36,12 @@ De opdracht staat in `docs/STARTPROMPT.md`. Hieronder staat waar deze implementa
 18. Het aangeleverde SVG is een export met een ingesloten bitmap en een luminantiemasker, geen uitgewerkte paden. Het bestand wordt ongewijzigd gebruikt. Een outline-SVG mag het later vervangen; alleen dat bestand hoeft dan te wisselen.
 19. `public/og.png` is uit datzelfde masker gerenderd: de exacte lettervormen in inkt op warm wit, 1200 bij 630. `public/favicon.svg` is een kopie van het logo; het heeft de eigen verhouding en is niet uitgesneden.
 
+## Copy
+
+23. De stem staat in `.cursor/rules/80-copy.mdc`: speels, toegankelijk en verzorgd, met concrete inhoud en controleerbare claims. Dat bestand is leidend voor alle publieke tekst. De copysectie van `20-content-seo.mdc` verwijst ernaar en houdt alleen de structurele eisen over, zodat er één bron voor de toon is.
+24. Geen reactietermijn in de publieke tekst. Eerder stond er op twaalf plekken een belofte van twee werkdagen; die is nergens bevestigd en dus verwijderd. De vraag staat als bewering in `site.json`.
+25. Site-brede beweringen staan in `instellingen/site.json` en komen bovenaan in `docs/FEITENCHECK.md`. Dat is de plek voor open vragen die niet bij één pagina horen, zoals de reactietermijn en hoe Thomas zelf aangeduid wil worden.
+
 ## Nog open
 
 20. Analytics: niets bij lancering, dus ook geen cookiemelding.

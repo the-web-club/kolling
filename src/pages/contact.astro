@@ -15,7 +15,7 @@ const instellingen = await haalInstellingen();
 const verzendingBeschikbaar = Boolean(RESEND_API_KEY && AANVRAAG_ONTVANGER && AANVRAAG_AFZENDER);
 
 const WAT_JE_KRIJGT = [
-  'Binnen twee werkdagen een eerste reactie van Thomas zelf',
+  'Een reactie van Thomas zelf, niet van een verkoopafdeling',
   'Een eerlijk antwoord of je idee binnen je budget past',
   'Een voorstel voor de volgende stap, bezoek of inmeten',
 ];
@@ -26,10 +26,10 @@ const WAT_JE_KRIJGT = [
   beschrijving="Bespreek je idee met Thomas Kolling. Stuur je aanvraag met maten en foto's van de ruimte, of bel de werkplaats in Ommen."
 >
   <section>
-    <SectieIntro label="Contact" kop="Bespreek je idee" niveau={1}>
+    <SectieIntro label="Contact" kop="Wat heb je in gedachten?" niveau={1}>
       <p>
-        Stuur wat je in gedachten hebt, met de maten van de ruimte en een paar foto&rsquo;s. Een
-        tekening is niet nodig.
+        Je idee mag nog een beetje scheef zijn. Stuur wat je voor je ziet, met de maten van de
+        ruimte en een paar foto&rsquo;s erbij. Een tekening hoeft er niet bij.
       </p>
     </SectieIntro>
     <div class="gegevens">

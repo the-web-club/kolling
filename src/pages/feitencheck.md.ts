@@ -1,6 +1,12 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import type { APIRoute } from 'astro';
-import { haalDiensten, haalEdities, haalLocaties, haalProjecten } from '@/lib/content';
+import {
+  haalDiensten,
+  haalEdities,
+  haalInstellingen,
+  haalLocaties,
+  haalProjecten,
+} from '@/lib/content';
 
 const DOELBESTAND = 'docs/FEITENCHECK.md';
 
@@ -37,7 +43,8 @@ function maakMarkdown(blokken: readonly Blok[]): string {
 }
 
 export const GET: APIRoute = async () => {
-  const [projecten, diensten, locaties, edities] = await Promise.all([
+  const [instellingen, projecten, diensten, locaties, edities] = await Promise.all([
+    haalInstellingen(),
     haalProjecten(),
     haalDiensten(),
     haalLocaties(),
@@ -45,6 +52,7 @@ export const GET: APIRoute = async () => {
   ]);
 
   const blokken: Blok[] = [
+    { pagina: 'Site-breed', beweringen: instellingen.beweringen },
     ...projecten.map((item) => ({ pagina: `/werk/${item.id}`, beweringen: item.data.beweringen })),
     ...diensten.map((item) => ({ pagina: `/maatwerk/${item.id}`, beweringen: item.data.beweringen })),
     ...locaties.map((item) => ({

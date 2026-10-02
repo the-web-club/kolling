@@ -16,11 +16,11 @@ const edities = await haalEdities();
   <section>
     <SectieIntro label="Edities" kop="Eigen ontwerpen in beperkte oplage" niveau={1}>
       <p>
-        Naast maatwerk werkt Thomas aan eigen ontwerpen die hij in een beperkte oplage maakt. Niet
-        op aanvraag, maar als vast ontwerp dat een paar keer gemaakt wordt.
+        Bij maatwerk bepaalt de opdracht de vorm. Bij een editie is dat omgedraaid: Thomas bedenkt
+        het ontwerp, maakt het af en maakt het daarna een paar keer.
       </p>
       <p>
-        De collectie is nog in ontwikkeling. Er is nog niets te koop, en er staan nog geen
+        Die collectie is nog in ontwikkeling. Er is dus nog niets te koop, en er staan nog geen
         ontwerpen, oplages, prijzen of data vast.
       </p>
     </SectieIntro>
@@ -30,18 +30,18 @@ const edities = await haalEdities();
     edities.length === 0 ? (
       <section>
         <div class="aankondiging">
-          <h2 class="kop">Wat je kunt verwachten</h2>
+          <h2 class="kop">Wat een editie wordt</h2>
           <dl class="kenmerken">
             <dt>Vast ontwerp</dt>
             <dd>Geen maatwerk, maar een ontwerp dat af is en herhaald wordt gemaakt.</dd>
             <dt>Beperkte oplage</dt>
             <dd>Een vastgelegd aantal exemplaren, genummerd en met vermelding van het materiaal.</dd>
-            <dt>Zelfde werkplaats</dt>
+            <dt>Dezelfde werkplaats</dt>
             <dd>Gemaakt aan de Strangeweg in Ommen, met dezelfde afwerking als het maatwerk.</dd>
           </dl>
           <p class="noot">
-            Wil je bericht krijgen zodra de eerste editie klaar is, laat dat dan weten via het
-            formulier. Kies bij soort aanvraag voor Editie.
+            Wil je het horen zodra de eerste editie er is? Laat het weten via het formulier en kies
+            bij soort aanvraag voor Editie.
           </p>
           <p>
             <TekstLink href="/contact?aanvraag=editie" variant="intekenend">
@@ -64,8 +64,8 @@ const edities = await haalEdities();
   }
 
   <CtaStrook
-    kop="Liever iets op maat"
-    tekst="Maatwerk is er wel. Stuur je idee met de maten van je ruimte en je hoort wat er mogelijk is."
+    kop="Niet willen wachten?"
+    tekst="Maatwerk kan wel gewoon. Stuur de maten van je ruimte en je hoort wat er mogelijk is."
     aanvraag="editie"
   />
 </Basis>

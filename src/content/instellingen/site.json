@@ -21,11 +21,18 @@
     "bezoek": "Bezoek aan de werkplaats gaat op afspraak.",
     "cta": {
       "primair": "Bespreek je idee",
-      "secundair": "Bezoek de werkplaats"
+      "secundair": "Langskomen in Ommen"
     },
     "seo": {
       "titelSuffix": " | Kolling",
-      "beschrijving": "Kolling maakt meubels en houtwerk op maat in de eigen werkplaats in Ommen. Je bespreekt je idee met Thomas en wij werken het samen uit tot een ontwerp."
-    }
+      "beschrijving": "Kolling maakt meubels en houtwerk op maat in de eigen werkplaats in Ommen. Bespreek je idee met Thomas en jullie werken het samen uit tot een ontwerp."
+    },
+    "beweringen": [
+      "Binnen welke termijn reageert Thomas op een aanvraag, zodat de site dat mag beloven",
+      "Krijgt een aanvrager altijd een bevestiging per e-mail terug",
+      "Is dit nummer ook bereikbaar via WhatsApp",
+      "Zijn er vaste tijden waarop bezoek aan de werkplaats kan, of altijd op afspraak",
+      "Hoe wil Thomas zelf worden aangeduid in de teksten: Thomas, Thomas Kolling of Kolling"
+    ]
   }
 ]
