@@ -120,6 +120,55 @@ De caps staan op 8,9 cqi mobiel en 7,4 cqi vanaf 48 rem. Dat is krapper dan stri
 
 Dat de kop boven 1440 px niet meer groeit is juist: het raster doet dat ook niet.
 
+## Audit voor de header met menu
+
+Vooronderzoek voor de navigatie en de zes "Binnenkort"-pagina's. Er is nog niets gebouwd. Hieronder staan de indeling, de routes en het JavaScript-budget, daarna drie vragen die eerst een antwoord nodig hebben.
+
+### Headerindeling per viewport
+
+Eén raster van drie cellen op elke breedte. Alleen de bewoner van de middelste cel wisselt, zodat de koprij nergens van structuur verandert.
+
+| Breedte        | Links     | Midden                            | Rechts    |
+| -------------- | --------- | --------------------------------- | --------- |
+| 1024 en breder | woordmerk | navigatie, zes items, gecentreerd | klok      |
+| 768 tot 1024   | woordmerk | klok, rechts uitgelijnd           | knop Menu |
+| 360 tot 768    | woordmerk | klok, rechts uitgelijnd           | knop Menu |
+| onder 360      | woordmerk | leeg                              | knop Menu |
+
+De volgorde in de HTML is woordmerk, navigatie, klok, knop. Die loopt op elke breedte gelijk met de volgorde op het scherm, dus het toetsenbord hoeft niet terug te springen.
+
+De koprij blijft net zo hoog als nu, `merk.hoogte` op smal en `merk.hoogte-breed` vanaf 48 rem. De knop Menu heeft een aanraakdoel van 44 px nodig en dat is hoger dan het woordmerk. De knop krijgt daarom verticale padding met een even grote negatieve marge: het doel is 44 px, de rij groeit niet mee. Het overschot valt in de rijafstand van `ruimte.rij.md`, waar geen ander element staat.
+
+Onder 1024 px staan de zes items alleen in het menu, niet in de koprij. Twee lijsten met dezelfde zes links dus, beide uit `navigatie[]`; de data staat één keer vast.
+
+### Routestructuur
+
+`src/pages/[sectie].astro` met `getStaticPaths()` over `navigatie[]` levert `/over`, `/voorbeelden`, `/collectie`, `/werk`, `/nieuws` en `/downloads` als statische pagina's. Er komt geen vangroute, dus elk ander pad valt op de 404.
+
+| Pagina      | robots            | JSON-LD | Canonical |
+| ----------- | ----------------- | ------- | --------- |
+| `/`         | index, follow     | ja      | `/`       |
+| zes secties | noindex, follow   | nee     | eigen pad |
+| 404         | noindex, nofollow | nee     | eigen pad |
+
+`robots.txt` verandert niet en er is op deze branch geen sitemap, dus er valt ook niets uit te sluiten. In een preview zet `Seo.astro` alles al op `noindex`.
+
+### JavaScript-budget
+
+Vier posten: de router van Astro, `src/lib/menu.ts`, `src/lib/beweging/paginaovergang.ts` en de klok. De klok en het menu zijn samen een paar honderd bytes; de router is de enige echte post. Ik meet het gecomprimeerde gewicht op de productiebuild en zet de uitkomst hieronder, naast de 487 bytes die de pagina nu nodig heeft. Blijft de router boven het budget, dan vervalt `ClientRouter` en worden de paginaovergangen gewone paginaladingen; de rest van de opdracht werkt dan ongewijzigd.
+
+### Drie vragen
+
+1. **`transition:persist` op `PaginaKop` en de meeschuivende haarlijn gaan niet samen.** Een element met `transition:persist` wordt bij navigatie niet vervangen: Astro houdt het oude element en gooit de nieuwe versie weg. De kop van de vorige pagina blijft dus staan met `aria-current` op het vorige item, en een menu dat open stond blijft open. Mijn voorstel: `transition:persist` alleen op de klok, de lichtachtergrond en de contactrij, en de navigatie gewoon mee laten wisselen. Dan loopt de klok door, herstart de achtergrond niet, klopt `aria-current` en kan `transition:name="menu-indicator"` de haarlijn van het oude naar het nieuwe item schuiven. Akkoord?
+2. **Gewicht 300 bestaat niet in de huidige fonts.** Instrument Sans is geladen als variabele font met bereik 400 tot 700, dus de menu-items in `tekst.kop2` komen met gewicht 300 alsnog op 400 uit. Dat is dezelfde grens als afwijking 2 hierboven. Ik houd 400 aan tot de licentiefonts er zijn, tenzij je wilt dat ik het bereik van de webfont oprek.
+3. **Waar landt dit werk?** De opdracht noemt `feature/coming-soon-menu` met een pull request, de laatste instructie noemt `main`. Er staat geen pull request open en `main` loopt gelijk met `origin/main`, dus beide kan. Mijn voorstel is `main`, omdat de coming-soon pagina daar ook rechtstreeks op is geland.
+
+### Twee opmerkingen, geen vraag
+
+De beeldaanvulling staat niet op `main`: de homepage heeft nu geen diptiek en geen enkel beeld. "Geen beelden op de sectiepagina's" is daarmee vanzelf waar, en ik laat de homepage beeldloos zoals hij is.
+
+Het menu leunt op de Popover API, die zonder JavaScript opent en sluit. Een browser die `popover` niet kent, negeert het attribuut: het menu staat dan als gewone lijst in de pagina in plaats van fullscreen. De links blijven bereikbaar, maar de koprij is op zo'n browser hoger dan één regel. Dat raakt Safari voor 17 en Firefox voor 125.
+
 ## Wat open staat
 
 1. **Woordmerk als SVG.** Het huidige `d-logo.svg` is een export met een ingesloten bitmap van 1065 px breed en een luminantiemasker. `pnpm og` rendert daaruit `woordmerk.png` op 480 px, het OG-beeld en het favicon. Een echte outline-SVG maakt die stap onnodig en is scherper op elk formaat.
