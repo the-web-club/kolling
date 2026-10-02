@@ -1,0 +1,256 @@
+---
+import logo from '@/assets/merk/d-logo.svg?url';
+import Knop from '@/components/Knop.astro';
+import { haalInstellingen } from '@/lib/content';
+
+const instellingen = await haalInstellingen();
+const huidig = Astro.url.pathname;
+
+const navigatie = [
+  { naam: 'Werk', pad: '/werk' },
+  { naam: 'Maatwerk', pad: '/maatwerk' },
+  { naam: 'Edities', pad: '/edities' },
+  { naam: 'Werkplaats', pad: '/werkplaats' },
+  { naam: 'Werkgebied', pad: '/werkgebied' },
+];
+
+function isActief(pad: string): boolean {
+  return huidig === pad || huidig.startsWith(`${pad}/`);
+}
+---
+
+<header class="pagina-kop" transition:persist>
+  <a class="merk" href="/" aria-label={`${instellingen.naam}, naar de homepage`}>
+    <img src={logo} alt={instellingen.naam} width="258" height="121" />
+  </a>
+
+  <button class="schakelaar" type="button" aria-expanded="false" aria-controls="hoofdmenu">
+    Menu
+  </button>
+
+  <nav class="menu" id="hoofdmenu" aria-label="Hoofdmenu">
+    <ul class="lijst">
+      {
+        navigatie.map((item) => (
+          <li>
+            <a
+              class="schakel"
+              href={item.pad}
+              aria-current={isActief(item.pad) ? 'page' : undefined}
+            >
+              {item.naam}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <Knop href="/contact" variant="omlijnd">{instellingen.cta.primair}</Knop>
+  </nav>
+</header>
+
+<style>
+  .pagina-kop {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: var(--navigatie-laag);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ruimte-rij-md);
+    min-block-size: var(--navigatie-hoogte);
+    padding-inline: var(--ruimte-goot);
+    background-color: var(--kleur-achtergrond);
+    border-block-end: var(--k-rand-haarlijn) solid transparent;
+  }
+
+  .merk {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .merk img {
+    display: block;
+    block-size: 1.75rem;
+    inline-size: auto;
+  }
+
+  .schakelaar {
+    min-block-size: 2.75rem;
+    min-inline-size: 2.75rem;
+    font-size: var(--navigatie-grootte);
+    letter-spacing: var(--navigatie-spatiering);
+    text-transform: uppercase;
+    color: var(--navigatie-voorgrond);
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .lijst {
+    display: flex;
+    gap: var(--ruimte-rij-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .schakel {
+    display: inline-block;
+    padding-block: var(--ruimte-stapel-sm);
+    font-size: var(--navigatie-grootte);
+    letter-spacing: var(--navigatie-spatiering);
+    text-transform: uppercase;
+    color: var(--navigatie-voorgrond-rust);
+    background-image: linear-gradient(var(--kleur-voorgrond), var(--kleur-voorgrond));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0 var(--link-onderstreping-dikte);
+  }
+
+  .schakel:hover {
+    color: var(--navigatie-voorgrond);
+    background-size: 100% var(--link-onderstreping-dikte);
+  }
+
+  .schakel[aria-current='page'] {
+    color: var(--navigatie-voorgrond);
+    background-size: 100% var(--link-onderstreping-dikte);
+  }
+
+  @media (max-width: 63.999rem) {
+    .menu {
+      position: fixed;
+      inset: var(--navigatie-hoogte) 0 0 0;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: var(--ruimte-sectie) var(--ruimte-goot);
+      background-color: var(--kleur-achtergrond);
+    }
+
+    .menu[data-toestand='open'] {
+      display: flex;
+    }
+
+    .lijst {
+      flex-direction: column;
+      gap: var(--ruimte-stapel-lg);
+    }
+
+    .schakel {
+      font-size: var(--tekst-kop3-grootte);
+      letter-spacing: var(--tekst-kop3-spatiering);
+      text-transform: none;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .pagina-kop {
+      gap: var(--ruimte-rij-lg);
+    }
+
+    .schakelaar {
+      display: none;
+    }
+
+    .menu {
+      display: flex;
+      align-items: center;
+      gap: var(--ruimte-rij-lg);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .pagina-kop {
+      transition: border-color var(--beweging-hover);
+    }
+
+    .schakel {
+      transition:
+        color var(--beweging-hover),
+        background-size var(--beweging-hover);
+    }
+  }
+
+  @media print {
+    .pagina-kop {
+      position: static;
+    }
+
+    .menu,
+    .schakelaar {
+      display: none;
+    }
+  }
+</style>
+
+<style is:global>
+  [data-gescrold] .pagina-kop {
+    border-block-end-color: var(--navigatie-lijn);
+  }
+
+  html:has(.menu[data-toestand='open']) {
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  const AFSTAND_VOOR_LIJN = 8;
+
+  function wissel(schakelaar: HTMLButtonElement, menu: HTMLElement, open: boolean): void {
+    schakelaar.setAttribute('aria-expanded', String(open));
+    schakelaar.textContent = open ? 'Sluiten' : 'Menu';
+    if (open) {
+      menu.setAttribute('data-toestand', 'open');
+      return;
+    }
+    menu.removeAttribute('data-toestand');
+  }
+
+  function koppel(kop: HTMLElement): void {
+    const schakelaar = kop.querySelector<HTMLButtonElement>('.schakelaar');
+    const menu = kop.querySelector<HTMLElement>('.menu');
+    if (!schakelaar || !menu) return;
+
+    schakelaar.addEventListener('click', () => {
+      wissel(schakelaar, menu, schakelaar.getAttribute('aria-expanded') !== 'true');
+    });
+
+    menu.addEventListener('click', (gebeurtenis) => {
+      if (gebeurtenis.target instanceof HTMLAnchorElement) {
+        wissel(schakelaar, menu, false);
+      }
+    });
+
+    document.addEventListener('keydown', (gebeurtenis) => {
+      if (gebeurtenis.key !== 'Escape') return;
+      if (schakelaar.getAttribute('aria-expanded') !== 'true') return;
+      wissel(schakelaar, menu, false);
+      schakelaar.focus();
+    });
+
+    document.addEventListener('focusin', (gebeurtenis) => {
+      if (schakelaar.getAttribute('aria-expanded') !== 'true') return;
+      if (gebeurtenis.target instanceof Node && kop.contains(gebeurtenis.target)) return;
+      schakelaar.focus();
+    });
+  }
+
+  function volgScroll(): void {
+    document.documentElement.toggleAttribute('data-gescrold', window.scrollY > AFSTAND_VOOR_LIJN);
+  }
+
+  function start(): void {
+    const kop = document.querySelector<HTMLElement>('.pagina-kop');
+    if (!kop) return;
+    volgScroll();
+    // De kop blijft staan bij een paginaovergang, dus koppelen gebeurt eenmalig.
+    if (kop.dataset.gekoppeld === undefined) {
+      kop.dataset.gekoppeld = '';
+      koppel(kop);
+      window.addEventListener('scroll', volgScroll, { passive: true });
+    }
+  }
+
+  document.addEventListener('astro:page-load', start);
+</script>

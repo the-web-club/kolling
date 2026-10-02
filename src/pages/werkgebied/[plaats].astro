@@ -1,0 +1,140 @@
+---
+import CtaStrook from '@/components/CtaStrook.astro';
+import Faq from '@/components/Faq.astro';
+import JsonLd from '@/components/JsonLd.astro';
+import Kruimelpad from '@/components/Kruimelpad.astro';
+import MateriaalLijst from '@/components/MateriaalLijst.astro';
+import SectieIntro from '@/components/SectieIntro.astro';
+import TekstLink from '@/components/TekstLink.astro';
+import WerkRaster from '@/components/WerkRaster.astro';
+import Basis from '@/layouts/Basis.astro';
+import { haalInstellingen, haalLocaties, haalProjectenOpId, type Locatie } from '@/lib/content';
+import { maakKruimelpad, maakVragenpagina } from '@/lib/jsonld';
+import { maakKruimels } from '@/lib/seo';
+
+export async function getStaticPaths() {
+  const locaties = await haalLocaties();
+  return locaties.map((locatie) => ({ params: { plaats: locatie.id }, props: { locatie } }));
+}
+
+interface Props {
+  locatie: Locatie;
+}
+
+const { locatie } = Astro.props;
+const instellingen = await haalInstellingen();
+const werkInGebied = await haalProjectenOpId(
+  locatie.data.projectenInGebied.map((item) => item.id),
+);
+
+if (!Astro.site) {
+  throw new Error('astro.config.mjs mist de site-URL.');
+}
+
+const kruimels = maakKruimels(`/werkgebied/${locatie.id}`, {
+  '/werkgebied': 'Werkgebied',
+  [`/werkgebied/${locatie.id}`]: `Meubelmaker in ${locatie.data.plaats}`,
+});
+
+const LOGISTIEK = [
+  locatie.data.logistiek.levering,
+  locatie.data.logistiek.montage,
+  locatie.data.logistiek.bezoek,
+];
+---
+
+<Basis titel={locatie.data.seo.titel} beschrijving={locatie.data.seo.beschrijving}>
+  <Fragment slot="hoofd">
+    <JsonLd schema={maakKruimelpad(kruimels, Astro.site)} />
+    <JsonLd schema={maakVragenpagina(locatie.data.faq)} />
+  </Fragment>
+
+  <section>
+    <Kruimelpad kruimels={kruimels} />
+  </section>
+
+  <section>
+    <SectieIntro label={`${locatie.data.plaats}, ${locatie.data.regio}`} kop={locatie.data.kop} niveau={1}>
+      <p>{locatie.data.intro}</p>
+    </SectieIntro>
+    <div class="nap">
+      <h2 class="kop">Werkplaats</h2>
+      <address>
+        {instellingen.adres.straat}<br />
+        {instellingen.adres.postcode} {instellingen.adres.plaats}<br />
+        <TekstLink href={`tel:${instellingen.telefoon.e164}`}>
+          {instellingen.telefoon.weergave}
+        </TekstLink>
+      </address>
+      <MateriaalLijst kop="Levering en bezoek" items={LOGISTIEK} />
+    </div>
+  </section>
+
+  {
+    locatie.data.uniekeSecties.map((eigen) => (
+      <section>
+        <SectieIntro kop={eigen.kop}>
+          <p>{eigen.tekst}</p>
+        </SectieIntro>
+      </section>
+    ))
+  }
+
+  {
+    werkInGebied.length > 0 && (
+      <section>
+        <SectieIntro label="Werk" kop="Werk dat hier gemaakt is" />
+        <WerkRaster projecten={werkInGebied} />
+      </section>
+    )
+  }
+
+  <section>
+    <SectieIntro label="Vragen" kop={`Vragen uit ${locatie.data.plaats} en omgeving`} />
+    <div class="vragen">
+      <Faq vragen={locatie.data.faq} />
+    </div>
+  </section>
+
+  <CtaStrook
+    kop="Langskomen of je idee sturen"
+    tekst="Stuur je idee met maten en foto's van de ruimte, of vraag een bezoek aan de werkplaats aan."
+  />
+</Basis>
+
+<style>
+  .nap,
+  .vragen {
+    grid-column: 1 / -1;
+  }
+
+  .nap {
+    display: grid;
+    gap: var(--ruimte-stapel-md);
+    align-content: start;
+  }
+
+  .kop {
+    font-family: var(--tekst-lopend-familie);
+    font-size: var(--tekst-label-grootte);
+    font-weight: var(--tekst-label-gewicht);
+    letter-spacing: var(--tekst-label-spatiering);
+    text-transform: uppercase;
+    color: var(--kleur-voorgrond-subtiel);
+  }
+
+  address {
+    font-style: normal;
+    line-height: var(--tekst-lopend-regelhoogte);
+  }
+
+  @media (min-width: 64rem) {
+    .nap {
+      grid-column: 10 / span 3;
+    }
+
+    .vragen {
+      grid-column: 2 / span 8;
+    }
+  }
+</style>

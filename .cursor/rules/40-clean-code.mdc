@@ -1,0 +1,89 @@
+---
+description: Schrijfstijl voor alle code in deze repo: Nederlands, minimaal, leesbaar, zonder AI-sporen
+globs:
+alwaysApply: true
+---
+
+# Clean code in het Nederlands, zonder AI-sporen
+
+Doel: code die eruitziet alsof één ervaren Nederlandse ontwikkelaar hem in één keer goed schreef. Weinig, duidelijk, zonder uitleg die de code zelf al geeft. Als een bestand "gegenereerd" aanvoelt, is het niet af.
+
+## Taal
+
+1. Alles wat wij zelf benoemen is Nederlands: identifiers, componentnamen, bestandsnamen, classnamen, tokennamen, data-attributen, eigen env-variabelen, contentvelden, comments, commitbeschrijvingen en documentatie.
+2. Engels blijft waar de techniek het voorschrijft: framework-API's (`Astro.props`, `getCollection`, `transition:name`), HTML, CSS, ARIA, Tailwind-namespaces in `@theme`, configuratiesleutels van packages, Conventional Commit-types (`feat`, `fix`, `docs`, `chore`), npm-scripts (`dev`, `build`, `preview`, `check`, `lint`, `test`), mapnamen die Astro verwacht (`src/pages`, `src/content`, `src/components`, `src/layouts`, `public`) en namen van externe systemen (`RESEND_API_KEY`, `VERCEL_ENV`).
+3. De woordenlijst in `41-woordenlijst.mdc` is de enige bron voor namen. Ontbreekt een woord, dan wordt het eerst daar toegevoegd en daarna gebruikt. Nooit improviseren, nooit synoniemen door elkaar.
+4. Identifiers zijn ASCII: geen accenten of trema's (`coordinaten`, `prive`, `een`). Kies een ander woord als het zonder diakrieten onleesbaar wordt.
+5. Samenstellingen worden in code per woorddeel gesplitst, anders dan in de spelling: `WerkKaart`, `isGepubliceerd`, `.werk-kaart`, `aanvraag-schema.ts`. Lidwoorden en voorzetsels blijven weg (`projectenPerCategorie`, niet `deProjectenPerDeCategorie`).
+
+## Naamgeving
+
+6. Een naam zegt wat iets is, niet hoe het gebouwd is: `WerkKaart`, niet `WerkKaartComponent`; `formatteerAfmetingen`, niet `afmetingenFormatteerHulp`; `aanvraagSchema`, niet `contactFormulierValidatieSchemaObject`.
+7. Verboden namen: `gegevens`, `data`, `item`, `ding`, `info`, `tijdelijk`, `obj`, `resultaat2`, `klik`, `doeIets`, `hulp.ts`, `hulpmiddelen.ts`, `utils.ts`, `algemeen.ts`, `overig.ts`, `Wikkel`, `Container`, `Binnen`, `Sectie1`.
+8. Booleans als vraag: `isGepubliceerd`, `heeftBeelden`, `kanVerzenden`. Geen `vlag`, geen dubbele ontkenning (`isNietVerborgen`).
+9. Functies beginnen met een werkwoord in de gebiedende wijs: `formatteerAfmetingen`, `haalProjectenOp`, `valideerAanvraag`, `verstuurNotificatie`. Geen `handle`-patroon en geen `doe`.
+10. Bestanden: componenten `PascalCase.astro`, al het andere `kebab-case.ts`. Eén component per bestand. Geen `index.ts`-barrels, met als enige uitzondering `src/components/iconen/index.ts`.
+
+## Structuur en omvang
+
+11. Een component doet één ding en blijft onder de 150 regels inclusief `<style>`. Een functie blijft onder de 40 regels. Anders splitsen langs een domeingrens, niet langs een technische.
+12. Pas abstraheren bij de derde identieke herhaling. Twee keer hetzelfde schrijven is goedkoper dan één verkeerde abstractie.
+13. Geen lagen die niets doen: geen `diensten/`-map die alleen doorgeeft, geen `types/`-map met één type, geen wrapper om `Astro.props`, geen `constanten.ts` met alles erin.
+14. Platte mappen: `components/`, `layouts/`, `lib/`, `content/`, `pages/`, `styles/`. Een submap pas als een map meer dan twaalf bestanden krijgt.
+15. Imports in vaste volgorde: Node en framework, dan packages, dan `@/`-aliassen, dan relatief. Geen ongebruikte imports, geen `import * as`.
+
+## Schrijfwijze
+
+16. Vroeg terugkeren. Geen `else` na `return`. Geen geneste ternaries. Maximaal twee niveaus inspringing binnen een functie.
+17. Valideer aan de grens (contentschema, API-invoer, env) en vertrouw daarbinnen de types. Geen defensieve checks op toestanden die het type al uitsluit.
+18. `strict` TypeScript zonder ontsnappingen: geen `any`, geen `!`, geen `as` buiten de grens, geen `@ts-ignore`, geen `eslint-disable` zonder reden op dezelfde regel.
+19. Fouten niet verzwijgen. `try/catch` alleen waar je iets zinnigs met de fout doet. Een gevangen fout krijgt een specifieke boodschap; nooit `console.error(fout)` en doorgaan.
+20. Geen `console.log` in gecommitte code. Geen dode code, geen uitgecommentarieerde code, geen `TODO` zonder naam en concreet vervolg.
+21. Geen magische waarden: een getal of string met betekenis wordt een benoemde constante of een token.
+
+## Comments en documentatie
+
+22. Een comment legt uit waarom, nooit wat. Code die een comment nodig heeft om te begrijpen wat hij doet, wordt herschreven.
+23. Geen JSDoc op zelfverklarende functies. Geen comment boven `interface Props` die de propnamen herhaalt. Geen sectiekoppen zoals `// ===== Hulpfuncties =====`. Geen `// Imports`.
+24. Geen emoji in code, commits, docs of UI. Geen uitroeptekens in commits of docs.
+25. README en docs kort en feitelijk. Geen "modern", "razendsnel", "robuust", "naadloos", "krachtig". Geen badges.
+26. Commits volgens Conventional Commits: Engels type, Nederlandse beschrijving in de gebiedende wijs, onder de 72 tekens, zonder punt en zonder emoji. Voorbeeld: `feat: voeg werkkaart met museumlabel toe`. Een body alleen als het waarom niet uit de titel blijkt.
+
+## AI-sporen die niet in deze repo voorkomen
+
+27. Overbodige wrappers (`<div class="wikkel"><div class="binnen">`), fragments zonder reden, extra `<div>` rond één element.
+28. Uitlegcomments per regel: `// Definieer de ...`, `// Geef de ... terug`, `// Controleer of ...`.
+29. Generieke verzamelbestanden met tien losse functies.
+30. Overdreven lange namen: `isGebruikerOpDitMomentHetFormulierAanHetVerzenden`, `verwerkKlikOpVerzendknopVanContactformulier`.
+31. `try/catch` om alles, `?? ''` en `?.` op waarden die niet leeg kunnen zijn, `Array.isArray` op getypeerde arrays, een `if (!naam)` na een schema dat `naam` al afdwingt.
+32. Placeholderteksten: `Lorem ipsum`, `Jan Jansen`, `Voorbeeld BV`, `voorbeeld.nl`, `Uw bedrijf`, `TODO: implementeren`, `Tekst hier`.
+33. Lege regels en commentaar om "leesbaar" te lijken. Leesbaarheid komt uit namen en structuur.
+34. Een samenvattend commentaarblok bovenaan een bestand dat beschrijft wat het bestand bevat.
+35. Halfvertaalde namen (`getProjecten`, `werkCardTitle`, `isPublished`). Een naam is helemaal Nederlands of valt onder de technische uitzonderingen van regel 2.
+
+## Voorbeeld
+
+Fout:
+
+```ts
+// Hulpfunctie om de afmetingen van een product te formatteren
+export function formatProductAfmetingenHelper(afmetingenData: any): string {
+  // Controleer of de data bestaat
+  if (afmetingenData && afmetingenData.lengte) {
+    // Geef de geformatteerde string terug
+    return afmetingenData.lengte + ' x ' + afmetingenData.breedte + ' x ' + afmetingenData.hoogte + ' cm';
+  } else {
+    return '';
+  }
+}
+```
+
+Goed:
+
+```ts
+import type { Afmetingen } from '@/lib/content';
+
+export function formatteerAfmetingen({ lengte, breedte, hoogte }: Afmetingen): string {
+  return `${lengte} × ${breedte} × ${hoogte} cm`;
+}
+```

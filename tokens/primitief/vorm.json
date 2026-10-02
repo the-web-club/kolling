@@ -1,0 +1,35 @@
+﻿{
+  "primitief": {
+    "maat": {
+      "container-max": { "$value": "90rem", "$type": "dimension" },
+      "container-inline": { "$value": "76rem", "$type": "dimension" },
+      "regellengte": { "$value": "68ch", "$type": "dimension" }
+    },
+    "radius": {
+      "geen": { "$value": "0", "$type": "dimension" },
+      "invoer": { "$value": "2px", "$type": "dimension" }
+    },
+    "rand": {
+      "haarlijn": { "$value": "1px", "$type": "dimension" }
+    },
+    "schermbreedte": {
+      "sm": { "$value": "40rem", "$type": "dimension" },
+      "md": { "$value": "48rem", "$type": "dimension" },
+      "lg": { "$value": "64rem", "$type": "dimension" },
+      "xl": { "$value": "80rem", "$type": "dimension" },
+      "2xl": { "$value": "96rem", "$type": "dimension" }
+    },
+    "laag": {
+      "basis": { "$value": "0", "$type": "number" },
+      "kop": { "$value": "10", "$type": "number" },
+      "overlay": { "$value": "20", "$type": "number" },
+      "modaal": { "$value": "30", "$type": "number" }
+    },
+    "verhouding": {
+      "liggend": { "$value": "3 / 2", "$type": "other" },
+      "staand": { "$value": "4 / 5", "$type": "other" },
+      "vierkant": { "$value": "1 / 1", "$type": "other" },
+      "breed": { "$value": "16 / 9", "$type": "other" }
+    }
+  }
+}

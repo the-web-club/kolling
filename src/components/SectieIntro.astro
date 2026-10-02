@@ -1,0 +1,52 @@
+---
+interface Props {
+  label?: string;
+  kop: string;
+  niveau?: 1 | 2;
+}
+
+const { label, kop, niveau = 2 } = Astro.props;
+const Kop = niveau === 1 ? 'h1' : 'h2';
+---
+
+<div class="sectie-intro" data-onthul-groep>
+  {label && <p class="label" data-onthul="omhoog">{label}</p>}
+  <Kop class="kop" data-onthul="omhoog">{kop}</Kop>
+  <div class="tekst" data-onthul="omhoog">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .sectie-intro {
+    display: grid;
+    grid-column: 1 / -1;
+    gap: var(--ruimte-stapel-md);
+  }
+
+  @media (min-width: 48rem) {
+    .sectie-intro {
+      grid-column: 2 / span 7;
+    }
+  }
+
+  .label {
+    font-size: var(--tekst-label-grootte);
+    font-weight: var(--tekst-label-gewicht);
+    letter-spacing: var(--tekst-label-spatiering);
+    text-transform: uppercase;
+    color: var(--kleur-voorgrond-subtiel);
+  }
+
+  .tekst {
+    display: grid;
+    gap: var(--ruimte-stapel-md);
+    font-size: var(--tekst-intro-grootte);
+    line-height: var(--tekst-intro-regelhoogte);
+    color: var(--kleur-voorgrond-gedempt);
+  }
+
+  .tekst:empty {
+    display: none;
+  }
+</style>

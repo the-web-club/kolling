@@ -1,0 +1,189 @@
+---
+description: Woordenlijst voor alle namen in code: domein, componenten, bestanden, tokens, data-attributen, env-variabelen en contentvelden. Enige bron voor naamgeving.
+globs:
+alwaysApply: true
+---
+
+# Woordenlijst
+
+Dit is de enige bron voor namen in deze repo. Een woord dat hier niet staat, wordt eerst toegevoegd en daarna pas gebruikt. Elk begrip heeft precies één naam; synoniemen bestaan niet.
+
+## Regels
+
+1. Nederlands voor alles wat wij zelf benoemen. Engels alleen waar `40-clean-code.mdc` regel 2 het toestaat.
+2. Ingeburgerde leenwoorden die gewoon gebruikt worden: hero, header, footer, token, grid, slug, webhook, API, URL, e-mail, cache, build, deploy, preview, badge, parallax, hover, focus, layout. Geen leenwoord maar Nederlands: placeholder wordt `plaatshouder`, button wordt `knop`, image wordt `beeld`, breadcrumbs wordt `kruimelpad`, reveal wordt `onthul`.
+3. Samenstellingen per woorddeel gesplitst in code: `WerkKaart`, `.werk-kaart`, `werkKaart`. In zichtbare tekst gelden de normale spellingregels: "werkkaart".
+4. ASCII in identifiers: `spatiering`, `coordinaten`, `prive`.
+5. Meervoud alleen voor verzamelingen (`projecten`, `beelden`); enkelvoud voor het type en het veld (`project`, `beeld`).
+
+## Domein
+
+1. project (een gemaakt werk), meervoud projecten; de sectie heet op de site "Werk"
+2. dienst (maatwerkcategorie), meervoud diensten
+3. categorie: tafels, kasten, interieur, bijzonder-houtwerk
+4. editie (signature piece in beperkte oplage), meervoud edities
+5. oplage (aantal exemplaren van een editie)
+6. status van een editie: beschikbaar, gereserveerd, uitverkocht
+7. locatie (pagina in het werkgebied), meervoud locaties
+8. werkplaats
+9. aanvraag (ingevuld contactformulier), meervoud aanvragen
+10. opdrachtgever: particulier, architect, zakelijk
+11. materiaal, meervoud materialen
+12. afwerking
+13. afmetingen (lengte, breedte, hoogte, in cm)
+14. jaar
+15. plaats en regio
+16. beeld (één afbeelding in een beeldslot), meervoud beelden
+17. bijschrift
+18. verhouding: liggend (3:2), staand (4:5), vierkant (1:1), breed (16:9)
+19. plaatshouder (het houtvlak dat een beeld vervangt), tint: eik, noten, es
+20. uitgelicht, gepubliceerd, volgorde, gerelateerd
+21. bewering (uitspraak die Thomas moet bevestigen), meervoud beweringen
+22. instellingen (site-brede gegevens: NAP, telefoon, Instagram, CTA-teksten)
+23. kruimelpad (breadcrumbs)
+24. veelgestelde vragen, in code afgekort tot faq
+
+## Componenten (`src/components/`)
+
+1. `PaginaKop.astro` (header), `PaginaVoet.astro` (footer)
+2. `Hero.astro`
+3. `Beeld.astro` (het enige beeldcomponent), `Plaatshouder.astro`
+4. `MuseumLabel.astro`
+5. `WerkRaster.astro`, `WerkKaart.astro`
+6. `SectieIntro.astro`
+7. `ProcesStappen.astro`, `MateriaalLijst.astro`, `OplageLabel.astro`, `CtaStrook.astro`
+8. `AanvraagFormulier.astro`
+9. `Faq.astro`, `Kruimelpad.astro`
+10. `Seo.astro`, `JsonLd.astro`
+11. `LopendeTekst.astro` (typografie voor Markdown-body's)
+12. `Knop.astro`, `TekstLink.astro`
+13. `src/components/iconen/` met `index.ts`
+
+## Bestanden en mappen
+
+1. Mappen volgens Astro: `src/pages`, `src/content`, `src/components`, `src/layouts`, `src/lib`, `src/styles`, `src/assets`, `public`.
+2. Layouts: `src/layouts/Basis.astro`.
+3. Stijlen: `src/styles/tokens.css` (gegenereerd), `src/styles/basis.css` (reset, elementtypografie, Tailwind-import, `@theme inline`), `src/styles/beweging.css` (entrance en overgangen).
+4. Lib: `src/lib/aanvraag-schema.ts`, `src/lib/formatteer.ts`, `src/lib/seo.ts`, `src/lib/jsonld.ts`, `src/lib/content.ts`, `src/lib/beweging/onthul.ts`, `src/lib/beweging/splits-regels.ts`, `src/lib/beweging/paginaovergang.ts`.
+5. API: `src/pages/api/aanvraag.ts`.
+6. Content: `src/content/projecten/`, `diensten/`, `edities/`, `locaties/`, `faq/`, `instellingen/site.json`; schema's in `src/content.config.ts`.
+7. Tokens: `tokens/primitief/`, `tokens/semantisch/`, `tokens/componenten/`, `tokens/config.mjs`; gegenereerd: `src/design/tokens.gegenereerd.ts`.
+8. Documentatie: `docs/STARTPROMPT.md`, `docs/BESLUITEN.md`, `docs/DESIGN-SYSTEM.md`, `docs/CONTENTMODEL.md`, `docs/SEO.md`, `docs/FOTOGRAFIE.md`, `docs/DEPLOY.md`, `docs/FEITENCHECK.md`, `docs/review/`.
+
+## Tokens
+
+Primitief (`tokens/primitief/*.json`, CSS-variabele `--k-...`):
+
+1. `kleur.papier.0`, `kleur.papier.50`, `kleur.papier.100`
+2. `kleur.lijn.200`, `kleur.steen.400`
+3. `kleur.inkt.700`, `kleur.inkt.900`, `kleur.inkt.1000`
+4. `kleur.hout.es.200`, `kleur.hout.eik.400`, `kleur.hout.noten.700`
+5. `kleur.fout.600`
+6. `letter.familie.kop`, `letter.familie.tekst`
+7. `letter.gewicht.licht`, `letter.gewicht.normaal`, `letter.gewicht.medium`
+8. `letter.grootte.xs`, `sm`, `basis`, `lg`, `xl`, `2xl`, `3xl`, `4xl`, `display`
+9. `letter.spatiering.kop`, `letter.spatiering.tekst`, `letter.spatiering.kapitaal`
+10. `letter.regelhoogte.display`, `letter.regelhoogte.kop`, `letter.regelhoogte.tekst`
+11. `ruimte.1` t/m `ruimte.40`, `ruimte.sectie`, `ruimte.goot`
+12. `maat.container.max`, `maat.container.inline`, `maat.regellengte`
+13. `radius.geen`, `radius.invoer`
+14. `rand.haarlijn`
+15. `schermbreedte.sm`, `md`, `lg`, `xl`, `2xl`
+16. `laag.basis`, `laag.kop`, `laag.overlay`, `laag.modaal`
+17. `verhouding.liggend`, `staand`, `vierkant`, `breed`
+18. `beweging.duur.snel`, `basis`, `traag`, `trager`, `filmisch`, `hero`
+19. `beweging.curve.uit-quint`, `uit-expo`, `in-uit-quart`
+20. `beweging.trap.snel`, `basis`, `traag` (stagger)
+21. `beweging.afstand.sm`, `md`, `lg`, `masker`
+22. `beweging.schaal.hover`, `beweging.schaal.onthul`
+23. `beweging.parallax.hoeveelheid`
+
+Semantisch (`tokens/semantisch/*.json`, CSS-variabele zonder prefix):
+
+1. `kleur.achtergrond`, `kleur.achtergrond.verhoogd`, `kleur.achtergrond.tint`
+2. `kleur.voorgrond`, `kleur.voorgrond.gedempt`, `kleur.voorgrond.subtiel`, `kleur.voorgrond.invers`
+3. `kleur.lijn`, `kleur.lijn.sterk`
+4. `kleur.accent`
+5. `kleur.plaatshouder.eik`, `kleur.plaatshouder.noten`, `kleur.plaatshouder.es`
+6. `tekst.display`, `tekst.kop1` t/m `tekst.kop4`, `tekst.intro`, `tekst.lopend`, `tekst.klein`, `tekst.label`
+7. `ruimte.sectie`, `ruimte.blok`, `ruimte.stapel.*`, `ruimte.rij.*`
+8. `beweging.binnenkomst`, `beweging.binnenkomst.hero`, `beweging.binnenkomst.beeld`, `beweging.vertrek`, `beweging.hover`, `beweging.hover.beeld`, `beweging.pagina.uit`, `beweging.pagina.in`
+
+CSS-variabelen: `--k-kleur-inkt-900`, `--kleur-voorgrond`, `--ruimte-6`, `--tekst-label-grootte`, `--beweging-duur-traag`, `--beweging-curve-uit-quint`, `--beweging-trap-basis`, `--beweging-afstand-masker`, `--beweging-schaal-onthul`.
+
+Tailwind `@theme inline` (namespace Engels, naam Nederlands): `--color-voorgrond: var(--kleur-voorgrond)` geeft `text-voorgrond`; `--spacing-sectie`, `--spacing-blok`, `--spacing-goot` geven `mt-sectie`, `py-blok`, `gap-goot`; `--font-kop`, `--font-tekst`; `--breakpoint-sm` enzovoort.
+
+## Data-attributen
+
+1. `data-js` op `<html>` zodra JavaScript draait
+2. `data-toestand="open"` (toestand van menu, details, overlay)
+3. `data-tint="eik | noten | es"`
+4. `data-variant="gevuld | omlijnd"` (knop)
+5. `data-onthul="omhoog | regels | gordijn | lijn"`, `data-onthul-groep`, `data-onthul-vertraging`
+6. `data-in-beeld` (gezet door `onthul.ts`)
+7. `data-parallax` op `Beeld`
+8. `data-gescrold` op `<html>` als fallback voor de header-haarlijn
+9. `data-plaatshouder` op voorbeeldprojecten
+
+## Env-variabelen
+
+1. Extern, ongewijzigd: `RESEND_API_KEY`, `VERCEL_ENV`, `PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`
+2. Eigen: `PUBLIC_SITE_URL`, `AANVRAAG_ONTVANGER`, `AANVRAAG_AFZENDER`, `AANVRAAG_BCC`, `CRM_WEBHOOK_URL`, `CRM_WEBHOOK_GEHEIM`
+
+## Contentvelden
+
+1. `projecten`: `titel`, `intro`, `categorie`, `materialen[]`, `afwerking`, `afmetingen` (`lengte`, `breedte`, `hoogte`), `jaar`, `plaats`, `regio`, `opdrachtgever`, `beelden[]` (`bron`, `alt`, `plaatshouder` met `tint` en `label`, `verhouding`, `bijschrift`), `uitgelicht`, `volgorde`, `gerelateerd[]`, `plaatshouder` (boolean), `beweringen[]`
+2. `diensten`: `titel`, `intro`, `voorWie[]`, `proces[]`, `materialen[]`, `faq[]` (`vraag`, `antwoord`), `gerelateerdeProjecten[]`, `seo` (`titel`, `beschrijving`), `beweringen[]`
+3. `edities`: `titel`, `oplage`, `beschikbaar`, `status`, `materialen[]`, `afmetingen`, `prijs`, `beelden[]`, `jaar`, `beweringen[]`
+4. `locaties`: `plaats`, `regio`, `intro`, `uniekeSecties[]` (`kop`, `tekst`), `projectenInGebied[]`, `logistiek` (`levering`, `montage`, `bezoek`), `faq[]`, `geo` (`lat`, `lng`), `publiceren`, `beweringen[]`
+5. `faq`: `vraag`, `antwoord`, `paginas[]`
+6. `instellingen/site.json`: `naam`, `juridischeNaam`, `maker`, `adres` (`straat`, `postcode`, `plaats`, `land`), `telefoon` (`weergave`, `e164`), `email`, `kvk`, `geo`, `instagram`, `bezoek`, `cta` (`primair`, `secundair`), `seo` (`titelSuffix`, `beschrijving`)
+
+## Formuliervelden (`AanvraagFormulier`)
+
+1. `naam`, `email`, `telefoon`, `soortAanvraag`, `budget`, `plaats`, `periode`, `idee`, `akkoordPrivacy`
+2. Verborgen: `honingpot` (honeypot), `tijdstempel`, `turnstileToken`
+3. `soortAanvraag`: tafel, kast, interieur, bijzonder-houtwerk, editie, anders
+4. `budget`: 1000-2000, 2000-3500, 3500-5000, 5000-plus, onbekend
+5. `periode`: zo-snel-mogelijk, binnen-3-maanden, binnen-6-maanden, open
+
+## Aangevuld tijdens de bouw
+
+Namen die tijdens de implementatie nodig bleken. Ze volgen dezelfde regels als hierboven.
+
+### Componenten
+
+1. `EditieKaart.astro` (editie in een raster, de tegenhanger van `WerkKaart`)
+2. `FormulierVeld.astro` (label, invoerslot en foutmelding)
+3. `FormulierKeuze.astro` (`FormulierVeld` met een native `select` en chevron)
+4. `iconen/Chevron.astro` (het enige icoon; voor de select en de vragenlijst)
+
+### Bestanden
+
+1. `tokens/controle.mjs` (bouwt de tokens of vergelijkt de output met de bron)
+2. `src/lib/aanvraag.ts` (verwerkt een aanvraag, los van de route zodat het te testen is)
+3. `src/lib/resend.ts` (verstuurt één bericht via de Resend API)
+4. `src/lib/formulier.ts` (validatie bij blur en verzenden, voorselectie, tijdstempel)
+5. `src/pages/robots.txt.ts`, `src/pages/sitemap.xml.ts`, `src/pages/feitencheck.md.ts`
+6. `src/assets/merk/d-logo.svg` (het logo voor lichte achtergronden)
+7. `src/design/tokens.gegenereerd.ts` en `src/styles/tokens.css` (gegenereerd)
+
+### Tokens
+
+1. Primitief: `letter.spatiering.display`, `maat.container-max`, `maat.container-inline`
+2. Semantisch: `kleur.fout`, `maat.container`, `maat.tekstkolom`, `maat.regellengte`
+3. Componenten: `knop.*`, `invoer.*`, `label.*`, `navigatie.*`, `link.*`, `bijschrift.*`, `plaatshouder.*`
+
+Waar een token en een groep dezelfde naam zouden krijgen, staat er een koppelteken in het bladnaam: `kleur.lijn` en `kleur.lijn-sterk`, `kleur.voorgrond` en `kleur.voorgrond-gedempt`, `beweging.hover` en `beweging.hover-beeld`. De CSS-variabele blijft daarmee `--kleur-lijn-sterk`.
+
+### Data-attributen
+
+1. `data-binnenkomst="hero"` (CSS-animatie bij het laden, zonder op JavaScript te wachten)
+2. `data-verhouding` op het beeldkader
+3. `data-breedte="half | vol"` op een formulierveld
+4. `data-fout` op een invoerveld met een fout
+5. `data-foutmelding` met de Nederlandse melding bij dat veld
+6. `data-plek` op een positie in `WerkRaster`
+7. `data-richting="onder | rechts"` op `Chevron`
+8. `data-gescrold` op `<html>` na acht pixels scrollen
+9. `data-gekoppeld` op `PaginaKop`, zodat de blijvende kop maar één keer luisteraars krijgt

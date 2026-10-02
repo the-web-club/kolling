@@ -1,0 +1,139 @@
+---
+import CtaStrook from '@/components/CtaStrook.astro';
+import Faq from '@/components/Faq.astro';
+import JsonLd from '@/components/JsonLd.astro';
+import MateriaalLijst from '@/components/MateriaalLijst.astro';
+import ProcesStappen from '@/components/ProcesStappen.astro';
+import SectieIntro from '@/components/SectieIntro.astro';
+import TekstLink from '@/components/TekstLink.astro';
+import Basis from '@/layouts/Basis.astro';
+import { haalDiensten, haalVragenVoor } from '@/lib/content';
+import { maakVragenpagina } from '@/lib/jsonld';
+
+const diensten = await haalDiensten();
+const vragen = (await haalVragenVoor('/maatwerk')).map((item) => item.data);
+
+const PROCES = [
+  {
+    kop: 'Idee en maten',
+    tekst: 'Je stuurt je idee met de maten van de ruimte en een paar foto\u2019s. Daar hoort geen tekening bij te zitten.',
+  },
+  {
+    kop: 'Gesprek',
+    tekst: 'We bespreken gebruik, maat en materiaal. Bij inbouwwerk volgt een bezoek om in te meten.',
+  },
+  {
+    kop: 'Voorstel',
+    tekst: 'Je krijgt een voorstel met maatvoering, houtsoort, afwerking en een termijn.',
+  },
+  {
+    kop: 'Maken en plaatsen',
+    tekst: 'Het werk wordt in Ommen gemaakt, afgewerkt en daarna bij je geplaatst.',
+  },
+];
+---
+
+<Basis
+  titel="Maatwerk"
+  beschrijving="Meubels en houtwerk op maat uit de werkplaats in Ommen. Van idee naar uitvoering in vier stappen, voor particulieren, architecten en bedrijven."
+>
+  <JsonLd schema={maakVragenpagina(vragen)} slot="hoofd" />
+
+  <section>
+    <SectieIntro label="Maatwerk" kop="Van idee naar uitvoering" niveau={1}>
+      <p>
+        Maatwerk is geen catalogus. Het begint bij wat je nodig hebt en bij de ruimte waar het komt
+        te staan. Daarna volgen maat, hout en afwerking.
+      </p>
+      <p>
+        Je werkt met één maker. Dat betekent dat degene die je idee hoort ook degene is die het
+        maakt en plaatst.
+      </p>
+    </SectieIntro>
+  </section>
+
+  <section>
+    <SectieIntro label="Werkwijze" kop="Hoe een opdracht verloopt">
+      <p>Vier stappen, zonder verrassingen tussendoor.</p>
+    </SectieIntro>
+    <ProcesStappen stappen={PROCES} />
+  </section>
+
+  <section>
+    <SectieIntro label="Soorten werk" kop="Wat we maken">
+      <p>Per soort werk staat uitgewerkt wat er mogelijk is, voor wie het is en wat het vraagt.</p>
+    </SectieIntro>
+    <div class="diensten">
+      {
+        diensten.map((dienst) => (
+          <article class="dienst">
+            <h3 class="kop">
+              <TekstLink href={`/maatwerk/${dienst.id}`} variant="intekenend">
+                {dienst.data.titel}
+              </TekstLink>
+            </h3>
+            <p class="tekst">{dienst.data.intro}</p>
+            <MateriaalLijst kop="Voor wie" items={dienst.data.voorWie} />
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section>
+    <SectieIntro label="Vragen" kop="Wat mensen vaak vragen">
+      <p>Staat je vraag er niet bij, stel hem dan gewoon.</p>
+    </SectieIntro>
+    <div class="vragen">
+      <Faq vragen={vragen} />
+    </div>
+  </section>
+
+  <CtaStrook
+    kop="Bespreek je idee"
+    tekst="Stuur je idee met maten en foto's van de ruimte. Je hoort binnen twee werkdagen wat er mogelijk is."
+  />
+</Basis>
+
+<style>
+  .diensten {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--ruimte-rij-lg) var(--ruimte-goot);
+  }
+
+  .dienst {
+    display: grid;
+    gap: var(--ruimte-stapel-md);
+    grid-column: 1 / -1;
+    align-content: start;
+    padding-block-start: var(--ruimte-stapel-md);
+    border-block-start: var(--k-rand-haarlijn) solid var(--kleur-lijn);
+  }
+
+  .kop {
+    font-size: var(--tekst-kop3-grootte);
+    letter-spacing: var(--tekst-kop3-spatiering);
+  }
+
+  .tekst {
+    color: var(--kleur-voorgrond-gedempt);
+  }
+
+  .vragen {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 48rem) {
+    .dienst {
+      grid-column: span 6;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .vragen {
+      grid-column: 2 / span 8;
+    }
+  }
+</style>

@@ -1,0 +1,179 @@
+@import './tokens.css';
+@import '@fontsource-variable/instrument-sans/wght.css';
+@import '@fontsource-variable/work-sans/wght.css';
+@import 'tailwindcss';
+
+@theme inline {
+  --color-achtergrond: var(--kleur-achtergrond);
+  --color-achtergrond-verhoogd: var(--kleur-achtergrond-verhoogd);
+  --color-achtergrond-tint: var(--kleur-achtergrond-tint);
+  --color-voorgrond: var(--kleur-voorgrond);
+  --color-voorgrond-gedempt: var(--kleur-voorgrond-gedempt);
+  --color-voorgrond-subtiel: var(--kleur-voorgrond-subtiel);
+  --color-voorgrond-invers: var(--kleur-voorgrond-invers);
+  --color-lijn: var(--kleur-lijn);
+  --color-lijn-sterk: var(--kleur-lijn-sterk);
+  --color-accent: var(--kleur-accent);
+  --color-fout: var(--kleur-fout);
+
+  --font-kop: var(--tekst-kop1-familie);
+  --font-tekst: var(--tekst-lopend-familie);
+
+  --spacing-sectie: var(--ruimte-sectie);
+  --spacing-blok: var(--ruimte-blok);
+  --spacing-goot: var(--ruimte-goot);
+  --spacing-stapel-sm: var(--ruimte-stapel-sm);
+  --spacing-stapel-md: var(--ruimte-stapel-md);
+  --spacing-stapel-lg: var(--ruimte-stapel-lg);
+  --spacing-rij-sm: var(--ruimte-rij-sm);
+  --spacing-rij-md: var(--ruimte-rij-md);
+  --spacing-rij-lg: var(--ruimte-rij-lg);
+}
+
+/* Terugval zolang Mint Grotesk en Apercu niet gelicentieerd zijn. De overrides
+   benaderen de metriek van de webfonts, zodat tekst niet zichtbaar verspringt. */
+@font-face {
+  font-family: 'Kop terugval';
+  src: local('Arial'), local('Helvetica Neue');
+  size-adjust: 104%;
+  ascent-override: 92%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Tekst terugval';
+  src: local('Arial'), local('Helvetica Neue');
+  size-adjust: 102%;
+  ascent-override: 95%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+}
+
+:root {
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-block-size: 100vh;
+  /* Secties met een doorlopende tint rekenen met 100vw; clip voorkomt dat de
+     breedte van de verticale scrollbar horizontaal scrollen oplevert. */
+  overflow-x: clip;
+  font-family: var(--tekst-lopend-familie);
+  font-size: var(--tekst-lopend-grootte);
+  font-weight: var(--tekst-lopend-gewicht);
+  line-height: var(--tekst-lopend-regelhoogte);
+  font-kerning: normal;
+  color: var(--kleur-voorgrond);
+  background-color: var(--kleur-achtergrond);
+}
+
+main {
+  display: grid;
+  gap: var(--ruimte-sectie);
+  padding-block: var(--ruimte-sectie);
+}
+
+section {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--ruimte-goot);
+  inline-size: 100%;
+  max-inline-size: var(--maat-container);
+  margin-inline: auto;
+  padding-inline: var(--ruimte-goot);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: var(--tekst-kop1-familie);
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--tekst-kop1-grootte);
+  font-weight: var(--tekst-kop1-gewicht);
+  line-height: var(--tekst-kop1-regelhoogte);
+  letter-spacing: var(--tekst-kop1-spatiering);
+}
+
+h2 {
+  font-size: var(--tekst-kop2-grootte);
+  font-weight: var(--tekst-kop2-gewicht);
+  line-height: var(--tekst-kop2-regelhoogte);
+  letter-spacing: var(--tekst-kop2-spatiering);
+}
+
+h3 {
+  font-size: var(--tekst-kop3-grootte);
+  font-weight: var(--tekst-kop3-gewicht);
+  line-height: var(--tekst-kop3-regelhoogte);
+  letter-spacing: var(--tekst-kop3-spatiering);
+}
+
+h4 {
+  font-size: var(--tekst-kop4-grootte);
+  font-weight: var(--tekst-kop4-gewicht);
+  line-height: var(--tekst-kop4-regelhoogte);
+  letter-spacing: var(--tekst-kop4-spatiering);
+}
+
+p {
+  margin: 0;
+  max-inline-size: var(--maat-regellengte);
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+  text-decoration-line: none;
+  text-decoration-thickness: var(--link-onderstreping-dikte);
+  text-decoration-color: var(--link-onderstreping-kleur);
+  text-underline-offset: var(--link-onderstreping-afstand);
+}
+
+figure {
+  margin: 0;
+}
+
+figcaption {
+  margin-block-start: var(--bijschrift-ruimte-boven);
+  font-size: var(--bijschrift-grootte);
+  font-weight: var(--bijschrift-gewicht);
+  letter-spacing: var(--bijschrift-spatiering);
+  text-transform: uppercase;
+  color: var(--bijschrift-voorgrond);
+}
+
+::selection {
+  color: var(--kleur-voorgrond-invers);
+  background-color: var(--kleur-voorgrond);
+}
+
+:focus-visible {
+  outline: 2px solid var(--kleur-lijn-sterk);
+  outline-offset: 2px;
+}
+
+@media print {
+  body {
+    color: var(--k-kleur-inkt-1000);
+    background: none;
+  }
+
+  main {
+    gap: var(--ruimte-blok);
+    padding-block: 0;
+  }
+
+  a::after {
+    content: ' (' attr(href) ')';
+    font-size: var(--tekst-klein-grootte);
+  }
+}

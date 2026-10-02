@@ -1,0 +1,15 @@
+{
+  "knop": {
+    "hoogte": { "$value": "3rem", "$type": "dimension" },
+    "padding-inline": { "$value": "{primitief.ruimte.6}", "$type": "dimension" },
+    "grootte": { "$value": "{primitief.letter.grootte.sm}", "$type": "dimension" },
+    "gewicht": { "$value": "{primitief.letter.gewicht.medium}", "$type": "fontWeight" },
+    "spatiering": { "$value": "{primitief.letter.spatiering.kapitaal}", "$type": "dimension" },
+    "radius": { "$value": "{primitief.radius.geen}", "$type": "dimension" },
+    "gevuld-achtergrond": { "$value": "{kleur.voorgrond}", "$type": "color" },
+    "gevuld-voorgrond": { "$value": "{kleur.voorgrond-invers}", "$type": "color" },
+    "gevuld-achtergrond-hover": { "$value": "{kleur.voorgrond-gedempt}", "$type": "color" },
+    "omlijnd-rand": { "$value": "{kleur.lijn-sterk}", "$type": "color" },
+    "omlijnd-voorgrond": { "$value": "{kleur.voorgrond}", "$type": "color" }
+  }
+}

@@ -1,0 +1,86 @@
+---
+description: CSS-architectuur, classnaamgeving en Tailwind-gebruik; alle waarden via tokens, alle namen Nederlands
+globs: src/**/*.astro,src/**/*.css
+alwaysApply: false
+---
+
+# CSS en classes
+
+Uitgangspunt: componenten krijgen Nederlandse semantische classes en scoped CSS op tokens. Tailwind doet alleen layout en zichtbaarheid. Aan een element mag je niet kunnen zien welk framework eronder zit.
+
+## Architectuur
+
+1. Drie bronnen van stijl, elk met één taak:
+   a. `src/styles/tokens.css` (gegenereerd, read-only): alle waarden.
+   b. `src/styles/basis.css`: reset, elementtypografie (`body`, `h1` t/m `h4`, `p`, `a`, `figure`, `::selection`, `:focus-visible`), de Tailwind-import en `@theme inline`.
+   c. Scoped `<style>` per component: alles wat bij dat component hoort.
+2. Tailwind-utilities uitsluitend voor grid en flex (`grid`, `col-span-*`, `col-start-*`, `flex`, `items-*`, `justify-*`), spacing uit het thema (`gap-goot`, `mt-sectie`, `py-blok`), responsive zichtbaarheid (`hidden`, `md:block`) en `sr-only`. Maximaal vijf utilities per element; meer betekent een class in scoped CSS.
+3. Nooit via Tailwind: kleur, typografie, borders, radius, motion, transforms, shadows, z-index. Dat is componentstijl op tokens.
+4. Geen `@apply`. Geen arbitrary values (`w-[13px]`, `text-[#333]`). Geen `!important`. Geen inline `style=""`, behalve voor custom properties die uit content komen (`style={`--verhouding: ${verhouding}`}`).
+5. Geen `tailwind.config.js`. `@theme inline` mapt uitsluitend semantische tokens met Engelse namespace en Nederlandse naam (`--color-voorgrond: var(--kleur-voorgrond)`, `--spacing-sectie`, `--font-kop`). Nooit primitieve tokens in het thema.
+
+## Classnaamgeving
+
+6. Buitenste element van een component: de componentnaam in kebab-case (`.werk-kaart`, `.museum-label`, `.pagina-kop`). Binnenelementen: korte rolnamen (`.afbeelding`, `.label`, `.titel`, `.meta`, `.bijschrift`) omdat scoped CSS uniekheid garandeert. Maximaal twee woorden per class.
+7. Toestand en variant via `data-`attributen uit de woordenlijst, nooit via classes: `data-toestand="open"`, `data-tint="noten"`, `data-variant="omlijnd"`, `aria-current="page"`. Stijl erop met attribuutselectors: `.menu[data-toestand="open"]`.
+8. Verboden classnamen: presentationeel (`.rood`, `.groot`, `.vet`, `.mt-20`, `.flex-midden`), structureel zonder betekenis (`.wikkel`, `.binnen`, `.container`, `.inhoud`, `.box`, `.sectie`, `.rij`, `.kolom`), genummerd (`.sectie-1`, `.kaart-2`), afgekort (`.knp-prim`, `.kop-nav`), Engels (`.wrapper`, `.card`, `.media`), met frameworknaam (`.tw-`, `.astro-`), of met BEM-tekens (`__`, `--`).
+9. Globale utility-classes bestaan niet. Komt iets op drie plekken terug, dan is het een component of een elementregel in `basis.css`.
+10. `:global()` alleen voor Markdown-uitvoer in `LopendeTekst` en voor `ClientRouter`-animaties. Nooit om in een kindcomponent te prikken; geef dan een prop of `data-`attribuut door.
+
+## CSS-schrijfwijze
+
+11. Eigenschappen in vaste volgorde: positionering, display en layout, box (`inline-size`, `block-size`, padding, margin), typografie, kleur en achtergrond, borders, effecten, transitions. Geen lege regels binnen een declaratieblok.
+12. Logische eigenschappen: `margin-block`, `padding-inline`, `inset`, `inline-size`, `block-size`. Geen `left`, `right`, `width`, `height` voor layout.
+13. Moderne CSS waar het de code korter maakt: `clamp()`, `aspect-ratio`, `gap`, `:has()`, `:where()` om specificiteit laag te houden, `text-wrap`, `@container` voor componenten die in meerdere kolombreedtes voorkomen (`WerkKaart`, `MuseumLabel`, `Beeld`).
+14. Specificiteit: één class of één attribuut per selector. Geen id-selectors, geen `div.werk-kaart`, geen selectors dieper dan twee niveaus.
+15. Transitions en animaties alleen op `opacity`, `translate`, `scale`, `clip-path`, `background-size`, `color`, `background-color`, `border-color`, `text-decoration-color` en `outline-color`. Nooit `transition: all`, nooit `transform` (gebruik de losse eigenschappen `translate` en `scale`, zodat parallax en hover elkaar niet overschrijven).
+16. Elke `transition` en `animation` staat in `@media (prefers-reduced-motion: no-preference)`. Entrance- en overgangsanimaties staan centraal in `src/styles/beweging.css` volgens `70-motion.mdc`; componenten bevatten alleen hun eigen hover- en focus-transitions.
+17. Alle waarden uit tokens: `var(--kleur-voorgrond)`, `var(--ruimte-6)`, `var(--tekst-label-grootte)`, `var(--beweging-duur-traag) var(--beweging-curve-uit-quint)`. Letterlijke waarden alleen voor `0`, `1px`, `100%`, `auto`, `currentColor` en verhoudingen zoals `3 / 2`.
+
+## Voorbeeld
+
+Fout:
+
+```html
+<div class="card-wrapper w-full flex flex-col gap-4 p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 border border-gray-100">
+  <div class="inner">
+    <img class="w-full h-[320px] object-cover rounded-xl" src="..." alt="" />
+    <h3 class="text-xl font-bold text-gray-900 mt-4">Eettafel</h3>
+  </div>
+</div>
+```
+
+Goed:
+
+```astro
+---
+import type { CollectionEntry } from 'astro:content';
+import Beeld from '@/components/Beeld.astro';
+import MuseumLabel from '@/components/MuseumLabel.astro';
+
+interface Props {
+  project: CollectionEntry<'projecten'>;
+  verhouding?: 'liggend' | 'staand';
+}
+
+const { project, verhouding = 'liggend' } = Astro.props;
+const { titel, materialen, afmetingen, jaar } = project.data;
+const [omslag] = project.data.beelden;
+---
+
+<a class="werk-kaart" href={`/werk/${project.id}`}>
+  <Beeld beeld={omslag} verhouding={verhouding} />
+  <MuseumLabel {titel} {materialen} {afmetingen} {jaar} compact />
+</a>
+
+<style>
+  .werk-kaart {
+    display: grid;
+    gap: var(--ruimte-4);
+    color: var(--kleur-voorgrond);
+    text-decoration: none;
+  }
+</style>
+```
+
+De hover-schaal van het beeld hoort bij `Beeld` zelf (`.beeld:hover .afbeelding`), niet bij de kaart die het beeld gebruikt.

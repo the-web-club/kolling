@@ -1,0 +1,51 @@
+---
+description: Copy, contentmodel, feitencheck en SEO zonder doorway abuse
+globs: src/content/**,src/pages/**,src/lib/seo.ts,src/lib/jsonld.ts
+alwaysApply: false
+---
+
+# Content en SEO
+
+## Copy
+
+1. Nederlands, je-vorm, korte zinnen, persoonlijk en concreet. Materiaal, aandacht en de maker dragen het verhaal.
+2. Geen superlatieven, geen uitroeptekens, geen gedachtestreepjes, geen Engelse marketingtermen, geen emoji.
+3. Eén H1 per pagina. Koppen beschrijven de inhoud, niet de vorm.
+4. Geen opvultekst om een woordenaantal te halen. Geen visueel verborgen SEO-tekst.
+5. Een lead-tekst is maximaal twee zinnen.
+
+## Contentmodel
+
+1. Alles wat op de site staat komt uit `src/content`. Nooit zichtbare tekst hardcoded in een component.
+2. Collecties: `projecten`, `diensten`, `edities`, `locaties`, `faq`, plus `instellingen/site.json`.
+3. Een nieuw project is een nieuw contentbestand plus beelden. Nooit een componentwijziging.
+4. Schema's in `src/content.config.ts` valideren aan de grens. Daarbinnen vertrouw je de types.
+
+## Feitencheck
+
+1. Elke pagina en elk contentbestand kan `beweringen[]` bevatten: uitspraken die Thomas moet bevestigen.
+2. De build schrijft `docs/FEITENCHECK.md` met alle open beweringen per pagina. Dat bestand is gegenereerd en staat in `.gitignore`.
+3. Voor lancering is die lijst leeg of bewust geaccepteerd.
+4. Twijfel je of iets een feit is, dan is het een bewering.
+
+## SEO
+
+1. Unieke `title` van maximaal 60 tekens met suffix " | Kolling". Unieke `description` van 140 tot 160 tekens.
+2. Absolute canonical op elke pagina. `lang="nl"`. Eén `og:image`.
+3. Alt-teksten beschrijven wat er te zien is. Bij een plaatshouder beschrijft de alt-tekst het beeld dat gaat komen.
+4. Interne links zijn gewone crawlbare `<a href>`. Geen navigatie via JavaScript.
+5. De sitemap bevat uitsluitend indexeerbare pagina's en wordt uit de content opgebouwd, niet met de hand.
+6. `noindex` voor `/design-system`, `/bedankt`, plaatshouderprojecten en niet-gepubliceerde locaties.
+7. Preview-deployments (`VERCEL_ENV=preview`) zijn volledig `noindex` met een afschermende `robots.txt`. Productie erft dat nooit.
+
+## Structured data
+
+1. `LocalBusiness` en `WebSite` vanuit `instellingen/site.json`. `BreadcrumbList` op onderliggende pagina's. `FAQPage` waar vragen staan.
+2. Alleen bekende feiten. Geen `geo` tot de coördinaten bevestigd zijn, geen `aggregateRating`, geen reviews, geen `Product` of `Offer` zolang er geen edities zijn.
+
+## Lokale SEO zonder doorway abuse
+
+1. Ommen is de enige echte vestigingsplaats. Landelijke dienstverlening wordt eerlijk beschreven op `/werkgebied`.
+2. `/werkgebied/ommen` is zelfstandig nuttig: werkplaatsadres, bezoek, mogelijkheden, aanpak van een aanvraag en praktische vragen. Geen homepage met een plaatsnaam erin.
+3. Geen reeks vergelijkbare plaatspagina's. Het schema van `locaties` dwingt af dat een locatie eigen secties, eigen logistiek en eigen vragen heeft voordat ze gepubliceerd mag worden.
+4. Een nieuwe locatiepagina komt er alleen als er echte, plaatsgebonden inhoud is.

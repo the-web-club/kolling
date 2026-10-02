@@ -1,0 +1,46 @@
+---
+description: Toegankelijkheid, performance, veiligheid, tests en de controles voor oplevering
+globs:
+alwaysApply: true
+---
+
+# Kwaliteit
+
+## Toegankelijkheid
+
+1. Semantische HTML. Eén `<h1>`, koppen in oplopende volgorde, `<nav>`, `<main>`, `<footer>`, `<figure>` met `<figcaption>`.
+2. Alles bereikbaar en bedienbaar met het toetsenbord, in de visuele volgorde. Zichtbare focus via de globale focusstijl.
+3. Contrast minimaal 4,5:1 voor tekst en 3:1 voor randen van interactieve elementen.
+4. Formuliervelden hebben een zichtbaar `<label>`, fouten via `aria-describedby`, en de eerste fout krijgt focus.
+5. Het mobiele menu heeft een focus trap, sluit op Escape en bij navigatie.
+6. Tekstvergroting tot 200 procent breekt geen layout. Alles blijft leesbaar en bruikbaar.
+7. `prefers-reduced-motion: reduce` respecteren volgens `70-motion.mdc`.
+
+## Performance
+
+1. Alle marketingpagina's prerenderen. Alleen `src/pages/api/aanvraag.ts` rendert op aanvraag.
+2. Beelden via Astro met `width`, `height` of `aspect-ratio`. Nul layout shift. Het eerste beeld laadt met prioriteit, de rest lazy.
+3. Fonts lokaal gehost als woff2 met `font-display: swap` en metric overrides op de terugvalstack.
+4. Weinig afhankelijkheden. Geen React, geen UI-library, geen animatiebibliotheek, geen iconenpakket.
+5. JavaScript alleen waar het gedrag toevoegt, als klein vanilla TypeScript-script. Zonder JavaScript werkt de site volledig.
+
+## Veiligheid
+
+1. Secrets uitsluitend server-side in environment variables. Nooit in een `PUBLIC_`-variabele, nooit in de client.
+2. Validatie aan de grens met Zod, met lengtelimieten. Origin-check, honingpot en minimale invultijd op het aanvraagendpoint.
+3. Geen volledige inzendingen in logs, geen persoonsgegevens in foutmeldingen, geen lokale opslag van aanvragen.
+4. Nooit een succesmelding zonder bevestigde aflevering. Ontbreekt de configuratie, dan meldt de site dat verzending niet beschikbaar is en biedt telefoon en Instagram als alternatief.
+
+## Tests
+
+1. Vitest dekt het gedrag van het aanvraagendpoint: validatie, honingpot, invultijd, origin-check, ontbrekende configuratie, timeout en afleverfout.
+2. Aflevering wordt getest met een mock. Tijdens ontwikkeling en tests gaan er geen echte berichten uit.
+3. Geen tests die alleen een CSS-implementatie herhalen. Geen snapshots van opmaak.
+
+## Controles voor oplevering
+
+1. `pnpm tokens:check`, `pnpm check`, `pnpm lint`, `pnpm test` en `pnpm build` slagen.
+2. Preview op 390, 768 en 1440 px: navigatie en mobiel menu, contactvoorselectie, formulierfouten, plaatshouderlabels, ontbrekende Resend-configuratie.
+3. Toetsenbord, zichtbare focus, reduced motion en tekstvergroting 200 procent.
+4. Canonicals, `noindex`-routes, sitemapuitsluitingen, structured data en interne links.
+5. Meld nooit dat verzending of deployment werkt zonder het te hebben geverifieerd.

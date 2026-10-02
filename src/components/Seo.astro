@@ -1,0 +1,32 @@
+---
+import { isPreviewOmgeving } from '@/lib/seo';
+
+interface Props {
+  titel: string;
+  beschrijving: string;
+  indexeerbaar?: boolean;
+}
+
+const { titel, beschrijving, indexeerbaar = true } = Astro.props;
+
+if (!Astro.site) {
+  throw new Error('astro.config.mjs mist de site-URL, dus canonicals kunnen niet absoluut zijn.');
+}
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogBeeld = new URL('/og.png', Astro.site).href;
+const mag = indexeerbaar && !isPreviewOmgeving;
+---
+
+<title>{titel}</title>
+<meta name="description" content={beschrijving} />
+<link rel="canonical" href={canonical} />
+<meta name="robots" content={mag ? 'index, follow' : 'noindex, nofollow'} />
+
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="nl_NL" />
+<meta property="og:title" content={titel} />
+<meta property="og:description" content={beschrijving} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogBeeld} />
+<meta name="twitter:card" content="summary_large_image" />

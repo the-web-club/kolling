@@ -1,0 +1,20 @@
+{
+  "kleur": {
+    "achtergrond": { "$value": "{primitief.kleur.papier.50}", "$type": "color" },
+    "achtergrond-verhoogd": { "$value": "{primitief.kleur.papier.0}", "$type": "color" },
+    "achtergrond-tint": { "$value": "{primitief.kleur.papier.100}", "$type": "color" },
+    "voorgrond": { "$value": "{primitief.kleur.inkt.900}", "$type": "color" },
+    "voorgrond-gedempt": { "$value": "{primitief.kleur.inkt.700}", "$type": "color" },
+    "voorgrond-subtiel": { "$value": "{primitief.kleur.steen.400}", "$type": "color" },
+    "voorgrond-invers": { "$value": "{primitief.kleur.papier.0}", "$type": "color" },
+    "lijn": { "$value": "{primitief.kleur.lijn.200}", "$type": "color" },
+    "lijn-sterk": { "$value": "{primitief.kleur.inkt.900}", "$type": "color" },
+    "accent": { "$value": "{primitief.kleur.hout.noten.700}", "$type": "color" },
+    "fout": { "$value": "{primitief.kleur.fout.600}", "$type": "color" },
+    "plaatshouder": {
+      "eik": { "$value": "{primitief.kleur.hout.eik.400}", "$type": "color" },
+      "noten": { "$value": "{primitief.kleur.hout.noten.700}", "$type": "color" },
+      "es": { "$value": "{primitief.kleur.hout.es.200}", "$type": "color" }
+    }
+  }
+}

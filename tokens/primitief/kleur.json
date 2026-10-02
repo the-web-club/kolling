@@ -1,0 +1,36 @@
+﻿{
+  "primitief": {
+    "kleur": {
+      "papier": {
+        "0": { "$value": "#ffffff", "$type": "color" },
+        "50": { "$value": "#faf9f7", "$type": "color" },
+        "100": { "$value": "#f3f1ec", "$type": "color" }
+      },
+      "lijn": {
+        "200": { "$value": "#e3e0d9", "$type": "color" }
+      },
+      "steen": {
+        "400": { "$value": "#9b968d", "$type": "color" }
+      },
+      "inkt": {
+        "700": { "$value": "#4a4844", "$type": "color" },
+        "900": { "$value": "#1b1a18", "$type": "color" },
+        "1000": { "$value": "#000000", "$type": "color" }
+      },
+      "hout": {
+        "es": {
+          "200": { "$value": "#e7decf", "$type": "color" }
+        },
+        "eik": {
+          "400": { "$value": "#c7a67a", "$type": "color" }
+        },
+        "noten": {
+          "700": { "$value": "#6a4931", "$type": "color" }
+        }
+      },
+      "fout": {
+        "600": { "$value": "#a23a29", "$type": "color" }
+      }
+    }
+  }
+}

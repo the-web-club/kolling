@@ -1,0 +1,67 @@
+---
+import FormulierVeld from '@/components/FormulierVeld.astro';
+import { Chevron } from '@/components/iconen';
+
+interface Props {
+  naam: string;
+  label: string;
+  opties: readonly { waarde: string; label: string }[];
+  foutmelding: string;
+  breedte?: 'half' | 'vol';
+}
+
+const { naam, label, opties, foutmelding, breedte = 'vol' } = Astro.props;
+---
+
+<FormulierVeld naam={naam} label={label} breedte={breedte}>
+  <div class="keuze">
+    <select
+      id={naam}
+      name={naam}
+      required
+      aria-describedby={`fout-${naam}`}
+      data-foutmelding={foutmelding}
+    >
+      <option value="">Maak een keuze</option>
+      {opties.map((optie) => <option value={optie.waarde}>{optie.label}</option>)}
+    </select>
+    <Chevron />
+  </div>
+</FormulierVeld>
+
+<style>
+  .keuze {
+    position: relative;
+    display: grid;
+  }
+
+  .keuze :global(.chevron) {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: var(--invoer-padding-inline);
+    translate: 0 -50%;
+    pointer-events: none;
+    color: var(--kleur-voorgrond-subtiel);
+  }
+
+  select {
+    appearance: none;
+    min-block-size: var(--invoer-hoogte);
+    padding-inline: var(--invoer-padding-inline);
+    padding-inline-end: var(--ruimte-10);
+    font-family: var(--tekst-lopend-familie);
+    font-size: var(--invoer-grootte);
+    color: var(--invoer-voorgrond);
+    background-color: var(--invoer-achtergrond);
+    border: var(--k-rand-haarlijn) solid var(--invoer-rand);
+    border-radius: var(--invoer-radius);
+  }
+
+  select:focus-visible {
+    border-color: var(--invoer-rand-focus);
+  }
+
+  select[data-fout] {
+    border-color: var(--invoer-rand-fout);
+  }
+</style>

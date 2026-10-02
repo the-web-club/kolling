@@ -1,0 +1,43 @@
+---
+import Beeld from '@/components/Beeld.astro';
+import MuseumLabel from '@/components/MuseumLabel.astro';
+import type { Project } from '@/lib/content';
+
+interface Props {
+  project: Project;
+  verhouding?: 'liggend' | 'staand' | 'vierkant' | 'breed';
+}
+
+const { project, verhouding } = Astro.props;
+const [omslag] = project.data.beelden;
+
+if (!omslag) {
+  throw new Error(`Project ${project.id} heeft geen beelden.`);
+}
+
+const beeld = verhouding ? { ...omslag, verhouding, bijschrift: undefined } : omslag;
+---
+
+<a class="werk-kaart" href={`/werk/${project.id}`}>
+  <Beeld beeld={beeld} />
+  <MuseumLabel
+    titel={project.data.titel}
+    materialen={project.data.materialen}
+    afmetingen={project.data.afmetingen}
+    jaar={project.data.jaar}
+    compact
+  />
+</a>
+
+<style>
+  .werk-kaart {
+    display: grid;
+    gap: var(--ruimte-stapel-md);
+    color: var(--kleur-voorgrond);
+    text-decoration-line: none;
+  }
+
+  .werk-kaart:active {
+    opacity: 0.8;
+  }
+</style>

@@ -1,0 +1,53 @@
+---
+interface Props {
+  tint: 'eik' | 'noten' | 'es';
+  label: string;
+}
+
+const { tint, label } = Astro.props;
+---
+
+<div class="plaatshouder" data-tint={tint}>
+  <span class="label">{label}</span>
+</div>
+
+<style>
+  .plaatshouder {
+    display: grid;
+    place-items: center;
+    block-size: 100%;
+    background-image:
+      repeating-linear-gradient(
+        92deg,
+        rgb(0 0 0 / var(--plaatshouder-korrel-dekking)) 0 1px,
+        transparent 1px 7px
+      ),
+      repeating-linear-gradient(
+        88deg,
+        rgb(255 255 255 / var(--plaatshouder-korrel-dekking)) 0 1px,
+        transparent 1px 13px
+      );
+  }
+
+  .plaatshouder[data-tint='eik'] {
+    background-color: var(--kleur-plaatshouder-eik);
+  }
+
+  .plaatshouder[data-tint='noten'] {
+    background-color: var(--kleur-plaatshouder-noten);
+  }
+
+  .plaatshouder[data-tint='es'] {
+    background-color: var(--kleur-plaatshouder-es);
+  }
+
+  .label {
+    padding: var(--ruimte-stapel-sm) var(--ruimte-stapel-md);
+    font-size: var(--plaatshouder-label-grootte);
+    font-weight: var(--tekst-label-gewicht);
+    letter-spacing: var(--tekst-label-spatiering);
+    text-transform: uppercase;
+    color: var(--plaatshouder-label-voorgrond);
+    background-color: var(--kleur-achtergrond-verhoogd);
+  }
+</style>

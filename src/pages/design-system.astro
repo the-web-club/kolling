@@ -1,0 +1,304 @@
+﻿---
+import logo from '@/assets/merk/d-logo.svg?url';
+import Beeld from '@/components/Beeld.astro';
+import Faq from '@/components/Faq.astro';
+import Knop from '@/components/Knop.astro';
+import MuseumLabel from '@/components/MuseumLabel.astro';
+import Plaatshouder from '@/components/Plaatshouder.astro';
+import ProcesStappen from '@/components/ProcesStappen.astro';
+import SectieIntro from '@/components/SectieIntro.astro';
+import TekstLink from '@/components/TekstLink.astro';
+import { tokens } from '@/design/tokens.gegenereerd';
+import Basis from '@/layouts/Basis.astro';
+
+const kleuren = tokens.filter(
+  (token) => token.laag === 'semantisch' && token.pad.startsWith('kleur.'),
+);
+const tekststijlen = tokens.filter(
+  (token) => token.laag === 'semantisch' && token.pad.endsWith('.grootte'),
+);
+const ruimtes = tokens.filter(
+  (token) => token.laag === 'semantisch' && token.pad.startsWith('ruimte.'),
+);
+const componenttokens = tokens.filter((token) => token.laag === 'componenten');
+
+const VOORBEELDVRAGEN = [
+  {
+    vraag: 'Hoe gedraagt een gesloten vraag zich',
+    antwoord: 'Zo, met het antwoord in gedempte tekst onder de haarlijn.',
+  },
+  {
+    vraag: 'En een tweede vraag',
+    antwoord: 'Bij het openen sluit de vorige, omdat de groep een naam deelt.',
+  },
+];
+
+const VOORBEELDSTAPPEN = [
+  { kop: 'Eerste stap', tekst: 'Een stap bestaat uit een nummer, een kop en twee regels tekst.' },
+  { kop: 'Tweede stap', tekst: 'De haarlijn boven elke stap houdt het raster zichtbaar.' },
+];
+---
+
+<Basis
+  titel="Design system"
+  beschrijving="Interne referentiepagina met de tokens, typografie, componenten en bewegingsvoorbeelden van het design system Galerie."
+  indexeerbaar={false}
+>
+  <section>
+    <SectieIntro label="Galerie" kop="Design system" niveau={1}>
+      <p>
+        Deze pagina leest de tokens uit <code>src/design/tokens.gegenereerd.ts</code>, zodat ze niet
+        kan verouderen. Pas de bron in <code>tokens/</code> aan en draai
+        <code>pnpm tokens:build</code>.
+      </p>
+    </SectieIntro>
+  </section>
+
+  <section>
+    <SectieIntro kop="Logo" />
+    <div class="blok">
+      <div class="logovlak">
+        <img src={logo} alt="Kolling" width="258" height="121" />
+      </div>
+      <p class="noot">
+        Een variant, zwart op transparant, uitsluitend op lichte vlakken. Niet inverteren,
+        herkleuren of hertekenen.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <SectieIntro kop="Kleur" />
+    <ul class="stalen">
+      {
+        kleuren.map((token) => (
+          <li class="staal">
+            <span class="vlak" style={`--staal: var(--${token.naam})`} />
+            <span class="naam">{token.pad}</span>
+            <span class="waarde">{token.waarde}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section>
+    <SectieIntro kop="Typografie" />
+    <div class="blok">
+      {
+        tekststijlen.map((token) => (
+          <p class="proef" style={`--proefgrootte: var(--${token.naam})`}>
+            {token.pad.replace('.grootte', '')}
+          </p>
+        ))
+      }
+    </div>
+  </section>
+
+  <section>
+    <SectieIntro kop="Ruimte" />
+    <ul class="maten">
+      {
+        ruimtes.map((token) => (
+          <li class="maat">
+            <span class="balk" style={`--balkbreedte: var(--${token.naam})`} />
+            <span class="naam">{token.pad}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section>
+    <SectieIntro kop="Knoppen en links" />
+    <div class="blok rij">
+      <Knop>Bespreek je idee</Knop>
+      <Knop variant="omlijnd">Bezoek de werkplaats</Knop>
+      <Knop disabled>Versturen</Knop>
+      <TekstLink href="/design-system">Onderstreepte link</TekstLink>
+      <TekstLink href="/design-system" variant="intekenend">Intekenende link</TekstLink>
+    </div>
+  </section>
+
+  <section>
+    <SectieIntro kop="Beeld en plaatshouders" />
+    <div class="beelden">
+      <Beeld
+        beeld={{
+          alt: 'Voorbeeld van een liggend beeldslot met een plaatshouder in eik',
+          plaatshouder: { tint: 'eik', label: 'Beeld volgt' },
+          verhouding: 'liggend',
+          bijschrift: 'Liggend, 3:2',
+        }}
+      />
+      <Beeld
+        beeld={{
+          alt: 'Voorbeeld van een staand beeldslot met een plaatshouder in noten',
+          plaatshouder: { tint: 'noten', label: 'Beeld volgt' },
+          verhouding: 'staand',
+          bijschrift: 'Staand, 4:5',
+        }}
+      />
+      <div class="tintvlak">
+        <Plaatshouder tint="es" label="Es" />
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <SectieIntro kop="Museumlabel" />
+    <div class="blok">
+      <MuseumLabel
+        titel="Eettafel in massief eiken"
+        materialen={['Massief eiken', 'Zwart gepoedercoat staal']}
+        afmetingen={{ lengte: 260, breedte: 100, hoogte: 75 }}
+        afwerking="Geoliede afwerking in twee lagen"
+      />
+    </div>
+  </section>
+
+  <section>
+    <SectieIntro kop="Proces en vragen" />
+    <ProcesStappen stappen={VOORBEELDSTAPPEN} />
+    <div class="blok">
+      <Faq vragen={VOORBEELDVRAGEN} />
+    </div>
+  </section>
+
+  <section>
+    <SectieIntro kop="Componenttokens" />
+    <ul class="tokenlijst">
+      {
+        componenttokens.map((token) => (
+          <li>
+            <code>--{token.naam}</code>
+            <span class="waarde">{token.waarde}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Basis>
+
+<style>
+  .blok,
+  .stalen,
+  .maten,
+  .beelden,
+  .tokenlijst {
+    grid-column: 1 / -1;
+  }
+
+  .blok {
+    display: grid;
+    gap: var(--ruimte-stapel-md);
+  }
+
+  .rij {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ruimte-stapel-md);
+  }
+
+  .logovlak {
+    display: grid;
+    place-items: center;
+    padding: var(--ruimte-12);
+    background-color: var(--kleur-achtergrond-verhoogd);
+    border: var(--k-rand-haarlijn) solid var(--kleur-lijn);
+  }
+
+  .logovlak img {
+    block-size: 3rem;
+    inline-size: auto;
+  }
+
+  .noot {
+    font-size: var(--tekst-klein-grootte);
+    color: var(--kleur-voorgrond-subtiel);
+  }
+
+  .stalen,
+  .maten,
+  .tokenlijst {
+    display: grid;
+    gap: var(--ruimte-stapel-md);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .staal {
+    display: grid;
+    grid-template-columns: 3rem 1fr auto;
+    gap: var(--ruimte-stapel-md);
+    align-items: center;
+    font-size: var(--tekst-klein-grootte);
+  }
+
+  .vlak {
+    aspect-ratio: var(--k-verhouding-vierkant);
+    background-color: var(--staal);
+    border: var(--k-rand-haarlijn) solid var(--kleur-lijn);
+  }
+
+  .maat {
+    display: grid;
+    grid-template-columns: 12rem 1fr;
+    gap: var(--ruimte-stapel-md);
+    align-items: center;
+    font-size: var(--tekst-klein-grootte);
+  }
+
+  .balk {
+    inline-size: var(--balkbreedte);
+    block-size: var(--ruimte-2);
+    background-color: var(--kleur-voorgrond);
+  }
+
+  .waarde {
+    font-variant-numeric: tabular-nums;
+    color: var(--kleur-voorgrond-subtiel);
+  }
+
+  .proef {
+    margin: 0;
+    font-family: var(--tekst-kop1-familie);
+    font-size: var(--proefgrootte);
+    line-height: var(--tekst-kop2-regelhoogte);
+  }
+
+  .beelden {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--ruimte-rij-md) var(--ruimte-goot);
+  }
+
+  .beelden > :global(*) {
+    grid-column: span 4;
+  }
+
+  .tintvlak {
+    aspect-ratio: var(--k-verhouding-vierkant);
+  }
+
+  .tokenlijst li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ruimte-stapel-md);
+    justify-content: space-between;
+    padding-block: var(--ruimte-stapel-sm);
+    font-size: var(--tekst-klein-grootte);
+    border-block-end: var(--k-rand-haarlijn) solid var(--kleur-lijn);
+  }
+
+  @media (min-width: 48rem) {
+    .blok,
+    .stalen,
+    .maten,
+    .tokenlijst {
+      grid-column: 2 / span 8;
+    }
+  }
+</style>

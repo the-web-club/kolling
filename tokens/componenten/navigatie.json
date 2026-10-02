@@ -1,0 +1,17 @@
+{
+  "navigatie": {
+    "hoogte": { "$value": "5rem", "$type": "dimension" },
+    "grootte": { "$value": "{tekst.klein.grootte}", "$type": "dimension" },
+    "spatiering": { "$value": "{primitief.letter.spatiering.kapitaal}", "$type": "dimension" },
+    "voorgrond": { "$value": "{kleur.voorgrond}", "$type": "color" },
+    "voorgrond-rust": { "$value": "{kleur.voorgrond-gedempt}", "$type": "color" },
+    "lijn": { "$value": "{kleur.lijn}", "$type": "color" },
+    "laag": { "$value": "{primitief.laag.kop}", "$type": "number" }
+  },
+  "link": {
+    "onderstreping-afstand": { "$value": "0.15em", "$type": "dimension" },
+    "onderstreping-dikte": { "$value": "{primitief.rand.haarlijn}", "$type": "dimension" },
+    "onderstreping-kleur": { "$value": "{kleur.lijn}", "$type": "color" },
+    "onderstreping-kleur-hover": { "$value": "{kleur.voorgrond}", "$type": "color" }
+  }
+}

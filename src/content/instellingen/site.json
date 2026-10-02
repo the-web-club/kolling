@@ -1,0 +1,31 @@
+[
+  {
+    "id": "site",
+    "naam": "Kolling",
+    "juridischeNaam": "[VUL IN]",
+    "maker": "Thomas Kolling",
+    "adres": {
+      "straat": "Strangeweg 5",
+      "postcode": "7731 GV",
+      "plaats": "Ommen",
+      "land": "Nederland"
+    },
+    "telefoon": {
+      "weergave": "06 13 62 22 76",
+      "e164": "+31613622276"
+    },
+    "email": "[VUL IN]",
+    "kvk": "[VUL IN]",
+    "geo": "[VUL IN]",
+    "instagram": "https://www.instagram.com/kolling.nl/",
+    "bezoek": "Bezoek aan de werkplaats gaat op afspraak.",
+    "cta": {
+      "primair": "Bespreek je idee",
+      "secundair": "Bezoek de werkplaats"
+    },
+    "seo": {
+      "titelSuffix": " | Kolling",
+      "beschrijving": "Kolling maakt meubels en houtwerk op maat in de eigen werkplaats in Ommen. Je bespreekt je idee met Thomas en wij werken het samen uit tot een ontwerp."
+    }
+  }
+]

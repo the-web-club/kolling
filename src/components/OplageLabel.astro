@@ -1,0 +1,39 @@
+---
+interface Props {
+  oplage: number;
+  beschikbaar: number;
+  status: 'beschikbaar' | 'gereserveerd' | 'uitverkocht';
+}
+
+const { oplage, beschikbaar, status } = Astro.props;
+
+const LABELS: Record<Props['status'], string> = {
+  beschikbaar: 'Beschikbaar',
+  gereserveerd: 'Gereserveerd',
+  uitverkocht: 'Uitverkocht',
+};
+---
+
+<p class="oplage-label">
+  <span class="aantal">{beschikbaar} van {oplage}</span>
+  <span class="status">{LABELS[status]}</span>
+</p>
+
+<style>
+  .oplage-label {
+    display: flex;
+    gap: var(--ruimte-stapel-md);
+    font-size: var(--tekst-label-grootte);
+    font-weight: var(--tekst-label-gewicht);
+    letter-spacing: var(--tekst-label-spatiering);
+    text-transform: uppercase;
+  }
+
+  .aantal {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .status {
+    color: var(--kleur-voorgrond-subtiel);
+  }
+</style>

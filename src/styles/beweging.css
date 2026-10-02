@@ -1,0 +1,104 @@
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    scroll-behavior: smooth;
+  }
+
+  [data-binnenkomst='hero'] {
+    animation: hero-omhoog var(--beweging-binnenkomst-hero) both;
+  }
+
+  [data-js] [data-onthul='omhoog'] {
+    opacity: 0;
+    translate: 0 var(--k-beweging-afstand-md);
+    transition:
+      opacity var(--beweging-binnenkomst),
+      translate var(--beweging-binnenkomst);
+    transition-delay: var(--onthul-vertraging, 0ms);
+  }
+
+  /* Het masker staat op het eerste kind, niet op het element zelf: een element met
+     een clip-path van nul oppervlak kruist nooit de viewport en zou nooit onthullen. */
+  [data-js] [data-onthul='gordijn'] > :first-child {
+    clip-path: inset(0 0 var(--k-beweging-afstand-masker) 0);
+    scale: var(--k-beweging-schaal-onthul);
+    transition:
+      clip-path var(--beweging-binnenkomst-beeld),
+      scale var(--beweging-binnenkomst-beeld);
+    transition-delay: var(--onthul-vertraging, 0ms);
+  }
+
+  [data-js] [data-onthul='lijn'] {
+    scale: 0 1;
+    transform-origin: left center;
+    transition: scale var(--beweging-binnenkomst);
+    transition-delay: var(--onthul-vertraging, 0ms);
+  }
+
+  [data-js] [data-onthul-regel] {
+    display: block;
+    overflow: clip;
+  }
+
+  [data-js] [data-onthul-regel] > span {
+    display: block;
+    translate: 0 110%;
+    transition: translate var(--beweging-binnenkomst);
+    transition-delay: var(--onthul-vertraging, 0ms);
+  }
+
+  [data-onthul='omhoog'][data-in-beeld] {
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  [data-onthul='gordijn'][data-in-beeld] > :first-child {
+    clip-path: inset(0);
+    scale: 1;
+  }
+
+  [data-onthul='lijn'][data-in-beeld] {
+    scale: 1 1;
+  }
+
+  [data-onthul-regel][data-in-beeld] > span {
+    translate: 0 0;
+  }
+
+  ::view-transition-old(root) {
+    animation: pagina-weg var(--beweging-pagina-uit) both;
+  }
+
+  ::view-transition-new(root) {
+    animation: pagina-terug var(--beweging-pagina-in) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-js] [data-onthul] {
+    opacity: 0;
+    transition: opacity 200ms linear;
+  }
+
+  [data-onthul][data-in-beeld] {
+    opacity: 1;
+  }
+}
+
+@keyframes hero-omhoog {
+  from {
+    opacity: 0;
+    translate: 0 var(--k-beweging-afstand-lg);
+  }
+}
+
+@keyframes pagina-weg {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes pagina-terug {
+  from {
+    opacity: 0;
+  }
+}

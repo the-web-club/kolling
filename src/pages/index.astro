@@ -1,0 +1,182 @@
+---
+import Beeld from '@/components/Beeld.astro';
+import CtaStrook from '@/components/CtaStrook.astro';
+import Hero from '@/components/Hero.astro';
+import MateriaalLijst from '@/components/MateriaalLijst.astro';
+import ProcesStappen from '@/components/ProcesStappen.astro';
+import SectieIntro from '@/components/SectieIntro.astro';
+import TekstLink from '@/components/TekstLink.astro';
+import WerkRaster from '@/components/WerkRaster.astro';
+import Basis from '@/layouts/Basis.astro';
+import { haalDiensten, haalInstellingen, haalUitgelichtWerk } from '@/lib/content';
+
+const instellingen = await haalInstellingen();
+const uitgelicht = await haalUitgelichtWerk(3);
+const diensten = await haalDiensten();
+
+const PROCES = [
+  {
+    kop: 'Je idee',
+    tekst: 'Je stuurt wat je in gedachten hebt, met maten en foto\u2019s van de ruimte. Daar begint het gesprek.',
+  },
+  {
+    kop: 'Ontwerp en maat',
+    tekst: 'We bepalen de maatvoering, de houtsoort en de afwerking. Bij inbouwwerk wordt er eerst ingemeten.',
+  },
+  {
+    kop: 'In de werkplaats',
+    tekst: 'Het werk wordt in Ommen gemaakt en daar compleet afgewerkt, zodat er op locatie zo weinig mogelijk hoeft te gebeuren.',
+  },
+  {
+    kop: 'Plaatsen',
+    tekst: 'Het meubel wordt geleverd en op zijn plek gezet. Inbouwwerk wordt ter plekke gesteld en afgewerkt.',
+  },
+];
+
+const HEROBEELD = {
+  alt: 'Een eettafel van massief eiken in een lichte ruimte, gezien vanaf de korte zijde',
+  plaatshouder: { tint: 'eik', label: 'Beeld volgt' },
+  verhouding: 'staand',
+} as const;
+---
+
+<Basis
+  titel="Meubels en houtwerk op maat"
+  beschrijving={instellingen.seo.beschrijving}
+>
+  <Hero
+    kop="Hout dat de ruimte rustiger maakt"
+    intro="Kolling maakt meubels en houtwerk op maat in de eigen werkplaats in Ommen. Eén maker, van het eerste gesprek tot het plaatsen."
+    beeld={HEROBEELD}
+    primair={{ naam: instellingen.cta.primair, pad: '/contact' }}
+    secundair={{ naam: 'Bekijk het werk', pad: '/werk' }}
+  />
+
+  <section>
+    <SectieIntro label="Werk" kop="Uitgelicht werk">
+      <p>
+        Hieronder staat werk zoals het uit de werkplaats komt. De beelden zijn nog impressies;
+        eigen projectfoto&rsquo;s volgen.
+      </p>
+    </SectieIntro>
+    <WerkRaster projecten={uitgelicht} />
+    <p class="verder">
+      <TekstLink href="/werk" variant="intekenend">Al het werk bekijken</TekstLink>
+    </p>
+  </section>
+
+  <section>
+    <SectieIntro label="Maatwerk" kop="Wat we maken">
+      <p>
+        Vier soorten werk, met per soort een eigen aanpak. Je leest per categorie wat er mogelijk
+        is en hoe een opdracht verloopt.
+      </p>
+    </SectieIntro>
+    <div class="diensten">
+      {
+        diensten.map((dienst) => (
+          <MateriaalLijst kop={dienst.data.titel} items={dienst.data.voorWie.slice(0, 2)} />
+        ))
+      }
+    </div>
+    <p class="verder">
+      <TekstLink href="/maatwerk" variant="intekenend">Alles over maatwerk</TekstLink>
+    </p>
+  </section>
+
+  <section>
+    <SectieIntro label="Werkplaats" kop="Eén werkplaats in Ommen">
+      <p>
+        Alles wordt gemaakt aan de Strangeweg in Ommen. Je kunt op afspraak langskomen om het hout
+        te zien voordat er iets gezaagd wordt.
+      </p>
+      <p>
+        <TekstLink href="/werkplaats" variant="intekenend">Over Thomas en de werkplaats</TekstLink>
+      </p>
+    </SectieIntro>
+    <div class="werkplaatsbeeld">
+      <Beeld
+        beeld={{
+          alt: 'De werkbank in de werkplaats in Ommen, met gereedschap binnen handbereik',
+          plaatshouder: { tint: 'noten', label: 'Beeld volgt' },
+          verhouding: 'breed',
+        }}
+      />
+    </div>
+  </section>
+
+  <section>
+    <SectieIntro label="Werkwijze" kop="Van idee naar uitvoering">
+      <p>Vier stappen, van het eerste bericht tot het meubel dat staat.</p>
+    </SectieIntro>
+    <ProcesStappen stappen={PROCES} />
+  </section>
+
+  <section class="tintstrook">
+    <SectieIntro label="Edities" kop="Edities in beperkte oplage">
+      <p>
+        Naast maatwerk komen er eigen ontwerpen in beperkte oplage. De collectie is nog in
+        ontwikkeling en er is nog niets te koop.
+      </p>
+      <p>
+        <TekstLink href="/edities" variant="intekenend">Wat Edities worden</TekstLink>
+      </p>
+    </SectieIntro>
+  </section>
+
+  <CtaStrook
+    kop="Bespreek je idee"
+    tekst="Stuur je idee met maten en foto's van de ruimte. Je hoort binnen twee werkdagen wat er mogelijk is."
+  />
+</Basis>
+
+<style>
+  .verder {
+    grid-column: 1 / -1;
+    margin-block-start: var(--ruimte-stapel-lg);
+  }
+
+  .diensten {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--ruimte-rij-md) var(--ruimte-goot);
+  }
+
+  .diensten > :global(*) {
+    grid-column: 1 / -1;
+  }
+
+  .werkplaatsbeeld {
+    grid-column: 1 / -1;
+    margin-block-start: var(--ruimte-stapel-lg);
+  }
+
+  .tintstrook {
+    position: relative;
+    padding-block: var(--ruimte-sectie);
+  }
+
+  /* De tint loopt door tot de schermranden; het raster blijft op de goot staan. */
+  .tintstrook::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    inline-size: 100vw;
+    margin-inline-start: calc(50% - 50vw);
+    background-color: var(--kleur-achtergrond-tint);
+  }
+
+  @media (min-width: 48rem) {
+    .diensten > :global(*) {
+      grid-column: span 6;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .diensten > :global(*) {
+      grid-column: span 3;
+    }
+  }
+</style>

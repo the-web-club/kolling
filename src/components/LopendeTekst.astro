@@ -1,0 +1,34 @@
+---
+---
+
+<div class="lopende-tekst">
+  <slot />
+</div>
+
+<style>
+  .lopende-tekst {
+    display: grid;
+    gap: var(--ruimte-stapel-lg);
+  }
+
+  .lopende-tekst :global(p) {
+    color: var(--kleur-voorgrond-gedempt);
+  }
+
+  .lopende-tekst :global(h2),
+  .lopende-tekst :global(h3) {
+    margin-block-start: var(--ruimte-stapel-lg);
+  }
+
+  .lopende-tekst :global(a) {
+    text-decoration-line: underline;
+  }
+
+  .lopende-tekst :global(ul) {
+    display: grid;
+    gap: var(--ruimte-stapel-sm);
+    margin: 0;
+    padding-inline-start: var(--ruimte-5);
+    color: var(--kleur-voorgrond-gedempt);
+  }
+</style>

@@ -1,0 +1,149 @@
+---
+import { render } from 'astro:content';
+import Beeld from '@/components/Beeld.astro';
+import CtaStrook from '@/components/CtaStrook.astro';
+import Kruimelpad from '@/components/Kruimelpad.astro';
+import LopendeTekst from '@/components/LopendeTekst.astro';
+import MuseumLabel from '@/components/MuseumLabel.astro';
+import OplageLabel from '@/components/OplageLabel.astro';
+import Basis from '@/layouts/Basis.astro';
+import { haalEdities, type Editie } from '@/lib/content';
+import { formatteerEuro } from '@/lib/formatteer';
+import { maakKruimels } from '@/lib/seo';
+
+export async function getStaticPaths() {
+  const edities = await haalEdities();
+  return edities.map((editie) => ({ params: { slug: editie.id }, props: { editie } }));
+}
+
+interface Props {
+  editie: Editie;
+}
+
+const { editie } = Astro.props;
+const { Content } = await render(editie);
+const [omslag, ...overige] = editie.data.beelden;
+
+if (!omslag) {
+  throw new Error(`Editie ${editie.id} heeft geen beelden.`);
+}
+
+const kruimels = maakKruimels(`/edities/${editie.id}`, {
+  '/edities': 'Edities',
+  [`/edities/${editie.id}`]: editie.data.titel,
+});
+---
+
+<Basis titel={editie.data.seo.titel} beschrijving={editie.data.seo.beschrijving}>
+  <section>
+    <Kruimelpad kruimels={kruimels} />
+  </section>
+
+  <section>
+    <div class="kop">
+      <h1>{editie.data.titel}</h1>
+      <p class="intro">{editie.data.intro}</p>
+      <OplageLabel
+        oplage={editie.data.oplage}
+        beschikbaar={editie.data.beschikbaar}
+        status={editie.data.status}
+      />
+      <p class="prijs">{formatteerEuro(editie.data.prijs)}</p>
+    </div>
+    <div class="omslag">
+      <Beeld beeld={omslag} prioriteit onthul={false} />
+    </div>
+  </section>
+
+  <section>
+    <div class="label-kolom">
+      <MuseumLabel
+        titel={editie.data.titel}
+        materialen={editie.data.materialen}
+        afmetingen={editie.data.afmetingen}
+        jaar={editie.data.jaar}
+      />
+    </div>
+    <div class="verhaal">
+      <LopendeTekst>
+        <Content />
+      </LopendeTekst>
+    </div>
+  </section>
+
+  {
+    overige.length > 0 && (
+      <section>
+        <div class="reeks" data-onthul-groep>
+          {overige.map((beeld) => (
+            <Beeld beeld={beeld} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <CtaStrook
+    kop="Interesse in deze editie"
+    tekst="Laat weten dat je interesse hebt. Je hoort binnen twee werkdagen of er nog een exemplaar beschikbaar is."
+    aanvraag="editie"
+  />
+</Basis>
+
+<style>
+  .kop {
+    display: grid;
+    gap: var(--ruimte-stapel-md);
+    grid-column: 1 / -1;
+    align-content: center;
+  }
+
+  .intro {
+    font-size: var(--tekst-intro-grootte);
+    line-height: var(--tekst-intro-regelhoogte);
+    color: var(--kleur-voorgrond-gedempt);
+  }
+
+  .prijs {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .omslag,
+  .label-kolom,
+  .verhaal,
+  .reeks {
+    grid-column: 1 / -1;
+  }
+
+  .reeks {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--ruimte-rij-lg) var(--ruimte-goot);
+  }
+
+  .reeks > :global(*) {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 64rem) {
+    .kop {
+      grid-column: 1 / span 5;
+    }
+
+    .omslag {
+      grid-column: 7 / span 6;
+    }
+
+    .label-kolom {
+      grid-column: 1 / span 3;
+    }
+
+    .verhaal {
+      grid-column: 5 / span 6;
+    }
+
+    .reeks > :global(*) {
+      grid-column: span 6;
+    }
+  }
+</style>

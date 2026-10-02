@@ -1,0 +1,258 @@
+---
+import FormulierKeuze from '@/components/FormulierKeuze.astro';
+import FormulierVeld from '@/components/FormulierVeld.astro';
+import Knop from '@/components/Knop.astro';
+import TekstLink from '@/components/TekstLink.astro';
+import {
+  BUDGETTEN,
+  LABEL_BUDGET,
+  LABEL_PERIODE,
+  LABEL_SOORT,
+  PERIODES,
+  SOORTEN_AANVRAAG,
+} from '@/lib/aanvraag-schema';
+import { haalInstellingen } from '@/lib/content';
+
+const instellingen = await haalInstellingen();
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+
+const soorten = SOORTEN_AANVRAAG.map((waarde) => ({ waarde, label: LABEL_SOORT[waarde] }));
+const budgetten = BUDGETTEN.map((waarde) => ({ waarde, label: LABEL_BUDGET[waarde] }));
+const periodes = PERIODES.map((waarde) => ({ waarde, label: LABEL_PERIODE[waarde] }));
+---
+
+<form class="aanvraag-formulier" method="post" action="/api/aanvraag" novalidate>
+  <p class="honingpot">
+    <label for="honingpot">Laat dit veld leeg</label>
+    <input id="honingpot" name="honingpot" type="text" tabindex="-1" autocomplete="off" />
+  </p>
+  <input id="tijdstempel" name="tijdstempel" type="hidden" />
+
+  <FormulierVeld naam="naam" label="Naam" breedte="half">
+    <input
+      id="naam"
+      name="naam"
+      type="text"
+      required
+      minlength="2"
+      maxlength="80"
+      autocomplete="name"
+      aria-describedby="fout-naam"
+      data-foutmelding="Vul je naam in."
+    />
+  </FormulierVeld>
+
+  <FormulierVeld naam="email" label="E-mailadres" breedte="half">
+    <input
+      id="email"
+      name="email"
+      type="email"
+      required
+      maxlength="120"
+      autocomplete="email"
+      aria-describedby="fout-email"
+      data-foutmelding="Vul een e-mailadres in met een @."
+    />
+  </FormulierVeld>
+
+  <FormulierVeld naam="telefoon" label="Telefoon" optioneel breedte="half">
+    <input
+      id="telefoon"
+      name="telefoon"
+      type="tel"
+      maxlength="30"
+      autocomplete="tel"
+      placeholder="bijv. 06 12 34 56 78"
+      aria-describedby="fout-telefoon"
+      data-foutmelding="Dit telefoonnummer is te lang."
+    />
+  </FormulierVeld>
+
+  <FormulierVeld naam="plaats" label="Plaats of postcode" optioneel breedte="half">
+    <input
+      id="plaats"
+      name="plaats"
+      type="text"
+      maxlength="80"
+      autocomplete="postal-code"
+      placeholder="bijv. 7731 GV"
+      aria-describedby="fout-plaats"
+      data-foutmelding="Gebruik maximaal 80 tekens."
+    />
+  </FormulierVeld>
+
+  <FormulierKeuze
+    naam="soortAanvraag"
+    label="Waar gaat je aanvraag over"
+    opties={soorten}
+    foutmelding="Kies waar je aanvraag over gaat."
+    breedte="half"
+  />
+
+  <FormulierKeuze
+    naam="budget"
+    label="Budgetindicatie"
+    opties={budgetten}
+    foutmelding="Kies een budgetindicatie."
+    breedte="half"
+  />
+
+  <FormulierKeuze
+    naam="periode"
+    label="Wanneer heb je het nodig"
+    opties={periodes}
+    foutmelding="Kies wanneer je het nodig hebt."
+    breedte="half"
+  />
+
+  <FormulierVeld naam="idee" label="Je idee">
+    <textarea
+      id="idee"
+      name="idee"
+      rows="7"
+      required
+      minlength="20"
+      maxlength="4000"
+      aria-describedby="fout-idee"
+      data-foutmelding="Beschrijf je idee in minstens twintig tekens."></textarea>
+  </FormulierVeld>
+
+  <div class="akkoord">
+    <input
+      id="akkoordPrivacy"
+      name="akkoordPrivacy"
+      type="checkbox"
+      value="ja"
+      required
+      aria-describedby="fout-akkoordPrivacy"
+      data-foutmelding="Je moet akkoord gaan met de privacyverklaring."
+    />
+    <label for="akkoordPrivacy">
+      Ik ga akkoord met de <TekstLink href="/privacy">privacyverklaring</TekstLink>.
+    </label>
+    <p class="fout" id="fout-akkoordPrivacy" hidden></p>
+  </div>
+
+  {siteKey && <div class="cf-turnstile" data-sitekey={siteKey} />}
+
+  <div class="verzenden">
+    <Knop type="submit">{instellingen.cta.primair}</Knop>
+    <p class="melding" role="status" aria-live="polite"></p>
+  </div>
+</form>
+
+{siteKey && <script is:inline async src="https://challenges.cloudflare.com/turnstile/v0/api.js" />}
+
+<style>
+  .aanvraag-formulier {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--ruimte-rij-md) var(--ruimte-goot);
+  }
+
+  .honingpot {
+    position: absolute;
+    clip-path: inset(50%);
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+  }
+
+  .akkoord,
+  .verzenden,
+  .cf-turnstile {
+    grid-column: 1 / -1;
+  }
+
+  .akkoord {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--ruimte-stapel-sm) var(--ruimte-stapel-md);
+    align-items: baseline;
+  }
+
+  .akkoord .fout {
+    grid-column: 2;
+  }
+
+  .verzenden {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ruimte-stapel-md);
+    align-items: center;
+    margin-block-start: var(--ruimte-stapel-md);
+  }
+
+  .melding:empty {
+    display: none;
+  }
+
+  .melding[data-toestand='fout'] {
+    color: var(--kleur-fout);
+  }
+
+  .fout {
+    font-size: var(--tekst-klein-grootte);
+    color: var(--kleur-fout);
+  }
+
+  input,
+  textarea {
+    inline-size: 100%;
+    padding: var(--invoer-padding-inline);
+    font-family: var(--tekst-lopend-familie);
+    font-size: var(--invoer-grootte);
+    line-height: var(--tekst-lopend-regelhoogte);
+    color: var(--invoer-voorgrond);
+    background-color: var(--invoer-achtergrond);
+    border: var(--k-rand-haarlijn) solid var(--invoer-rand);
+    border-radius: var(--invoer-radius);
+  }
+
+  input[type='text'],
+  input[type='email'],
+  input[type='tel'] {
+    min-block-size: var(--invoer-hoogte);
+  }
+
+  input[type='checkbox'] {
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    padding: 0;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--invoer-voorbeeld-voorgrond);
+  }
+
+  input:focus-visible,
+  textarea:focus-visible {
+    border-color: var(--invoer-rand-focus);
+  }
+
+  input[data-fout],
+  textarea[data-fout] {
+    border-color: var(--invoer-rand-fout);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    input,
+    textarea {
+      transition: border-color var(--beweging-hover);
+    }
+  }
+
+  @media print {
+    .aanvraag-formulier {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import { koppelFormulier } from '@/lib/formulier';
+
+  document.addEventListener('astro:page-load', koppelFormulier);
+</script>

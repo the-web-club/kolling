@@ -1,0 +1,42 @@
+---
+interface Props {
+  href: string;
+  variant?: 'onderstreept' | 'intekenend';
+}
+
+const { href, variant = 'onderstreept' } = Astro.props;
+---
+
+<a class="tekst-link" data-variant={variant} href={href}>
+  <slot />
+</a>
+
+<style>
+  .tekst-link[data-variant='onderstreept'] {
+    text-decoration-line: underline;
+  }
+
+  .tekst-link[data-variant='onderstreept']:hover {
+    text-decoration-color: var(--link-onderstreping-kleur-hover);
+  }
+
+  .tekst-link[data-variant='intekenend'] {
+    background-image: linear-gradient(var(--kleur-voorgrond), var(--kleur-voorgrond));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0 var(--link-onderstreping-dikte);
+    padding-block-end: var(--link-onderstreping-afstand);
+  }
+
+  .tekst-link[data-variant='intekenend']:hover {
+    background-size: 100% var(--link-onderstreping-dikte);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .tekst-link {
+      transition:
+        text-decoration-color var(--beweging-hover),
+        background-size var(--beweging-hover);
+    }
+  }
+</style>

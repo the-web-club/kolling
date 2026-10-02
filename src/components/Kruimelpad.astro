@@ -1,0 +1,52 @@
+---
+import TekstLink from '@/components/TekstLink.astro';
+import type { Kruimel } from '@/lib/seo';
+
+interface Props {
+  kruimels: readonly Kruimel[];
+}
+
+const { kruimels } = Astro.props;
+const laatste = kruimels.at(-1);
+---
+
+<nav class="kruimelpad" aria-label="Kruimelpad">
+  <ol class="lijst">
+    {
+      kruimels.map((kruimel) => (
+        <li class="kruimel">
+          {kruimel === laatste ? (
+            <span aria-current="page">{kruimel.naam}</span>
+          ) : (
+            <TekstLink href={kruimel.pad} variant="intekenend">
+              {kruimel.naam}
+            </TekstLink>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  .kruimelpad {
+    grid-column: 1 / -1;
+  }
+
+  .lijst {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ruimte-stapel-sm);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--tekst-klein-grootte);
+    color: var(--kleur-voorgrond-subtiel);
+  }
+
+  .kruimel:not(:last-child)::after {
+    content: '/';
+    margin-inline-start: var(--ruimte-stapel-sm);
+    color: var(--kleur-voorgrond-subtiel);
+  }
+</style>

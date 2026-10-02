@@ -1,0 +1,45 @@
+---
+description: Project Kolling.nl: opdracht, bevestigde feiten, routes en wat nooit verzonnen wordt
+globs:
+alwaysApply: true
+---
+
+# Kolling.nl
+
+Statische marketingsite voor Kolling, het merk van Thomas Kolling: meubels en algemeen houtwerk in het hoogsegment, gemaakt in de eigen werkplaats in Ommen. De volledige opdracht staat in `docs/STARTPROMPT.md`. Besluiten en afwijkingen staan in `docs/BESLUITEN.md`.
+
+## Opdracht
+
+1. Een witte galerie waarin het houtwerk centraal staat. Het museum is de referentie.
+2. Doelgroepen: particulieren met een hoger interieurbudget, interieurarchitecten en zakelijke opdrachtgevers.
+3. Primaire conversie en vaste CTA: "Bespreek je idee". Secundair: "Bezoek de werkplaats".
+4. Geen database, geen accounts, geen webshop, geen CMS. Alleen het aanvraagendpoint is dynamisch.
+
+## Bevestigde feiten
+
+Alleen deze feiten mogen als feit op de site staan. Alles daarbuiten is een bewering en gaat via `beweringen[]` naar `docs/FEITENCHECK.md`.
+
+1. Naam: Kolling. Maker: Thomas Kolling.
+2. Werkplaats: Strangeweg 5, 7731 GV Ommen. Bezoek op afspraak. Landelijk actief.
+3. Telefoon: weergave `06 13 62 22 76`, link `tel:+31613622276`, JSON-LD `+31613622276`.
+4. Instagram: `https://www.instagram.com/kolling.nl/`.
+5. Aanbod: meubels en algemeen houtwerk in het hoogsegment, plus aankomende Edities in beperkte oplages die nog niet bestaan.
+6. Budgetindicaties staan uitsluitend in het aanvraagformulier, nooit als prijs bij werk.
+
+## Ontbreekt nog
+
+E-mailadres, KvK-nummer en geo-coördinaten staan als `[VUL IN]` in `src/content/instellingen/site.json` en zijn zichtbaar gemarkeerd op `/privacy`. Vul ze niet in en verzin ze niet.
+
+## Nooit verzinnen
+
+Klantnamen, reviews, gerealiseerde projecten, ervaring in jaren, certificeringen, duurzaamheidsclaims, openingstijden, e-mailadres, prijzen, oplageaantallen, voorraad, releasedata, geo-coördinaten en vestigingen buiten Ommen.
+
+## Routes
+
+`/`, `/werk`, `/werk/[categorie]`, `/werk/[slug]`, `/maatwerk`, `/maatwerk/[slug]`, `/edities`, `/edities/[slug]`, `/werkplaats`, `/werkgebied`, `/werkgebied/ommen`, `/contact`, `/bedankt`, `/privacy`, `/design-system`, 404.
+
+`noindex` en buiten de sitemap: `/design-system`, `/bedankt`, elk project met `plaatshouder: true`, elke locatie met `publiceren: false`.
+
+## Merk
+
+Eén logo: `src/assets/merk/d-logo.svg`, zwart op transparant, uitsluitend op lichte achtergronden. Niet inverteren, herkleuren of hertekenen. Er is geen variant voor donkere vlakken, dus de site heeft geen donkere logoplaatsingen.

@@ -1,0 +1,59 @@
+---
+import Knop from '@/components/Knop.astro';
+import { haalInstellingen } from '@/lib/content';
+
+interface Props {
+  kop: string;
+  tekst: string;
+  aanvraag?: string;
+}
+
+const { kop, tekst, aanvraag } = Astro.props;
+const instellingen = await haalInstellingen();
+const pad = aanvraag ? `/contact?aanvraag=${aanvraag}` : '/contact';
+---
+
+<section class="cta-strook">
+  <div class="inzet" data-onthul-groep>
+    <h2 class="kop" data-onthul="omhoog">{kop}</h2>
+    <p class="tekst" data-onthul="omhoog">{tekst}</p>
+    <div class="acties" data-onthul="omhoog">
+      <Knop href={pad}>{instellingen.cta.primair}</Knop>
+      <Knop href="/werkgebied/ommen" variant="omlijnd">{instellingen.cta.secundair}</Knop>
+    </div>
+  </div>
+</section>
+
+<style>
+  .inzet {
+    display: grid;
+    gap: var(--ruimte-stapel-lg);
+    grid-column: 1 / -1;
+    padding-block-start: var(--ruimte-stapel-lg);
+    border-block-start: var(--k-rand-haarlijn) solid var(--kleur-lijn);
+  }
+
+  .kop {
+    font-size: var(--tekst-kop2-grootte);
+    line-height: var(--tekst-kop2-regelhoogte);
+    letter-spacing: var(--tekst-kop2-spatiering);
+  }
+
+  .tekst {
+    font-size: var(--tekst-intro-grootte);
+    line-height: var(--tekst-intro-regelhoogte);
+    color: var(--kleur-voorgrond-gedempt);
+  }
+
+  .acties {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ruimte-stapel-md);
+  }
+
+  @media (min-width: 48rem) {
+    .inzet {
+      grid-column: 2 / span 8;
+    }
+  }
+</style>

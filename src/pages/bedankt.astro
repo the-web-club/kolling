@@ -1,0 +1,36 @@
+---
+import SectieIntro from '@/components/SectieIntro.astro';
+import TekstLink from '@/components/TekstLink.astro';
+import Basis from '@/layouts/Basis.astro';
+import { haalInstellingen } from '@/lib/content';
+
+const instellingen = await haalInstellingen();
+---
+
+<Basis
+  titel="Bedankt"
+  beschrijving="Je aanvraag is verstuurd. Thomas leest hem zelf en reageert binnen twee werkdagen."
+  indexeerbaar={false}
+>
+  <section>
+    <SectieIntro label="Verstuurd" kop="Je aanvraag staat erin" niveau={1}>
+      <p>
+        Thomas leest je bericht zelf. Je krijgt binnen twee werkdagen een eerste reactie op je
+        idee, met een voorstel voor de volgende stap.
+      </p>
+      <p>
+        Je hebt ook een bevestiging per e-mail gekregen. Zie je die niet, kijk dan in je
+        ongewenste berichten.
+      </p>
+      <p>
+        Is het haast, bel dan
+        <TekstLink href={`tel:${instellingen.telefoon.e164}`}>
+          {instellingen.telefoon.weergave}
+        </TekstLink>.
+      </p>
+      <p>
+        <TekstLink href="/werk" variant="intekenend">Bekijk het werk</TekstLink>
+      </p>
+    </SectieIntro>
+  </section>
+</Basis>

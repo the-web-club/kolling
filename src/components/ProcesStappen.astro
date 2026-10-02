@@ -1,0 +1,71 @@
+---
+interface Props {
+  stappen: readonly { kop: string; tekst: string }[];
+}
+
+const { stappen } = Astro.props;
+---
+
+<ol class="proces-stappen" data-onthul-groep>
+  {
+    stappen.map((stap, index) => (
+      <li class="stap" data-onthul="omhoog">
+        <span class="nummer">{String(index + 1).padStart(2, '0')}</span>
+        <h3 class="kop">{stap.kop}</h3>
+        <p class="tekst">{stap.tekst}</p>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .proces-stappen {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--ruimte-rij-lg) var(--ruimte-goot);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: stap;
+  }
+
+  .stap {
+    display: grid;
+    gap: var(--ruimte-stapel-sm);
+    grid-column: 1 / -1;
+    align-content: start;
+    padding-block-start: var(--ruimte-stapel-md);
+    border-block-start: var(--k-rand-haarlijn) solid var(--kleur-lijn);
+  }
+
+  .nummer {
+    font-size: var(--tekst-label-grootte);
+    font-weight: var(--tekst-label-gewicht);
+    letter-spacing: var(--tekst-label-spatiering);
+    font-variant-numeric: tabular-nums;
+    color: var(--kleur-voorgrond-subtiel);
+  }
+
+  .kop {
+    font-size: var(--tekst-kop4-grootte);
+    font-weight: var(--tekst-kop4-gewicht);
+    line-height: var(--tekst-kop4-regelhoogte);
+  }
+
+  .tekst {
+    color: var(--kleur-voorgrond-gedempt);
+  }
+
+  @media (min-width: 48rem) {
+    .stap {
+      grid-column: span 6;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .stap {
+      grid-column: span 3;
+    }
+  }
+</style>

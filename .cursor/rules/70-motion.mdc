@@ -1,0 +1,52 @@
+---
+description: Bewegingssysteem: binnenkomst, paginaovergangen, onthullen bij scrollen, parallax en hover
+globs: src/styles/beweging.css,src/lib/beweging/**,src/components/**
+alwaysApply: false
+---
+
+# Beweging
+
+Beweging laat zien dat iets met aandacht is gemaakt. Ze trekt nooit de aandacht naar zichzelf. Eén beweging per element, één richting per sectie, en alles uit tokens. Dit bestand is leidend voor alle beweging; `60-ui-ux.mdc` stelt alleen de randvoorwaarden.
+
+## Lagen
+
+1. Binnenkomst van de pagina: alleen de hero, direct bij het laden, zonder op JavaScript te wachten. CSS-animatie met `var(--beweging-binnenkomst-hero)`.
+2. Paginaovergang: crossfade via `ClientRouter`. `PaginaKop` en `PaginaVoet` blijven staan met `transition:persist`.
+3. Onthullen bij scrollen: `data-onthul` op een element, gezet door `src/lib/beweging/onthul.ts` via `IntersectionObserver`.
+4. Scroll-gestuurde beweging: alleen parallax binnen een beeldkader, via `data-parallax`.
+5. Hover en focus: per component, in de scoped CSS van dat component.
+
+## Regels
+
+1. Animeer uitsluitend `opacity`, `translate`, `scale` en `clip-path`. Nooit `transform` als geheel, zodat parallax en hover elkaar niet overschrijven. Nooit `transition: all`.
+2. Een element beweegt één keer. Terugscrollen herhaalt niets.
+3. Verdwijnen is altijd sneller dan verschijnen: `var(--beweging-vertrek)` tegen `var(--beweging-binnenkomst)`.
+4. Beweging veroorzaakt nooit layout shift en blokkeert nooit interactie. Content is binnen 300ms zichtbaar.
+5. Zonder JavaScript staat alles op zijn plek en is alles zichtbaar. `onthul.ts` voegt `data-in-beeld` toe; de startstaat geldt alleen als `data-js` op `<html>` staat.
+6. Geen autoplay, carrousels, marquee, tellers, typewriter, custom cursors, preloaders of scroll-hijacking.
+
+## Varianten van data-onthul
+
+1. `omhoog`: opacity 0 naar 1 en `translate` van `var(--k-beweging-afstand-md)` naar 0. De standaard voor tekstblokken en secties.
+2. `regels`: per regel van een kop, gesplitst door `src/lib/beweging/splits-regels.ts`, met `clip-path` als masker en `translate` van onder. Alleen voor display- en kop1-teksten.
+3. `gordijn`: `clip-path` van `inset(0 0 var(--k-beweging-afstand-masker) 0)` naar `inset(0)`, gecombineerd met `scale` van `var(--k-beweging-schaal-onthul)` naar 1. Alleen voor beelden.
+4. `lijn`: een haarlijn die horizontaal intekent via `scale` op de x-as. Voor sectiescheidingen.
+
+`data-onthul-groep` zet de stagger aan voor directe kinderen, maximaal vier per groep, met `var(--k-beweging-trap-basis)`. `data-onthul-vertraging` verschuift één element, in stappen van de trap-token.
+
+De drempel is 15 procent zichtbaar. Een element dat bij het laden al in beeld staat, onthult direct zonder vertraging.
+
+## Hover
+
+1. Beeld: `scale` naar `var(--k-beweging-schaal-hover)` over `var(--beweging-hover-beeld)`, binnen een kader met `overflow: hidden`. Niets anders beweegt mee.
+2. Navigatielinks en kaarttitels: de onderstreping tekent in van links naar rechts via `background-size` over `var(--beweging-hover)`.
+3. Knop `gevuld`: achtergrond naar `var(--knop-gevuld-achtergrond-hover)`. Knop `omlijnd`: rand wordt vlak. Geen schaal, geen schaduw.
+4. Active is opacity 0.8, disabled is opacity 0.4 zonder pointer-events.
+
+## Parallax
+
+`data-parallax` op `Beeld` beweegt de afbeelding `var(--k-beweging-parallax-hoeveelheid)` binnen haar kader, gekoppeld aan de scrollpositie. Uitsluitend via `translate`, uitsluitend binnen `overflow: hidden`, en alleen als `animation-timeline` wordt ondersteund. Geen scroll-listener op de hoofdthread.
+
+## Reduced motion
+
+Bij `prefers-reduced-motion: reduce` blijven alleen opacity-fades van 200ms over. Geen `translate`, geen `scale`, geen `clip-path`, geen parallax, geen stagger. Alle entrance- en overgangsregels staan daarom in `@media (prefers-reduced-motion: no-preference)` in `src/styles/beweging.css`.

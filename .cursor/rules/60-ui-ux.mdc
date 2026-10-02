@@ -1,0 +1,79 @@
+---
+description: High-end UI/UX-regels voor Kolling: typografie, ruimte, beeld, beweging, interactie, formulier en toestanden
+globs:
+alwaysApply: true
+---
+
+# High-end UI/UX
+
+Toets voor elk scherm: zou dit misstaan in een galerie of een goed interieurboek? Dan is het fout. Het verschil zit in rust, precisie en consequentie, niet in effecten. Alle waarden komen uit het design system (`10-design-system.mdc`), alle namen uit de woordenlijst (`41-woordenlijst.mdc`).
+
+## Typografie
+
+1. Hiërarchie door grootte en ruimte, niet door gewicht. Maximaal gewicht 500, nooit `bold`.
+2. Letterspatiëring volgt de grootte: `display` en `4xl` -0.02em, `3xl` en `2xl` -0.01em, lopende tekst 0, kapitaallabels +0.08em.
+3. Koppen `text-wrap: balance`, alinea's `text-wrap: pretty`. Geen handmatige `<br>` in koppen, behalve in de hero waar de regelval ontwerp is.
+4. Maat 60 tot 70 tekens voor lopende tekst (`--maat-regellengte`). Lead-teksten maximaal twee zinnen.
+5. Cijfers in museumlabels en het formulier met `font-variant-numeric: tabular-nums`. Maten met echte maaltekens: `240 × 100 × 75 cm`. Euro met harde spatie: `€ 1.000`.
+6. Nederlandse typografie in zichtbare tekst: aanhalingstekens consistent („zo” of ‘zo’), geen rechte quotes in zichtbare tekst, geen gedachtestreepjes, geen uitroeptekens.
+7. Fonts met `font-display: swap` en metric overrides op de fallback-stack, zodat tekst niet zichtbaar verspringt bij het laden. Kerning en ligaturen aan, geen `letter-spacing` op lopende tekst.
+
+## Ruimte en raster
+
+8. Twaalf kolommen, één goot-token (`ruimte.goot`). Tekst start zelden op kolom 1: gebruik kolomoffsets (tekst op kolom 2 t/m 7, beeld op 8 t/m 12) voor editoriaal ritme.
+9. Per sectie twee spacing-stappen: één tussen blokken (`ruimte.blok`) en één binnen een blok (`ruimte.stapel`). Geen tussenmaten improviseren.
+10. `ruimte.sectie` tussen alle secties, altijd gelijk. Maximaal één tintsectie (`kleur.achtergrond.tint`) per pagina.
+11. Leegte is bewust. Een scherm mag uit één kop en één beeld bestaan. Nooit opvullen met decoratie, iconen of een extra kolom.
+12. Uitlijning is absoluut: alle linkerkanten op een rasterlijn, alle beeldranden op de goot. Controleer op 390, 768 en 1440 px.
+
+## Beeld
+
+13. Vaste verhoudingen per slot (3:2, 4:5, 1:1, 16:9), altijd `width` en `height` of `aspect-ratio`. Nul layout shift.
+14. Tijdens het laden toont een beeldslot de effen achtergrondtint. Geen spinner, geen blur-up, geen grijze skeletons.
+15. Hover, entrance en parallax van beeld volgen `70-motion.mdc`. `Beeld` zit altijd in een kader met `overflow: hidden` zodat schaal en parallax binnen de verhouding blijven.
+16. Bijschriften in labelstijl onder het beeld, nooit erover. Tekst over beeld alleen in de hero, met contrast door compositie, niet door een donkere overlay.
+17. Geen decoratieve afbeeldingen, geen stock, geen iconen als illustratie. Beeld is werk, werkplaats of materiaal.
+
+## Beweging
+
+18. Alle beweging (page entry, paginaovergangen, entrance bij scrollen, scroll-gestuurde beweging, hover states, micro-interacties) staat in `70-motion.mdc`. Dat bestand is leidend; hier gelden alleen de drie randvoorwaarden hieronder.
+19. Bij `prefers-reduced-motion: reduce` blijven alleen opacity-fades van 200ms over. Zonder JavaScript is alles direct zichtbaar en staat alles op zijn plek.
+20. Beweging veroorzaakt nooit layout shift en blokkeert nooit interactie. Content is binnen 300ms zichtbaar.
+21. Geen autoplay, carrousels, marquee, tellers, typewriter-effecten, custom cursors of preloaders.
+
+## Interactie
+
+22. Tekstlinks in lopende tekst: onderstreping 1px met `text-underline-offset: 0.15em`, altijd zichtbaar. Navigatielinks en kaarttitels: onderstreping tekent in bij hover (zie `70-motion.mdc`). Actieve pagina met een haarlijn eronder, niet vet.
+23. Knoppen: minimale hoogte 48px, padding uit tokens, radius 0, twee varianten (`gevuld` in inkt, `omlijnd` met haarlijn). Hover-gedrag volgens `70-motion.mdc`. Geen schaal, geen schaduw, geen verschuivende pijl.
+24. Focus zichtbaar en overal gelijk: `outline: 2px solid var(--kleur-lijn-sterk); outline-offset: 2px` op `:focus-visible`. Nooit `outline: none` zonder vervanging.
+25. Aanraakdoelen minimaal 44 × 44px. Cursor blijft standaard; `pointer` alleen op links en knoppen.
+26. `PaginaKop` op wit; de haarlijn onderaan verschijnt na 8px scrollen; hoogte blijft stabiel, het logo verkleint niet. Mobiel menu fullscreen, items met stagger, focus trap, sluit op Escape en bij navigatie.
+27. Native scrollen. Geen smooth-scroll-library. `scroll-behavior: smooth` alleen voor ankerlinks en uit bij reduced motion.
+
+## Formulier
+
+28. Labels boven het veld, altijd zichtbaar. Placeholder alleen als voorbeeld (`bijv. 7731 GV`), nooit als label. Optionele velden gemarkeerd met "optioneel"; geen sterretjes.
+29. Inputs 16px of groter (voorkomt zoom op iOS), hoogte 48px, haarlijn als rand, radius 2px, focus via de globale focusstijl plus `border-color` naar `kleur.voorgrond`.
+30. Validatie bij het verlaten van een veld en bij verzenden, nooit per toetsaanslag vóór de eerste blur. Fouten in `kleur.fout`, zonder icoon, concreet geformuleerd ("Vul een e-mailadres in met een @"). Focus naar het eerste foute veld.
+31. De verzendknop toont tijdens verzenden "Versturen" met een beletselteken en is uitgeschakeld; geen spinner. Na succes een persoonlijke bedanktpagina die vertelt wat er nu gebeurt en binnen welke termijn.
+32. Selects zijn native `<select>` met eigen stijl op rand en pijl. Geen custom dropdown-componenten.
+
+## Toestanden en randgevallen
+
+33. Elk interactief element heeft hover, focus-visible, active (opacity 0.8) en disabled (opacity 0.4, geen pointer-events), allemaal uit tokens.
+34. Lege toestanden zijn ontworpen: Edities zonder items toont de aankondiging, nooit "Geen items gevonden". Een categorie zonder werk toont één zin en een link naar al het werk.
+35. Fouten zijn eerlijk en kort, met een alternatief (telefoon, Instagram). Geen technische details voor de bezoeker.
+36. 404 in de huisstijl: één zin, links naar werk en contact. Geen grappen, geen illustratie.
+37. `@media print` verbergt `PaginaKop`-navigatie, `PaginaVoet`-navigatie en het formulier en toont NAP en de URL's van links. Een projectpagina print als een nette A4.
+
+## Template- en AI-esthetiek die hier niet voorkomt
+
+38. Gecentreerde hero met twee knoppen en gradient-tekst. Drie feature-kaarten met iconen in gekleurde cirkels. "Waarom kiezen voor ons". Testimonial-carrousel met avatars. Tellers met "500+ projecten". Logobalk "Bekend van".
+39. `rounded-2xl`, `shadow-xl`, afwisselende `bg-gray-50`-secties, `hover:scale-105`, blauwe primaire kleur, paarse gradients, glassmorphism, blobs, golvende sectiescheidingen.
+40. Emoji, iconen uit een library als decoratie, pill-badges ("Nieuw"), chatbot-bubbels, cookiebanners zonder noodzaak, "Scroll naar beneden"-pijlen.
+41. Inter als standaardfont, uniforme kaartenrijen, elke sectie volgens hetzelfde patroon van kop, subkop en knop.
+42. Alles wat op de homepage van een SaaS-startup thuishoort.
+
+## Controle voor oplevering van een scherm
+
+43. Vier controles per scherm, in deze volgorde: raster en uitlijning op 390 en 1440 px; typografische hiërarchie zonder kleur (in grijstinten); toetsenbord van boven naar beneden; reduced motion aan.

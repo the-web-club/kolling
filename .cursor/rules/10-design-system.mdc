@@ -1,0 +1,46 @@
+---
+description: Design system Galerie: drie tokenlagen, generatie, waarden en hoe je een token toevoegt
+globs:
+alwaysApply: true
+---
+
+# Design system Galerie
+
+Eén bron, drie lagen, gegenereerde output. Componenten gebruiken nooit losse waarden.
+
+## Lagen
+
+1. Primitief: `tokens/primitief/*.json`. Ruwe merkwaarden. Elk bestand nest onder `primitief`. CSS-variabele met prefix: `--k-kleur-inkt-900`.
+2. Semantisch: `tokens/semantisch/*.json`. Betekenis, verwijst uitsluitend naar primitief. CSS-variabele zonder prefix: `--kleur-voorgrond`.
+3. Componenten: `tokens/componenten/*.json`. Per component, verwijst naar semantisch (of naar primitief voor maten zonder semantische tegenhanger). CSS-variabele: `--knop-hoogte`.
+
+Een component gebruikt componenttokens of semantische tokens. Nooit een primitieve token in een component en nooit een losse waarde.
+
+## Generatie
+
+`pnpm tokens:build` schrijft `src/styles/tokens.css` en `src/design/tokens.gegenereerd.ts`. Beide zijn gegenereerd, worden gecommit en nooit met de hand aangepast. `pnpm tokens:check` bouwt naar een tijdelijke map en faalt als de output afwijkt van de bron. CI draait die check.
+
+Verwijzingen blijven staan in de output (`outputReferences`), zodat je in de browser ziet welke semantische token op welke primitieve waarde uitkomt.
+
+## Een token toevoegen
+
+1. Voeg de naam toe aan `41-woordenlijst.mdc`.
+2. Voeg de primitieve waarde toe, daarna de semantische verwijzing, daarna eventueel de componenttoken.
+3. Draai `pnpm tokens:build` en commit de gegenereerde bestanden.
+4. Laat de token zien op `/design-system`.
+
+## Waarden
+
+1. Kleur: warm wit `papier`, bijna zwart `inkt`, één grijs voor metadata `steen`, haarlijnen `lijn`, drie houttinten uitsluitend voor plaatshouders, één functionele foutkleur. Geen tweede merkkleur.
+2. Typografie: twee families (`kop` voor display en koppen, `tekst` voor lopende tekst en interface), gewichten 300 tot 500, fluid schaal van `xs` tot `display` met `clamp()`.
+3. Ruimte: 4px-basis. `ruimte.sectie` tussen secties, `ruimte.blok` tussen blokken binnen een sectie, `ruimte.stapel.*` binnen een blok, `ruimte.goot` als enige gootmaat.
+4. Vorm: radius 0, invoervelden 2px. Haarlijn 1px. Geen schaduwen.
+5. Beweging: duur, curve, trap, afstand en schaal als tokens. Gebruik volgens `70-motion.mdc`.
+
+## Tailwind
+
+`@theme inline` in `src/styles/basis.css` mapt semantische tokens naar Tailwind-namespaces. Breakpoints komen uit Tailwind zelf; die waarden zijn gelijk aan `primitief.schermbreedte` en worden niet opnieuw gemapt, omdat een media-querygrens geen CSS-variabele kan zijn. Dat is de enige gedocumenteerde uitzondering op "alle waarden uit tokens".
+
+## /design-system
+
+De route rendert de tokens uit `src/design/tokens.gegenereerd.ts`, niet een met de hand bijgehouden lijst. Zo kan de referentiepagina niet verouderen. `noindex` en buiten de sitemap.

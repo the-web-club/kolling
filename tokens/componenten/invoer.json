@@ -1,0 +1,20 @@
+{
+  "invoer": {
+    "hoogte": { "$value": "3rem", "$type": "dimension" },
+    "padding-inline": { "$value": "{primitief.ruimte.3}", "$type": "dimension" },
+    "grootte": { "$value": "1rem", "$type": "dimension" },
+    "radius": { "$value": "{primitief.radius.invoer}", "$type": "dimension" },
+    "achtergrond": { "$value": "{kleur.achtergrond-verhoogd}", "$type": "color" },
+    "voorgrond": { "$value": "{kleur.voorgrond}", "$type": "color" },
+    "rand": { "$value": "{kleur.lijn}", "$type": "color" },
+    "rand-focus": { "$value": "{kleur.voorgrond}", "$type": "color" },
+    "rand-fout": { "$value": "{kleur.fout}", "$type": "color" },
+    "voorbeeld-voorgrond": { "$value": "{kleur.voorgrond-subtiel}", "$type": "color" }
+  },
+  "label": {
+    "grootte": { "$value": "{tekst.klein.grootte}", "$type": "dimension" },
+    "gewicht": { "$value": "{primitief.letter.gewicht.medium}", "$type": "fontWeight" },
+    "voorgrond": { "$value": "{kleur.voorgrond}", "$type": "color" },
+    "optioneel-voorgrond": { "$value": "{kleur.voorgrond-subtiel}", "$type": "color" }
+  }
+}

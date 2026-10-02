@@ -1,0 +1,175 @@
+---
+import {
+  AANVRAAG_AFZENDER,
+  AANVRAAG_ONTVANGER,
+  RESEND_API_KEY,
+} from 'astro:env/server';
+import AanvraagFormulier from '@/components/AanvraagFormulier.astro';
+import MateriaalLijst from '@/components/MateriaalLijst.astro';
+import SectieIntro from '@/components/SectieIntro.astro';
+import TekstLink from '@/components/TekstLink.astro';
+import Basis from '@/layouts/Basis.astro';
+import { haalInstellingen } from '@/lib/content';
+
+const instellingen = await haalInstellingen();
+const verzendingBeschikbaar = Boolean(RESEND_API_KEY && AANVRAAG_ONTVANGER && AANVRAAG_AFZENDER);
+
+const WAT_JE_KRIJGT = [
+  'Binnen twee werkdagen een eerste reactie van Thomas zelf',
+  'Een eerlijk antwoord of je idee binnen je budget past',
+  'Een voorstel voor de volgende stap, bezoek of inmeten',
+];
+---
+
+<Basis
+  titel="Contact"
+  beschrijving="Bespreek je idee met Thomas Kolling. Stuur je aanvraag met maten en foto's van de ruimte, of bel de werkplaats in Ommen."
+>
+  <section>
+    <SectieIntro label="Contact" kop="Bespreek je idee" niveau={1}>
+      <p>
+        Stuur wat je in gedachten hebt, met de maten van de ruimte en een paar foto&rsquo;s. Een
+        tekening is niet nodig.
+      </p>
+    </SectieIntro>
+    <div class="gegevens">
+      <h2 class="kop">Direct contact</h2>
+      <p>
+        <TekstLink href={`tel:${instellingen.telefoon.e164}`}>
+          {instellingen.telefoon.weergave}
+        </TekstLink>
+      </p>
+      <p>
+        <TekstLink href={instellingen.instagram}>Instagram</TekstLink>
+      </p>
+      <address>
+        {instellingen.adres.straat}<br />
+        {instellingen.adres.postcode} {instellingen.adres.plaats}
+      </address>
+      <p class="noot">{instellingen.bezoek}</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="meldingen">
+      <p class="melding" id="aanvraag-fout">
+        Er ontbreekt nog iets in je aanvraag. Loop de velden na en verstuur hem opnieuw.
+      </p>
+      <p class="melding" id="aanvraag-mislukt">
+        Het versturen lukte niet. Bel
+        <TekstLink href={`tel:${instellingen.telefoon.e164}`}>
+          {instellingen.telefoon.weergave}
+        </TekstLink>
+        of stuur een bericht via <TekstLink href={instellingen.instagram}>Instagram</TekstLink>.
+      </p>
+      <p class="melding" id="aanvraag-onbeschikbaar">
+        Verzenden is nu niet beschikbaar. Bel
+        <TekstLink href={`tel:${instellingen.telefoon.e164}`}>
+          {instellingen.telefoon.weergave}
+        </TekstLink>
+        of stuur een bericht via <TekstLink href={instellingen.instagram}>Instagram</TekstLink>.
+      </p>
+    </div>
+
+    {
+      verzendingBeschikbaar ? (
+        <div class="formulier">
+          <AanvraagFormulier />
+        </div>
+      ) : (
+        <div class="onbeschikbaar">
+          <h2 class="kop">Het formulier staat nog uit</h2>
+          <p>
+            De verzendconfiguratie is nog niet ingesteld, dus een aanvraag via dit formulier zou
+            niet aankomen. Daarom staat het formulier uit in plaats van dat het doet alsof.
+          </p>
+          <p>
+            Bel
+            <TekstLink href={`tel:${instellingen.telefoon.e164}`}>
+              {instellingen.telefoon.weergave}
+            </TekstLink>
+            of stuur een bericht via
+            <TekstLink href={instellingen.instagram}>Instagram</TekstLink>.
+          </p>
+        </div>
+      )
+    }
+
+    <div class="verwachting">
+      <MateriaalLijst kop="Wat je terugkrijgt" items={WAT_JE_KRIJGT} />
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .gegevens,
+  .meldingen,
+  .formulier,
+  .verwachting,
+  .onbeschikbaar {
+    grid-column: 1 / -1;
+  }
+
+  .gegevens,
+  .onbeschikbaar {
+    display: grid;
+    gap: var(--ruimte-stapel-md);
+    align-content: start;
+  }
+
+  .kop {
+    font-family: var(--tekst-lopend-familie);
+    font-size: var(--tekst-label-grootte);
+    font-weight: var(--tekst-label-gewicht);
+    letter-spacing: var(--tekst-label-spatiering);
+    text-transform: uppercase;
+    color: var(--kleur-voorgrond-subtiel);
+  }
+
+  .onbeschikbaar .kop {
+    font-family: var(--tekst-kop4-familie);
+    font-size: var(--tekst-kop4-grootte);
+    letter-spacing: var(--tekst-kop4-spatiering);
+    text-transform: none;
+    color: var(--kleur-voorgrond);
+  }
+
+  address {
+    font-style: normal;
+    line-height: var(--tekst-lopend-regelhoogte);
+  }
+
+  .noot {
+    font-size: var(--tekst-klein-grootte);
+    color: var(--kleur-voorgrond-subtiel);
+  }
+
+  /* Zonder JavaScript stuurt het endpoint terug met een fragment; :target maakt de juiste melding zichtbaar. */
+  .melding {
+    display: none;
+    padding: var(--ruimte-stapel-md);
+    color: var(--kleur-fout);
+    border: var(--k-rand-haarlijn) solid var(--kleur-fout);
+  }
+
+  .melding:target {
+    display: block;
+  }
+
+  .verwachting {
+    margin-block-start: var(--ruimte-stapel-lg);
+  }
+
+  @media (min-width: 64rem) {
+    .gegevens {
+      grid-column: 10 / span 3;
+    }
+
+    .meldingen,
+    .formulier,
+    .verwachting,
+    .onbeschikbaar {
+      grid-column: 1 / span 7;
+    }
+  }
+</style>

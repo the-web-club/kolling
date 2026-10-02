@@ -1,0 +1,43 @@
+﻿{
+  "primitief": {
+    "letter": {
+      "familie": {
+        "kop": {
+          "$value": "'Instrument Sans Variable', 'Kop terugval', system-ui, sans-serif",
+          "$type": "fontFamily"
+        },
+        "tekst": {
+          "$value": "'Work Sans Variable', 'Tekst terugval', system-ui, sans-serif",
+          "$type": "fontFamily"
+        }
+      },
+      "gewicht": {
+        "licht": { "$value": "300", "$type": "fontWeight" },
+        "normaal": { "$value": "400", "$type": "fontWeight" },
+        "medium": { "$value": "500", "$type": "fontWeight" }
+      },
+      "grootte": {
+        "xs": { "$value": "0.75rem", "$type": "dimension" },
+        "sm": { "$value": "0.875rem", "$type": "dimension" },
+        "basis": { "$value": "clamp(1rem, 0.97rem + 0.15vw, 1.0625rem)", "$type": "dimension" },
+        "lg": { "$value": "clamp(1.125rem, 1.08rem + 0.2vw, 1.25rem)", "$type": "dimension" },
+        "xl": { "$value": "clamp(1.375rem, 1.3rem + 0.35vw, 1.625rem)", "$type": "dimension" },
+        "2xl": { "$value": "clamp(1.625rem, 1.48rem + 0.62vw, 2.125rem)", "$type": "dimension" },
+        "3xl": { "$value": "clamp(2rem, 1.72rem + 1.2vw, 3rem)", "$type": "dimension" },
+        "4xl": { "$value": "clamp(2.5rem, 1.95rem + 2.3vw, 4.25rem)", "$type": "dimension" },
+        "display": { "$value": "clamp(3rem, 1.6rem + 5.8vw, 7.5rem)", "$type": "dimension" }
+      },
+      "spatiering": {
+        "display": { "$value": "-0.02em", "$type": "dimension" },
+        "kop": { "$value": "-0.01em", "$type": "dimension" },
+        "tekst": { "$value": "0", "$type": "dimension" },
+        "kapitaal": { "$value": "0.08em", "$type": "dimension" }
+      },
+      "regelhoogte": {
+        "display": { "$value": "0.95", "$type": "number" },
+        "kop": { "$value": "1.12", "$type": "number" },
+        "tekst": { "$value": "1.6", "$type": "number" }
+      }
+    }
+  }
+}

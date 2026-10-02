@@ -1,0 +1,36 @@
+{
+  "beweging": {
+    "binnenkomst": {
+      "$value": "{primitief.beweging.duur.traag} {primitief.beweging.curve.uit-quint}",
+      "$type": "other"
+    },
+    "binnenkomst-hero": {
+      "$value": "{primitief.beweging.duur.hero} {primitief.beweging.curve.uit-expo}",
+      "$type": "other"
+    },
+    "binnenkomst-beeld": {
+      "$value": "{primitief.beweging.duur.filmisch} {primitief.beweging.curve.uit-expo}",
+      "$type": "other"
+    },
+    "vertrek": {
+      "$value": "{primitief.beweging.duur.basis} {primitief.beweging.curve.in-uit-quart}",
+      "$type": "other"
+    },
+    "hover": {
+      "$value": "{primitief.beweging.duur.snel} {primitief.beweging.curve.uit-quint}",
+      "$type": "other"
+    },
+    "hover-beeld": {
+      "$value": "{primitief.beweging.duur.trager} {primitief.beweging.curve.uit-expo}",
+      "$type": "other"
+    },
+    "pagina-uit": {
+      "$value": "{primitief.beweging.duur.basis} {primitief.beweging.curve.in-uit-quart}",
+      "$type": "other"
+    },
+    "pagina-in": {
+      "$value": "{primitief.beweging.duur.basis} {primitief.beweging.curve.uit-quint}",
+      "$type": "other"
+    }
+  }
+}

@@ -1,0 +1,148 @@
+---
+import SectieIntro from '@/components/SectieIntro.astro';
+import TekstLink from '@/components/TekstLink.astro';
+import Basis from '@/layouts/Basis.astro';
+import { haalInstellingen } from '@/lib/content';
+
+const instellingen = await haalInstellingen();
+const ONBEKEND = '[VUL IN]';
+
+const ontbrekend = [
+  { veld: 'Juridische naam', waarde: instellingen.juridischeNaam },
+  { veld: 'E-mailadres', waarde: instellingen.email },
+  { veld: 'KvK-nummer', waarde: instellingen.kvk },
+].filter((item) => item.waarde === ONBEKEND);
+---
+
+<Basis
+  titel="Privacy"
+  beschrijving="Wat Kolling doet met de gegevens die je via het aanvraagformulier verstuurt, wie ze verwerkt en hoe lang ze worden bewaard."
+>
+  <section>
+    <SectieIntro label="Privacy" kop="Wat we met je gegevens doen" niveau={1}>
+      <p>
+        Deze pagina gaat over het aanvraagformulier op deze site. Dat is de enige plek waar je
+        gegevens achterlaat.
+      </p>
+    </SectieIntro>
+  </section>
+
+  {
+    ontbrekend.length > 0 && (
+      <section>
+        <div class="aanvullen">
+          <h2 class="kop">Deze tekst is nog niet af</h2>
+          <p>
+            De volgende gegevens ontbreken nog, dus dit is nog geen juridisch afgeronde
+            privacyverklaring. Ze worden aangevuld voordat de site live gaat.
+          </p>
+          <ul>
+            {ontbrekend.map((item) => (
+              <li>{item.veld}</li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <section>
+    <div class="tekst">
+      <h2>Welke gegevens</h2>
+      <p>
+        Het formulier vraagt om je naam, je e-mailadres, eventueel je telefoonnummer, eventueel je
+        plaats of postcode, het soort aanvraag, een budgetindicatie, de gewenste periode en een
+        beschrijving van je idee.
+      </p>
+      <p>
+        Naam, e-mailadres en de beschrijving van je idee zijn nodig om je aanvraag te kunnen
+        beantwoorden. De overige velden helpen om meteen een bruikbaar antwoord te geven.
+      </p>
+
+      <h2>Waarvoor</h2>
+      <p>
+        De gegevens worden uitsluitend gebruikt om op je aanvraag te reageren en om de opdracht die
+        daaruit volgt te kunnen uitvoeren. Er is geen nieuwsbrief en er wordt niets doorverkocht.
+      </p>
+
+      <h2>Wie ze verwerkt</h2>
+      <p>
+        De site staat bij Vercel. Het versturen van de e-mail loopt via Resend. Beide partijen
+        verwerken je gegevens alleen om het bericht af te leveren.
+      </p>
+      <p>
+        Je aanvraag wordt niet in een database op deze site opgeslagen. Ze komt als e-mail binnen
+        bij {instellingen.maker}.
+      </p>
+
+      <h2>Hoe lang</h2>
+      <p>
+        Een aanvraag die niet tot een opdracht leidt, wordt na de correspondentie verwijderd. Loopt
+        er een opdracht, dan blijft de correspondentie bewaard zolang dat voor die opdracht en de
+        administratie nodig is.
+      </p>
+
+      <h2>Cookies</h2>
+      <p>
+        Deze site plaatst geen cookies voor analyse of advertenties en gebruikt geen trackers. Er is
+        daarom ook geen cookiemelding.
+      </p>
+
+      <h2>Je rechten</h2>
+      <p>
+        Je kunt vragen welke gegevens er van je zijn, ze laten corrigeren of laten verwijderen. Bel
+        daarvoor
+        <TekstLink href={`tel:${instellingen.telefoon.e164}`}>
+          {instellingen.telefoon.weergave}
+        </TekstLink>.
+      </p>
+    </div>
+  </section>
+</Basis>
+
+<style>
+  .aanvullen,
+  .tekst {
+    grid-column: 1 / -1;
+  }
+
+  .aanvullen {
+    display: grid;
+    gap: var(--ruimte-stapel-md);
+    padding: var(--ruimte-stapel-lg);
+    border: var(--k-rand-haarlijn) solid var(--kleur-fout);
+  }
+
+  .aanvullen .kop {
+    font-family: var(--tekst-kop4-familie);
+    font-size: var(--tekst-kop4-grootte);
+    color: var(--kleur-fout);
+  }
+
+  .aanvullen ul {
+    margin: 0;
+    padding-inline-start: var(--ruimte-5);
+  }
+
+  .tekst {
+    display: grid;
+    gap: var(--ruimte-stapel-md);
+  }
+
+  .tekst h2 {
+    margin-block-start: var(--ruimte-stapel-lg);
+    font-size: var(--tekst-kop4-grootte);
+    font-weight: var(--tekst-kop4-gewicht);
+  }
+
+  .tekst p {
+    color: var(--kleur-voorgrond-gedempt);
+  }
+
+  @media (min-width: 64rem) {
+    .aanvullen,
+    .tekst {
+      grid-column: 2 / span 7;
+    }
+  }
+</style>

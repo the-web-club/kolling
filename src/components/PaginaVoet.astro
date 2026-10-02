@@ -1,0 +1,153 @@
+---
+import logo from '@/assets/merk/d-logo.svg?url';
+import TekstLink from '@/components/TekstLink.astro';
+import { haalInstellingen } from '@/lib/content';
+
+const instellingen = await haalInstellingen();
+
+const paginas = [
+  { naam: 'Werk', pad: '/werk' },
+  { naam: 'Maatwerk', pad: '/maatwerk' },
+  { naam: 'Edities', pad: '/edities' },
+  { naam: 'Werkplaats', pad: '/werkplaats' },
+  { naam: 'Werkgebied', pad: '/werkgebied' },
+  { naam: 'Meubelmaker in Ommen', pad: '/werkgebied/ommen' },
+  { naam: 'Contact', pad: '/contact' },
+  { naam: 'Privacy', pad: '/privacy' },
+];
+---
+
+<footer class="pagina-voet" transition:persist>
+  <div class="merk">
+    <img src={logo} alt={instellingen.naam} width="258" height="121" />
+  </div>
+
+  <div class="adres">
+    <h2 class="kop">Werkplaats</h2>
+    <address>
+      {instellingen.adres.straat}<br />
+      {instellingen.adres.postcode} {instellingen.adres.plaats}<br />
+      <TekstLink href={`tel:${instellingen.telefoon.e164}`}>
+        {instellingen.telefoon.weergave}
+      </TekstLink>
+    </address>
+    <p class="noot">{instellingen.bezoek}</p>
+  </div>
+
+  <nav class="paginas" aria-label="Alle pagina's">
+    <h2 class="kop">Pagina's</h2>
+    <ul class="lijst">
+      {
+        paginas.map((pagina) => (
+          <li>
+            <TekstLink href={pagina.pad} variant="intekenend">
+              {pagina.naam}
+            </TekstLink>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <div class="volgen">
+    <h2 class="kop">Volgen</h2>
+    <TekstLink href={instellingen.instagram}>Instagram</TekstLink>
+  </div>
+
+  <p class="rechten">{instellingen.naam}. Werk van {instellingen.maker}.</p>
+</footer>
+
+<style>
+  .pagina-voet {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--ruimte-rij-lg) var(--ruimte-goot);
+    inline-size: 100%;
+    max-inline-size: var(--maat-container);
+    margin-inline: auto;
+    padding: var(--ruimte-sectie) var(--ruimte-goot) var(--ruimte-12);
+    border-block-start: var(--k-rand-haarlijn) solid var(--kleur-lijn);
+  }
+
+  .merk,
+  .adres,
+  .paginas,
+  .volgen,
+  .rechten {
+    grid-column: 1 / -1;
+  }
+
+  .merk img {
+    display: block;
+    block-size: 2.25rem;
+    inline-size: auto;
+  }
+
+  .kop {
+    margin-block-end: var(--ruimte-stapel-md);
+    font-family: var(--tekst-lopend-familie);
+    font-size: var(--tekst-label-grootte);
+    font-weight: var(--tekst-label-gewicht);
+    letter-spacing: var(--tekst-label-spatiering);
+    text-transform: uppercase;
+    color: var(--kleur-voorgrond-subtiel);
+  }
+
+  address {
+    font-style: normal;
+    line-height: var(--tekst-lopend-regelhoogte);
+  }
+
+  .noot,
+  .rechten {
+    font-size: var(--tekst-klein-grootte);
+    color: var(--kleur-voorgrond-subtiel);
+  }
+
+  .noot {
+    margin-block-start: var(--ruimte-stapel-md);
+  }
+
+  .lijst {
+    display: grid;
+    gap: var(--ruimte-stapel-sm);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 48rem) {
+    .adres {
+      grid-column: 1 / span 6;
+    }
+
+    .paginas {
+      grid-column: 7 / span 6;
+    }
+
+    .volgen {
+      grid-column: 1 / span 6;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .adres {
+      grid-column: 1 / span 4;
+    }
+
+    .paginas {
+      grid-column: 6 / span 4;
+    }
+
+    .volgen {
+      grid-column: 10 / span 3;
+    }
+  }
+
+  @media print {
+    .paginas,
+    .volgen {
+      display: none;
+    }
+  }
+</style>

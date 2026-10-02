@@ -1,0 +1,177 @@
+---
+import { render } from 'astro:content';
+import Beeld from '@/components/Beeld.astro';
+import CtaStrook from '@/components/CtaStrook.astro';
+import JsonLd from '@/components/JsonLd.astro';
+import Kruimelpad from '@/components/Kruimelpad.astro';
+import LopendeTekst from '@/components/LopendeTekst.astro';
+import MuseumLabel from '@/components/MuseumLabel.astro';
+import WerkRaster from '@/components/WerkRaster.astro';
+import Basis from '@/layouts/Basis.astro';
+import { CATEGORIELABELS, haalProjecten, haalProjectenOpId, type Project } from '@/lib/content';
+import { maakKruimelpad } from '@/lib/jsonld';
+import { maakKruimels } from '@/lib/seo';
+
+export async function getStaticPaths() {
+  const projecten = await haalProjecten();
+  return projecten.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+const gerelateerd = await haalProjectenOpId(project.data.gerelateerd.map((item) => item.id));
+
+if (!Astro.site) {
+  throw new Error('astro.config.mjs mist de site-URL.');
+}
+
+const kruimels = maakKruimels(`/werk/${project.id}`, {
+  '/werk': 'Werk',
+  [`/werk/${project.id}`]: project.data.titel,
+});
+
+const [omslag, ...overige] = project.data.beelden;
+
+if (!omslag) {
+  throw new Error(`Project ${project.id} heeft geen beelden.`);
+}
+---
+
+<Basis
+  titel={project.data.seo.titel}
+  beschrijving={project.data.seo.beschrijving}
+  indexeerbaar={!project.data.plaatshouder}
+>
+  <JsonLd schema={maakKruimelpad(kruimels, Astro.site)} slot="hoofd" />
+
+  <section>
+    <Kruimelpad kruimels={kruimels} />
+  </section>
+
+  <section>
+    <div class="kop">
+      <p class="label">{CATEGORIELABELS[project.data.categorie]}</p>
+      <h1>{project.data.titel}</h1>
+      <p class="intro">{project.data.intro}</p>
+      {
+        project.data.plaatshouder && (
+          <p class="aanduiding">Voorbeeldproject, eigen projectfoto&rsquo;s volgen</p>
+        )
+      }
+    </div>
+    <div class="omslag">
+      <Beeld beeld={omslag} prioriteit parallax onthul={false} />
+    </div>
+  </section>
+
+  <section>
+    <div class="label-kolom">
+      <MuseumLabel
+        titel={project.data.titel}
+        materialen={project.data.materialen}
+        afmetingen={project.data.afmetingen}
+        afwerking={project.data.afwerking}
+        jaar={project.data.jaar}
+      />
+    </div>
+    <div class="verhaal">
+      <LopendeTekst>
+        <Content />
+      </LopendeTekst>
+    </div>
+  </section>
+
+  {
+    overige.length > 0 && (
+      <section>
+        <div class="reeks" data-onthul-groep>
+          {overige.map((beeld) => (
+            <Beeld beeld={beeld} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    gerelateerd.length > 0 && (
+      <section>
+        <h2 class="verder">Ander werk</h2>
+        <WerkRaster projecten={gerelateerd} />
+      </section>
+    )
+  }
+
+  <CtaStrook
+    kop="Zoiets, maar op jouw maat"
+    tekst="Stuur je idee met de maten van je ruimte. Je hoort binnen twee werkdagen wat er mogelijk is."
+  />
+</Basis>
+
+<style>
+  .kop {
+    display: grid;
+    gap: var(--ruimte-stapel-md);
+    grid-column: 1 / -1;
+    align-content: center;
+  }
+
+  .label,
+  .aanduiding {
+    font-size: var(--tekst-label-grootte);
+    font-weight: var(--tekst-label-gewicht);
+    letter-spacing: var(--tekst-label-spatiering);
+    text-transform: uppercase;
+    color: var(--kleur-voorgrond-subtiel);
+  }
+
+  .intro {
+    font-size: var(--tekst-intro-grootte);
+    line-height: var(--tekst-intro-regelhoogte);
+    color: var(--kleur-voorgrond-gedempt);
+  }
+
+  .omslag,
+  .label-kolom,
+  .verhaal,
+  .reeks,
+  .verder {
+    grid-column: 1 / -1;
+  }
+
+  .reeks {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--ruimte-rij-lg) var(--ruimte-goot);
+  }
+
+  .reeks > :global(*) {
+    grid-column: 1 / -1;
+  }
+
+  @media (min-width: 64rem) {
+    .kop {
+      grid-column: 1 / span 5;
+    }
+
+    .omslag {
+      grid-column: 7 / span 6;
+    }
+
+    .label-kolom {
+      grid-column: 1 / span 3;
+    }
+
+    .verhaal {
+      grid-column: 5 / span 6;
+    }
+
+    .reeks > :global(*) {
+      grid-column: span 6;
+    }
+  }
+</style>

@@ -1,0 +1,57 @@
+---
+import '@/styles/basis.css';
+import '@/styles/beweging.css';
+import { ClientRouter } from 'astro:transitions';
+import logo from '@/assets/merk/d-logo.svg?url';
+import JsonLd from '@/components/JsonLd.astro';
+import PaginaKop from '@/components/PaginaKop.astro';
+import PaginaVoet from '@/components/PaginaVoet.astro';
+import Seo from '@/components/Seo.astro';
+import { haalInstellingen } from '@/lib/content';
+import { maakLocalBusiness, maakWebsite } from '@/lib/jsonld';
+import { maakTitel } from '@/lib/seo';
+
+interface Props {
+  titel: string;
+  beschrijving: string;
+  indexeerbaar?: boolean;
+}
+
+const { titel, beschrijving, indexeerbaar = true } = Astro.props;
+const instellingen = await haalInstellingen();
+
+if (!Astro.site) {
+  throw new Error('astro.config.mjs mist de site-URL.');
+}
+
+const volledigeTitel = maakTitel(titel, instellingen.seo.titelSuffix);
+const werkplaats = maakLocalBusiness(instellingen, Astro.site, logo);
+const website = maakWebsite(instellingen, Astro.site);
+---
+
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <Seo titel={volledigeTitel} beschrijving={beschrijving} indexeerbaar={indexeerbaar} />
+    <JsonLd schema={werkplaats} />
+    <JsonLd schema={website} />
+    <slot name="hoofd" />
+    <ClientRouter />
+    <script is:inline>
+      document.documentElement.setAttribute('data-js', '');
+    </script>
+  </head>
+  <body>
+    <PaginaKop />
+    <main>
+      <slot />
+    </main>
+    <PaginaVoet />
+    <script>
+      import '@/lib/beweging/paginaovergang';
+    </script>
+  </body>
+</html>

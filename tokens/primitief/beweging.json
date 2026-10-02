@@ -1,0 +1,37 @@
+﻿{
+  "primitief": {
+    "beweging": {
+      "duur": {
+        "snel": { "$value": "150ms", "$type": "duration" },
+        "basis": { "$value": "300ms", "$type": "duration" },
+        "traag": { "$value": "600ms", "$type": "duration" },
+        "trager": { "$value": "900ms", "$type": "duration" },
+        "filmisch": { "$value": "1200ms", "$type": "duration" },
+        "hero": { "$value": "1600ms", "$type": "duration" }
+      },
+      "curve": {
+        "uit-quint": { "$value": "cubic-bezier(0.22, 1, 0.36, 1)", "$type": "cubicBezier" },
+        "uit-expo": { "$value": "cubic-bezier(0.16, 1, 0.3, 1)", "$type": "cubicBezier" },
+        "in-uit-quart": { "$value": "cubic-bezier(0.76, 0, 0.24, 1)", "$type": "cubicBezier" }
+      },
+      "trap": {
+        "snel": { "$value": "60ms", "$type": "duration" },
+        "basis": { "$value": "90ms", "$type": "duration" },
+        "traag": { "$value": "140ms", "$type": "duration" }
+      },
+      "afstand": {
+        "sm": { "$value": "8px", "$type": "dimension" },
+        "md": { "$value": "16px", "$type": "dimension" },
+        "lg": { "$value": "32px", "$type": "dimension" },
+        "masker": { "$value": "110%", "$type": "dimension" }
+      },
+      "schaal": {
+        "hover": { "$value": "1.03", "$type": "number" },
+        "onthul": { "$value": "1.08", "$type": "number" }
+      },
+      "parallax": {
+        "hoeveelheid": { "$value": "6%", "$type": "dimension" }
+      }
+    }
+  }
+}

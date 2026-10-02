@@ -1,0 +1,53 @@
+---
+interface Props {
+  naam: string;
+  label: string;
+  optioneel?: boolean;
+  breedte?: 'half' | 'vol';
+}
+
+const { naam, label, optioneel = false, breedte = 'vol' } = Astro.props;
+---
+
+<div class="formulier-veld" data-breedte={breedte}>
+  <label class="label" for={naam}>
+    {label}
+    {optioneel && <span class="optioneel">optioneel</span>}
+  </label>
+  <slot />
+  <p class="fout" id={`fout-${naam}`} hidden></p>
+</div>
+
+<style>
+  .formulier-veld {
+    display: grid;
+    gap: var(--ruimte-stapel-sm);
+  }
+
+  .formulier-veld[data-breedte='half'] {
+    grid-column: span 6;
+  }
+
+  .formulier-veld[data-breedte='vol'] {
+    grid-column: 1 / -1;
+  }
+
+  .label {
+    display: flex;
+    gap: var(--ruimte-stapel-sm);
+    align-items: baseline;
+    font-size: var(--label-grootte);
+    font-weight: var(--label-gewicht);
+    color: var(--label-voorgrond);
+  }
+
+  .optioneel {
+    font-weight: var(--k-letter-gewicht-normaal);
+    color: var(--label-optioneel-voorgrond);
+  }
+
+  .fout {
+    font-size: var(--tekst-klein-grootte);
+    color: var(--kleur-fout);
+  }
+</style>

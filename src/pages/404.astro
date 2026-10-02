@@ -1,0 +1,23 @@
+---
+import SectieIntro from '@/components/SectieIntro.astro';
+import TekstLink from '@/components/TekstLink.astro';
+import Basis from '@/layouts/Basis.astro';
+---
+
+<Basis
+  titel="Pagina niet gevonden"
+  beschrijving="Deze pagina bestaat niet of is verplaatst. Via het werk of de contactpagina kom je verder."
+  indexeerbaar={false}
+>
+  <section>
+    <SectieIntro label="404" kop="Deze pagina bestaat niet" niveau={1}>
+      <p>De link is verouderd of er staat een typefout in het adres.</p>
+      <p>
+        <TekstLink href="/werk" variant="intekenend">Bekijk het werk</TekstLink>
+      </p>
+      <p>
+        <TekstLink href="/contact" variant="intekenend">Bespreek je idee</TekstLink>
+      </p>
+    </SectieIntro>
+  </section>
+</Basis>

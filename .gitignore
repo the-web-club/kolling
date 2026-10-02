@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.astro/
+.vercel/
+.env
+.env.*
+!.env.example
+src/assets/fonts/licensed/
+docs/FEITENCHECK.md
+.DS_Store

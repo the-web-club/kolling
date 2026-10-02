@@ -1,0 +1,22 @@
+{
+  "ruimte": {
+    "sectie": { "$value": "{primitief.ruimte.sectie}", "$type": "dimension" },
+    "blok": { "$value": "{primitief.ruimte.16}", "$type": "dimension" },
+    "goot": { "$value": "{primitief.ruimte.goot}", "$type": "dimension" },
+    "stapel": {
+      "sm": { "$value": "{primitief.ruimte.2}", "$type": "dimension" },
+      "md": { "$value": "{primitief.ruimte.4}", "$type": "dimension" },
+      "lg": { "$value": "{primitief.ruimte.8}", "$type": "dimension" }
+    },
+    "rij": {
+      "sm": { "$value": "{primitief.ruimte.3}", "$type": "dimension" },
+      "md": { "$value": "{primitief.ruimte.6}", "$type": "dimension" },
+      "lg": { "$value": "{primitief.ruimte.12}", "$type": "dimension" }
+    }
+  },
+  "maat": {
+    "container": { "$value": "{primitief.maat.container-max}", "$type": "dimension" },
+    "tekstkolom": { "$value": "{primitief.maat.container-inline}", "$type": "dimension" },
+    "regellengte": { "$value": "{primitief.maat.regellengte}", "$type": "dimension" }
+  }
+}
