@@ -24,7 +24,26 @@ Primitief: `beweging.duur.ambient` (90000ms) en `beweging.curve.ambient` (`cubic
 
 Semantisch: `kleur.licht.warm` en `kleur.licht.koel`, die naar `hout.es.200` en `lijn.200` verwijzen. De opdracht noemde die primitieven rechtstreeks, maar `10-design-system.mdc` staat geen primitieve tokens in een component toe; via deze laag blijft de regel intact en blijven de waarden gelijk. Verder `tekst.display-kort.*` voor de compacte stap op korte schermen.
 
-Componenten: `binnenkomst.*` met de vertraging per element in de choreografie, en `merk.hoogte` plus `merk.hoogte-breed`. Die staan als token omdat de timing anders negen losse getallen in de CSS zou zijn, en rule 17 geen magische waarden toestaat.
+Componenten: `binnenkomst.*` met de vertraging per element in de choreografie. Die staan als token omdat de timing anders negen losse getallen in de CSS zou zijn, en rule 17 geen magische waarden toestaat. Verder `pagina.*` voor de padding en de afstand tussen de contactblokken, en `merk.hoogte` plus `merk.hoogte-breed`.
+
+## Spacing na de eerste review
+
+Het woordmerk was op mobiel 22 px en de blokken in de voet stonden met 1 rem onder elkaar, net zoals de opdracht vroeg. In de praktijk las dat als één doorlopende lijst, omdat de afstand tussen de blokken nauwelijks groter was dan die tussen een label en zijn tekst.
+
+Aangepast:
+
+|                       | Was                   | Nu                                            |
+| --------------------- | --------------------- | --------------------------------------------- |
+| Woordmerk mobiel      | 1,375 rem             | 1,75 rem                                      |
+| Woordmerk desktop     | 1,75 rem              | 2 rem                                         |
+| Padding mobiel        | `ruimte.goot` (20 px) | `ruimte.4` (16 px)                            |
+| Padding desktop       | `ruimte.goot`         | `ruimte.goot`                                 |
+| Blokken onder elkaar  | `ruimte.4`            | `ruimte.8`, en `ruimte.6` onder 44 rem hoogte |
+| Haarlijn naar blokken | `ruimte.4`            | `ruimte.6`                                    |
+
+De stap terug naar `ruimte.6` op korte schermen is nodig omdat bij 320 bij 568 anders maar 5 px overbleef. Nu is de kleinste marge 16 px.
+
+Bij die controle kwam ook een echte fout boven: in de adresregel stond "7731 GVOmmen" aan elkaar. Prettier had de twee expressies over twee regels verdeeld, en een regelafbreking tussen expressies verdwijnt in de uitvoer. De adresregel en de microregel worden nu in de frontmatter samengesteld, zodat opmaak van de template ze niet meer kan breken.
 
 ## Afwijkingen van de opdracht
 
@@ -41,16 +60,16 @@ Gewicht van het kritieke pad in de productiebuild, ongecomprimeerd: HTML 9,1 kB,
 
 Alle acht viewports uit de opdracht passen zonder verticale of horizontale overflow, met de microregel binnen het scherm:
 
-| Formaat     | Past | Breedte H1 |
-| ----------- | ---- | ---------- |
-| 320 × 568   | ja   | 280 px     |
-| 360 × 640   | ja   | 320 px     |
-| 390 × 844   | ja   | 350 px     |
-| 768 × 1024  | ja   | 468 px     |
-| 1280 × 720  | ja   | 794 px     |
-| 1440 × 900  | ja   | 895 px     |
-| 1920 × 1080 | ja   | 893 px     |
-| 844 × 390   | ja   | 516 px     |
+| Formaat     | Past | Ruimte onder de microregel |
+| ----------- | ---- | -------------------------- |
+| 320 × 568   | ja   | 16 px                      |
+| 360 × 640   | ja   | 16 px                      |
+| 390 × 844   | ja   | 16 px                      |
+| 768 × 1024  | ja   | 27 px                      |
+| 1280 × 720  | ja   | 36 px                      |
+| 1440 × 900  | ja   | 39 px                      |
+| 1920 × 1080 | ja   | 40 px                      |
+| 844 × 390   | ja   | 28 px                      |
 
 Bij `prefers-reduced-motion: reduce` staan beide lichtvlakken stil (`animation-name: none`) en verschijnt alles met één fade van 200ms. Zonder JavaScript staat er geen enkel element op opacity 0.
 

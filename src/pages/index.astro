@@ -16,7 +16,14 @@ const intro =
   'Meubels en houtwerk op maat, gemaakt in eigen werkplaats aan de Strangeweg. De website volgt. Een idee bespreken kan nu al.';
 
 const heeftEmail = isBekend(instellingen.email);
-const heeftKvk = isBekend(instellingen.kvk);
+
+// De adresregel en de microregel staan in de frontmatter, niet in de template:
+// een regelafbreking tussen twee expressies verdwijnt in de uitvoer en plakt
+// dan woorden aan elkaar.
+const adresregel = `${adres.straat}, ${adres.postcode} ${adres.plaats}`;
+const microregel = isBekend(instellingen.kvk)
+  ? `${instellingen.naam}, ${adres.plaats}, KvK ${instellingen.kvk}`
+  : `${instellingen.naam}, ${adres.plaats}`;
 ---
 
 <Basis titel={titel} beschrijving={beschrijving} suffix={false}>
@@ -59,8 +66,7 @@ const heeftKvk = isBekend(instellingen.kvk);
         <div class="blok" data-onthul="omhoog">
           <h2 class="label">Werkplaats</h2>
           <address>
-            {adres.straat}, {adres.postcode}
-            {adres.plaats}<br />
+            {adresregel}<br />
             Bezoek op afspraak
           </address>
         </div>
@@ -87,9 +93,7 @@ const heeftKvk = isBekend(instellingen.kvk);
         </div>
       </div>
 
-      <p class="micro" data-onthul="fade">
-        {instellingen.naam}, {adres.plaats}{heeftKvk && `, KvK ${instellingen.kvk}`}
-      </p>
+      <p class="micro" data-onthul="fade">{microregel}</p>
     </footer>
   </div>
 </Basis>
@@ -121,7 +125,7 @@ const heeftKvk = isBekend(instellingen.kvk);
     inline-size: 100%;
     max-inline-size: var(--maat-container);
     margin-inline: auto;
-    padding: var(--ruimte-goot);
+    padding: var(--pagina-padding);
   }
 
   .kop {
@@ -180,7 +184,7 @@ const heeftKvk = isBekend(instellingen.kvk);
 
   .contact {
     display: grid;
-    gap: var(--ruimte-4);
+    gap: var(--pagina-micro-ruimte);
   }
 
   .lijn {
@@ -192,7 +196,7 @@ const heeftKvk = isBekend(instellingen.kvk);
   .blokken {
     display: grid;
     grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: var(--ruimte-4) var(--ruimte-goot);
+    gap: var(--pagina-blok-ruimte) var(--ruimte-goot);
   }
 
   .blok {
@@ -253,8 +257,16 @@ const heeftKvk = isBekend(instellingen.kvk);
   }
 
   @media (min-width: 48rem) {
+    .pagina {
+      padding: var(--pagina-padding-breed);
+    }
+
     .merk :global(img) {
       block-size: var(--merk-hoogte-breed);
+    }
+
+    .blokken {
+      gap: var(--pagina-blok-ruimte-breed) var(--ruimte-goot);
     }
 
     h1,
@@ -295,6 +307,10 @@ const heeftKvk = isBekend(instellingen.kvk);
     .statement {
       gap: var(--ruimte-stapel-md) var(--ruimte-goot);
     }
+
+    .blokken {
+      gap: var(--ruimte-6) var(--ruimte-goot);
+    }
   }
 
   @media (max-height: 30rem) {
@@ -312,7 +328,10 @@ const heeftKvk = isBekend(instellingen.kvk);
       gap: var(--ruimte-stapel-sm) var(--ruimte-goot);
     }
 
-    .contact,
+    .contact {
+      gap: var(--ruimte-stapel-md);
+    }
+
     .blokken {
       gap: var(--ruimte-stapel-sm) var(--ruimte-goot);
     }

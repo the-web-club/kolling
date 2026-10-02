@@ -103,13 +103,13 @@
   --binnenkomst-blok-twee: 890ms;
   --binnenkomst-blok-drie: 980ms;
   --binnenkomst-micro: 1000ms;
-  --merk-hoogte: 1.375rem;
-  --merk-hoogte-breed: 1.75rem;
   --invoer-hoogte: 3rem;
   --invoer-grootte: 1rem;
   --knop-hoogte: 3rem;
   --navigatie-hoogte: 5rem;
   --link-onderstreping-afstand: 0.15em;
+  --merk-hoogte: 1.75rem;
+  --merk-hoogte-breed: 2rem;
   --beweging-binnenkomst: var(--k-beweging-duur-traag) var(--k-beweging-curve-uit-quint);
   --beweging-binnenkomst-hero: var(--k-beweging-duur-hero) var(--k-beweging-curve-uit-expo);
   --beweging-binnenkomst-beeld: var(--k-beweging-duur-filmisch) var(--k-beweging-curve-uit-expo);
@@ -208,6 +208,11 @@
   --navigatie-spatiering: var(--k-letter-spatiering-kapitaal);
   --navigatie-laag: var(--k-laag-kop);
   --link-onderstreping-dikte: var(--k-rand-haarlijn);
+  --pagina-padding: var(--k-ruimte-4);
+  --pagina-padding-breed: var(--k-ruimte-goot);
+  --pagina-blok-ruimte: var(--k-ruimte-8);
+  --pagina-blok-ruimte-breed: var(--k-ruimte-4);
+  --pagina-micro-ruimte: var(--k-ruimte-6);
   --bijschrift-grootte: var(--tekst-label-grootte);
   --bijschrift-spatiering: var(--tekst-label-spatiering);
   --bijschrift-gewicht: var(--tekst-label-gewicht);

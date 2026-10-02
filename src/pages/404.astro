@@ -39,7 +39,7 @@ const instellingen = await haalInstellingen();
     inline-size: 100%;
     max-inline-size: var(--maat-container);
     margin-inline: auto;
-    padding: var(--ruimte-goot);
+    padding: var(--pagina-padding);
   }
 
   .statement {
@@ -100,6 +100,10 @@ const instellingen = await haalInstellingen();
   }
 
   @media (min-width: 48rem) {
+    .pagina {
+      padding: var(--pagina-padding-breed);
+    }
+
     h1,
     .intro,
     .terug {

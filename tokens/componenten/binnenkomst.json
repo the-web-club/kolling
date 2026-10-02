@@ -9,9 +9,5 @@
     "blok-twee": { "$value": "890ms", "$type": "duration" },
     "blok-drie": { "$value": "980ms", "$type": "duration" },
     "micro": { "$value": "1000ms", "$type": "duration" }
-  },
-  "merk": {
-    "hoogte": { "$value": "1.375rem", "$type": "dimension" },
-    "hoogte-breed": { "$value": "1.75rem", "$type": "dimension" }
   }
 }

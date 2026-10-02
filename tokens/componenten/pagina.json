@@ -1,0 +1,13 @@
+{
+  "pagina": {
+    "padding": { "$value": "{primitief.ruimte.4}", "$type": "dimension" },
+    "padding-breed": { "$value": "{primitief.ruimte.goot}", "$type": "dimension" },
+    "blok-ruimte": { "$value": "{primitief.ruimte.8}", "$type": "dimension" },
+    "blok-ruimte-breed": { "$value": "{primitief.ruimte.4}", "$type": "dimension" },
+    "micro-ruimte": { "$value": "{primitief.ruimte.6}", "$type": "dimension" }
+  },
+  "merk": {
+    "hoogte": { "$value": "1.75rem", "$type": "dimension" },
+    "hoogte-breed": { "$value": "2rem", "$type": "dimension" }
+  }
+}
