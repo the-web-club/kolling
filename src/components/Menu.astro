@@ -21,7 +21,7 @@ const huidigPad = Astro.url.pathname;
 <div class="menu" id="menu" popover data-menu>
   <div class="menu-kop">
     <div class="merk">
-      <Picture src={woordmerk} formats={['avif', 'webp']} alt={naam} width={70} height={35} />
+      <Picture src={woordmerk} formats={['avif', 'webp']} alt={naam} width={70} />
     </div>
     <button class="menu-sluiten" type="button" popovertarget="menu" popovertargetaction="hide">
       Sluiten
@@ -67,21 +67,28 @@ const huidigPad = Astro.url.pathname;
     cursor: pointer;
   }
 
+  .menu-knop,
+  .menu-sluiten {
+    grid-column: 4;
+    justify-self: end;
+    line-height: 1;
+  }
+
   .menu-knop {
     --onthul-vertraging: var(--binnenkomst-kop);
-    grid-column: 3;
-    justify-self: end;
   }
 
   /* De popover vult de breedte en is zo hoog als haar inhoud. Het dekkende
-     papier zit op de backdrop, zodat een klik naast de lijst het menu sluit. */
+     papier zit op de backdrop, zodat een klik naast de lijst het menu sluit.
+     De eigen kop draagt de bovenpadding, net als op de pagina zelf. */
   .menu {
     position: fixed;
     inset: 0 0 auto 0;
     inline-size: 100%;
     max-inline-size: var(--maat-container);
     margin-inline: auto;
-    padding: var(--pagina-padding);
+    padding-inline: var(--pagina-padding);
+    padding-block-end: var(--pagina-padding);
     border: 0;
     background-color: transparent;
     color: var(--kleur-voorgrond);
@@ -94,15 +101,31 @@ const huidigPad = Astro.url.pathname;
     overflow-y: auto;
   }
 
+  /* Hetzelfde raster, dezelfde hoogte en dezelfde padding als PaginaKop, zodat
+     het woordmerk bij het openen van het menu op zijn plek blijft staan. */
   .menu-kop {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    grid-template-rows: var(--merk-hoogte);
+    align-items: center;
+    column-gap: var(--kop-kolom-ruimte);
+    padding-block: var(--kop-padding-blok);
+  }
+
+  .merk {
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--ruimte-stapel-md);
+    align-items: center;
+    grid-column: 1;
+    justify-self: start;
+    line-height: 0;
+  }
+
+  .merk :global(picture),
+  .merk :global(img) {
+    display: block;
   }
 
   .merk :global(img) {
-    display: block;
     block-size: var(--merk-hoogte);
     inline-size: auto;
   }
@@ -147,6 +170,21 @@ const huidigPad = Astro.url.pathname;
     min-block-size: var(--navigatie-aanraakdoel);
     color: var(--navigatie-voorgrond);
     text-decoration-line: underline;
+  }
+
+  @media (min-width: 48rem) {
+    .menu {
+      padding-inline: var(--pagina-padding-breed);
+      padding-block-end: var(--pagina-padding-breed);
+    }
+
+    .menu-kop {
+      grid-template-rows: var(--merk-hoogte-breed);
+    }
+
+    .merk :global(img) {
+      block-size: var(--merk-hoogte-breed);
+    }
   }
 
   @media (max-height: 37.5rem) {

@@ -4,11 +4,24 @@
     "padding-breed": { "$value": "{primitief.ruimte.goot}", "$type": "dimension" },
     "blok-ruimte": { "$value": "{primitief.ruimte.8}", "$type": "dimension" },
     "blok-ruimte-breed": { "$value": "{primitief.ruimte.4}", "$type": "dimension" },
-    "micro-ruimte": { "$value": "{primitief.ruimte.6}", "$type": "dimension" },
-    "kopruimte-breed": { "$value": "{primitief.ruimte.8}", "$type": "dimension" }
+    "micro-ruimte": { "$value": "{primitief.ruimte.6}", "$type": "dimension" }
   },
   "merk": {
-    "hoogte": { "$value": "2.1875rem", "$type": "dimension" },
-    "hoogte-breed": { "$value": "2.5rem", "$type": "dimension" }
+    "hoogte": { "$value": "1.375rem", "$type": "dimension" },
+    "hoogte-breed": { "$value": "1.75rem", "$type": "dimension" }
+  },
+  "kop": {
+    "padding-blok": { "$value": "{primitief.ruimte.5}", "$type": "dimension" },
+    "kolom-ruimte": { "$value": "{primitief.ruimte.6}", "$type": "dimension" },
+    "hoogte": { "$value": "calc({merk.hoogte} + {primitief.ruimte.5} * 2)", "$type": "dimension" },
+    "hoogte-breed": {
+      "$value": "calc({merk.hoogte-breed} + {primitief.ruimte.5} * 2)",
+      "$type": "dimension"
+    },
+    "drempel": { "$value": "{primitief.beweging.afstand.sm}", "$type": "dimension" },
+    "laag": { "$value": "{primitief.laag.kop}", "$type": "number" },
+    "achtergrond": { "$value": "{kleur.achtergrond}", "$type": "color" },
+    "lijn": { "$value": "{kleur.lijn}", "$type": "color" },
+    "lijn-dikte": { "$value": "{primitief.rand.haarlijn}", "$type": "dimension" }
   }
 }

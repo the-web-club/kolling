@@ -20,7 +20,6 @@ const { naam, adres } = await haalInstellingen();
       formats={['avif', 'webp']}
       alt={naam}
       width={70}
-      height={35}
       densities={[2]}
       loading="eager"
       fetchpriority="high"
@@ -56,32 +55,86 @@ const { naam, adres } = await haalInstellingen();
 </script>
 
 <style>
-  /* Drie cellen op elke breedte. Onder 64 rem staat de klok in de middelste
-     cel en de knop naar het menu in de derde; vanaf 64 rem schuift de
-     navigatie ertussen en gaat de klok naar rechts. */
+  /* Vier cellen op elke breedte: woordmerk, navigatie, klok en de knop naar het
+     menu. Onder 64 rem staan de zes items in het menu en blijft hun cel leeg;
+     vanaf 64 rem verdwijnt de knop en schuift de klok naar de rechterrand.
+
+     De rij is zo hoog als het woordmerk, zodat het aanraakdoel van 44 px van
+     de knop naar het menu de kop niet hoger maakt. Het overschot valt in de
+     padding, gelijk boven en onder. */
   .pagina-kop {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: var(--kop-laag);
     display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: baseline;
-    column-gap: var(--ruimte-stapel-md);
+    grid-template-columns: auto 1fr auto auto;
+    grid-template-rows: var(--merk-hoogte);
+    align-items: center;
+    column-gap: var(--kop-kolom-ruimte);
+    padding-block: var(--kop-padding-blok);
+  }
+
+  /* In rust loopt de lichtachtergrond onder de kop door. Na acht pixels
+     scrollen dekt deze band hem af, over de volle breedte van het venster,
+     net als de haarlijn onder de contactrij. */
+  .pagina-kop::before {
+    content: '';
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: -1;
+    block-size: var(--kop-hoogte);
+    background-color: var(--kop-achtergrond);
+    border-block-end: var(--kop-lijn-dikte) solid var(--kop-lijn);
+    opacity: 0;
+  }
+
+  @supports (animation-timeline: scroll(root)) {
+    .pagina-kop::before {
+      animation-name: kop-dekt;
+      animation-fill-mode: both;
+      animation-timing-function: linear;
+      animation-timeline: scroll(root);
+      animation-range: 0 var(--kop-drempel);
+    }
+  }
+
+  @keyframes kop-dekt {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 
   .merk {
     --onthul-vertraging: var(--binnenkomst-kop);
+    display: flex;
+    align-items: center;
     grid-column: 1;
+    justify-self: start;
+    line-height: 0;
+  }
+
+  /* Zonder display: block houdt de inline afbeelding ruimte onder de basislijn
+     over en staat het woordmerk een paar pixels te hoog in de rij. */
+  .merk :global(picture),
+  .merk :global(img) {
+    display: block;
   }
 
   .merk :global(img) {
-    display: block;
     block-size: var(--merk-hoogte);
     inline-size: auto;
   }
 
   .klok {
     --onthul-vertraging: var(--binnenkomst-kop);
-    grid-column: 2;
+    grid-column: 3;
     justify-self: end;
     font-size: var(--tekst-klein-grootte);
+    line-height: 1;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
     color: var(--kleur-voorgrond-gedempt);
@@ -94,6 +147,14 @@ const { naam, adres } = await haalInstellingen();
   }
 
   @media (min-width: 48rem) {
+    .pagina-kop {
+      grid-template-rows: var(--merk-hoogte-breed);
+    }
+
+    .pagina-kop::before {
+      block-size: var(--kop-hoogte-breed);
+    }
+
     .merk :global(img) {
       block-size: var(--merk-hoogte-breed);
     }
@@ -101,20 +162,7 @@ const { naam, adres } = await haalInstellingen();
 
   @media (min-width: 64rem) {
     .pagina-kop {
-      grid-template-columns: 1fr auto 1fr;
-    }
-
-    .klok {
-      grid-column: 3;
-    }
-  }
-
-  /* Vanaf 64 rem staat de navigatie in de koprij en komt de kop van de pagina
-     er vlak onder. De extra ruimte valt weg op korte schermen, waar de pagina
-     binnen één beeld moet blijven. */
-  @media (min-width: 64rem) and (min-height: 44.0625rem) {
-    .pagina-kop {
-      padding-block-end: var(--pagina-kopruimte-breed);
+      grid-template-columns: auto 1fr auto;
     }
   }
 </style>

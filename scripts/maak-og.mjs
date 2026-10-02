@@ -14,17 +14,20 @@ const OG_WOORDMERK_BREEDTE = 200;
 const OG_WOORDMERK_RAND = 48;
 const WOORDMERK_BRON_BREEDTE = 480;
 const FAVICON_MAAT = 64;
+const MASKER_DREMPEL = 1;
 const INKT = { r: 27, g: 26, b: 24 };
 
 // Het aangeleverde SVG zet het woordmerk als luminantiemasker over zwarte inkt.
-// Zonder die stap levert een directe render een zwart vlak op.
+// Zonder die stap levert een directe render een zwart vlak op. De export heeft
+// rondom ongelijke zwarte randen; die worden transparante marges en zetten het
+// woordmerk scheef in zijn kader, dus ze gaan er hier af.
 async function haalMasker() {
   const svg = await readFile(LOGO, 'utf8');
   const gevonden = /base64,([A-Za-z0-9+/=]+)/.exec(svg);
   if (!gevonden?.[1]) {
     throw new Error(`${LOGO} bevat geen ingesloten beeld om het masker uit te lezen.`);
   }
-  return Buffer.from(gevonden[1], 'base64');
+  return sharp(Buffer.from(gevonden[1], 'base64')).trim({ threshold: MASKER_DREMPEL }).toBuffer();
 }
 
 async function maakInkt(masker, breedte) {

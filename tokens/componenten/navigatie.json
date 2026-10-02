@@ -9,7 +9,6 @@
     "voorgrond-rust": { "$value": "{kleur.voorgrond-gedempt}", "$type": "color" },
     "voorgrond-gedimd": { "$value": "{kleur.voorgrond-gedempt}", "$type": "color" },
     "lijn": { "$value": "{kleur.lijn}", "$type": "color" },
-    "laag": { "$value": "{primitief.laag.kop}", "$type": "number" },
     "indicator-afstand": { "$value": "{primitief.ruimte.1}", "$type": "dimension" },
     "indicator-dikte": { "$value": "{primitief.rand.haarlijn}", "$type": "dimension" },
     "lijn-actief": { "$value": "{kleur.lijn-sterk}", "$type": "color" },

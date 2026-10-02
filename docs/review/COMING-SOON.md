@@ -411,6 +411,23 @@ Het woordmerk krijgt voorlopig `filter: invert(1)` op het zwarte PNG, uitsluiten
 
 `voorgrond-subtiel` gaat van de koppen af: de drie `<h2>` in de contactrij en de titels van de bijschriften krijgen `voorgrond-gedempt` (8,67 in het licht, 7,62 in het donker). De microregel houdt `voorgrond-subtiel`, want dat is de enige plek waar de token echt decoratief is. Het lichte thema wordt daarmee op twee plekken donkerder dan nu; dat is een bewuste wijziging en geen gevolg van het donkere thema.
 
+## Sticky paginakop met gecentreerd woordmerk
+
+De kop is nu `position: sticky` op elke breedte, draagt zelf zijn padding van `ruimte.5` boven en onder, en krijgt na acht pixels scrollen een dekkende band met haarlijn over de volle vensterbreedte. Gemeten kophoogte: 62 px onder 48 rem en 68 px daarboven, met het woordmerk op 22 respectievelijk 28 px en overal exact 20 px ruimte boven en onder. Gecontroleerd op 320 × 568, 390 × 844, 768 × 1024, 844 × 390, 1440 × 900 en 1920 × 1080: geen overloop, de linkerrand van het woordmerk op de containerrand en de klok op dezelfde rechterrand als de microregel. Het geopende menu zet het woordmerk op exact dezelfde plek, tot op de pixel.
+
+`woordmerk.png` was 480 × 240 met de inkt op 449 × 212, negentien pixels van links en vijfentwintig van boven. Dat zette het woordmerk scheef in elk kader waarin het verticaal gecentreerd stond. `scripts/maak-og.mjs` snijdt de zwarte randen nu van het masker; het bestand is 480 × 225 en de inkt vult het geheel. Het OG-beeld en het favicon komen uit datzelfde masker en zijn mee opnieuw gegenereerd.
+
+Afwijkingen van de opdracht:
+
+1. **De token heet `kop.hoogte`, niet `maat.kop.hoogte`.** De `maat.*`-groep is semantisch en mag alleen naar primitieven verwijzen, terwijl de kophoogte uit `merk.hoogte` volgt. Als componenttoken blijft de hoogte vanzelf kloppen: `calc(var(--merk-hoogte) + var(--k-ruimte-5) * 2)`. Er zijn twee waarden nodig, want het woordmerk verspringt op 48 rem.
+2. **De padding links en rechts blijft `pagina.padding`.** `maat.container-inline` is 76 rem, de tekstbreedte; als padding zou die het scherm vullen. Dezelfde afwijking als punt 1 hierboven, uit de eerste review.
+3. **De rij is zo hoog als het woordmerk.** Het aanraakdoel van 44 px van de knop naar het menu zou de kop anders 84 px hoog maken. Het overschot valt nu gelijk verdeeld in de padding, waarmee het doel 44 px blijft en de kop zijn hoogte houdt.
+4. **Het woordmerk is kleiner dan het was.** De inkt was 31 px op mobiel en 35 px op desktop; nu is dat 22 en 28 px, de maten uit de opdracht. Terug is één waarde in `merk.hoogte`.
+5. **Geen `data-gescrold`-terugval.** Die vraagt een scroll-listener, en op deze branch kan geen enkele pagina scrollen. De terugval hoort bij de eerste pagina die dat wel doet. `animation-timeline: scroll(root)` zelf werkt in Chrome, Safari en Firefox.
+6. **De animatie staat in longhands.** Als `animation`-shorthand plus `animation-timeline` voegt de minifier beide samen tot `animation: linear both kop-dekt scroll(root)`, en die regel kent de browser niet, waarna de band nooit verschijnt.
+7. **Geen themaschakelaar.** Die bestaat op deze branch niet, dus de koprij heeft vier cellen: woordmerk, navigatie, klok en de knop naar het menu.
+8. **Twee tokens vervallen.** `pagina.kopruimte-breed` gaf de kop op brede schermen extra ruimte eronder en gaat niet samen met gelijke padding boven en onder. `navigatie.laag` was ongebruikt en is opgevolgd door `kop.laag`.
+
 ## Wat open staat
 
 1. **Woordmerk als SVG.** Het huidige `d-logo.svg` is een export met een ingesloten bitmap van 1065 px breed en een luminantiemasker. `pnpm og` rendert daaruit `woordmerk.png` op 480 px, het OG-beeld en het favicon. Een echte outline-SVG maakt die stap onnodig en is scherper op elk formaat.

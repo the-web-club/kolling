@@ -123,8 +123,8 @@
   --navigatie-hoogte: 5rem;
   --navigatie-aanraakdoel: 2.75rem;
   --link-onderstreping-afstand: 0.15em;
-  --merk-hoogte: 2.1875rem;
-  --merk-hoogte-breed: 2.5rem;
+  --merk-hoogte: 1.375rem;
+  --merk-hoogte-breed: 1.75rem;
   --statement-cap: 8.9cqi;
   --statement-cap-breed: 7.4cqi;
   --statement-cap-naast-beeld: 4.4cqi;
@@ -248,7 +248,6 @@
   --menu-trap: var(--k-beweging-trap-snel);
   --navigatie-spatiering: var(--k-letter-spatiering-kapitaal);
   --navigatie-ruimte: var(--k-ruimte-6);
-  --navigatie-laag: var(--k-laag-kop);
   --navigatie-indicator-afstand: var(--k-ruimte-1);
   --navigatie-indicator-dikte: var(--k-rand-haarlijn);
   --link-onderstreping-dikte: var(--k-rand-haarlijn);
@@ -257,7 +256,13 @@
   --pagina-blok-ruimte: var(--k-ruimte-8);
   --pagina-blok-ruimte-breed: var(--k-ruimte-4);
   --pagina-micro-ruimte: var(--k-ruimte-6);
-  --pagina-kopruimte-breed: var(--k-ruimte-8);
+  --kop-padding-blok: var(--k-ruimte-5);
+  --kop-kolom-ruimte: var(--k-ruimte-6);
+  --kop-hoogte: calc(var(--merk-hoogte) + var(--k-ruimte-5) * 2);
+  --kop-hoogte-breed: calc(var(--merk-hoogte-breed) + var(--k-ruimte-5) * 2);
+  --kop-drempel: var(--k-beweging-afstand-sm);
+  --kop-laag: var(--k-laag-kop);
+  --kop-lijn-dikte: var(--k-rand-haarlijn);
   --beeld-achtergrond: var(--kleur-achtergrond-tint);
   --bijschrift-grootte: var(--tekst-label-grootte);
   --bijschrift-spatiering: var(--tekst-label-spatiering);
@@ -298,4 +303,6 @@
   --navigatie-overgang: var(--beweging-menu);
   --link-onderstreping-kleur: var(--kleur-lijn);
   --link-onderstreping-kleur-hover: var(--kleur-voorgrond);
+  --kop-achtergrond: var(--kleur-achtergrond);
+  --kop-lijn: var(--kleur-lijn);
 }
