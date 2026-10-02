@@ -1,7 +1,6 @@
 {
   "statement": {
     "cap": { "$value": "8.9cqi", "$type": "dimension" },
-    "cap-breed": { "$value": "7.4cqi", "$type": "dimension" },
-    "cap-naast-beeld": { "$value": "4.4cqi", "$type": "dimension" }
+    "cap-breed": { "$value": "7.4cqi", "$type": "dimension" }
   }
 }

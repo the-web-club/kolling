@@ -3,8 +3,6 @@
     "kop": { "$value": "0ms", "$type": "duration" },
     "regel-een": { "$value": "100ms", "$type": "duration" },
     "regel-twee": { "$value": "190ms", "$type": "duration" },
-    "beeld-groot": { "$value": "300ms", "$type": "duration" },
-    "beeld-klein": { "$value": "450ms", "$type": "duration" },
     "intro": { "$value": "500ms", "$type": "duration" },
     "lijn": { "$value": "700ms", "$type": "duration" },
     "blok-een": { "$value": "800ms", "$type": "duration" },
