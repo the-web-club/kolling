@@ -1,0 +1,207 @@
+---
+import type { ImageMetadata } from 'astro';
+import { maakBronnen, type Bron, type Positie, type Verhouding } from '@/lib/beeld';
+
+interface Props {
+  beeld: ImageMetadata;
+  alt: string;
+  verhouding: Verhouding;
+  verhoudingMobiel?: Verhouding;
+  maten: string;
+  bijschrift?: string;
+  positie?: Positie;
+  breedtes?: readonly number[];
+  prioriteit?: boolean;
+  onthul?: boolean;
+  class?: string;
+}
+
+// Gelijk aan primitief.schermbreedte.lg. Een media-querygrens kan geen
+// CSS-variabele zijn; dat is de uitzondering uit 10-design-system.
+const DESKTOP = '(min-width: 64rem)';
+
+const {
+  beeld,
+  alt,
+  verhouding,
+  verhoudingMobiel,
+  maten,
+  bijschrift,
+  positie = 'attention',
+  breedtes,
+  prioriteit = false,
+  onthul = true,
+  class: klasse,
+} = Astro.props;
+
+const bronnen = await maakBronnen({ beeld, verhouding, breedtes, positie });
+const mobiel = verhoudingMobiel
+  ? await maakBronnen({ beeld, verhouding: verhoudingMobiel, breedtes, positie })
+  : undefined;
+
+// Met een mobiele verhouding staan de desktopbronnen vooraan achter hun media,
+// zodat de browser er precies één kiest en nooit twee uitsnedes downloadt.
+const lijst: (Bron & { media?: string })[] = mobiel
+  ? [
+      { ...bronnen.avif, media: DESKTOP },
+      { ...bronnen.webp, media: DESKTOP },
+      mobiel.avif,
+      mobiel.webp,
+    ]
+  : [bronnen.avif, bronnen.webp];
+const terugval = mobiel ? mobiel.jpeg : bronnen.jpeg;
+
+const [titel, ...staart] = (bijschrift ?? '').split(',');
+const toelichting = staart.join(',').trim();
+---
+
+<figure class:list={['beeld', klasse]} data-positie={positie}>
+  <picture
+    data-verhouding={verhouding}
+    data-verhouding-mobiel={verhoudingMobiel}
+    data-onthul={onthul ? 'gordijn' : undefined}
+  >
+    {lijst.map((bron) => <source {...bron} sizes={maten} />)}
+    <img
+      class="afbeelding"
+      src={terugval.src}
+      srcset={terugval.srcset}
+      sizes={maten}
+      width={terugval.breedte}
+      height={terugval.hoogte}
+      alt={alt}
+      loading={prioriteit ? 'eager' : 'lazy'}
+      fetchpriority={prioriteit ? 'high' : undefined}
+      decoding="async"
+    />
+  </picture>
+  {
+    bijschrift && (
+      <figcaption class="bijschrift" data-onthul={onthul ? 'fade' : undefined}>
+        <span class="titel">{titel}</span>
+        {toelichting && <span class="toelichting">{toelichting}</span>}
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .beeld {
+    display: grid;
+    gap: var(--bijschrift-ruimte-boven);
+  }
+
+  /* De breedte staat expliciet op 100%, anders krimpt het kader als rasteritem
+     ook in de breedte zodra de hoogte begrensd wordt. */
+  picture {
+    --onthul-vertraging: var(--beeld-vertraging, 0ms);
+    display: block;
+    overflow: hidden;
+    inline-size: 100%;
+    max-block-size: var(--beeld-max-hoogte, none);
+    background-color: var(--beeld-achtergrond);
+  }
+
+  picture[data-verhouding='liggend'] {
+    aspect-ratio: var(--beeld-verhouding-liggend);
+  }
+
+  picture[data-verhouding='staand'] {
+    aspect-ratio: var(--beeld-verhouding-staand);
+  }
+
+  picture[data-verhouding='vierkant'] {
+    aspect-ratio: var(--beeld-verhouding-vierkant);
+  }
+
+  picture[data-verhouding='breed'] {
+    aspect-ratio: var(--beeld-verhouding-breed);
+  }
+
+  .afbeelding {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    object-position: var(--beeld-uitsnede, 50% 50%);
+  }
+
+  /* Begrenst een kader zijn hoogte, dan snijdt de browser verder dan de build.
+     Dat gebeurt aan dezelfde zijde als de uitsnede bij de build. */
+  .beeld[data-positie='bottom'] {
+    --beeld-uitsnede: 50% 100%;
+  }
+
+  .beeld[data-positie='top'] {
+    --beeld-uitsnede: 50% 0%;
+  }
+
+  .beeld[data-positie='left'] {
+    --beeld-uitsnede: 0% 50%;
+  }
+
+  .beeld[data-positie='right'] {
+    --beeld-uitsnede: 100% 50%;
+  }
+
+  .bijschrift {
+    --onthul-vertraging: calc(var(--beeld-vertraging, 0ms) + var(--beeld-bijschrift-vertraging));
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--ruimte-stapel-sm);
+    font-family: var(--tekst-lopend-familie);
+  }
+
+  .titel {
+    font-size: var(--bijschrift-grootte);
+    font-weight: var(--bijschrift-gewicht);
+    letter-spacing: var(--bijschrift-spatiering);
+    text-transform: uppercase;
+    color: var(--bijschrift-voorgrond);
+  }
+
+  .toelichting {
+    font-size: var(--tekst-klein-grootte);
+    color: var(--kleur-voorgrond-gedempt);
+  }
+
+  @media (max-width: 63.9375rem) {
+    picture[data-verhouding-mobiel='liggend'] {
+      aspect-ratio: var(--beeld-verhouding-liggend);
+    }
+
+    picture[data-verhouding-mobiel='staand'] {
+      aspect-ratio: var(--beeld-verhouding-staand);
+    }
+
+    picture[data-verhouding-mobiel='vierkant'] {
+      aspect-ratio: var(--beeld-verhouding-vierkant);
+    }
+
+    picture[data-verhouding-mobiel='breed'] {
+      aspect-ratio: var(--beeld-verhouding-breed);
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .titel,
+    .toelichting {
+      transition: color var(--beweging-hover);
+    }
+
+    .beeld:hover .titel,
+    .beeld:hover .toelichting {
+      color: var(--kleur-voorgrond);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .afbeelding {
+        transition: scale var(--beweging-hover-beeld);
+      }
+
+      .beeld:hover .afbeelding {
+        scale: var(--beeld-schaal-hover);
+      }
+    }
+  }
+</style>

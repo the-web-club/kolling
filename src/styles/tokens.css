@@ -95,6 +95,9 @@
   --k-verhouding-staand: 4 / 5;
   --k-verhouding-vierkant: 1 / 1;
   --k-verhouding-breed: 16 / 9;
+  --beeld-band-hoogte: 26vh;
+  --beeld-band-hoogte-breed: 32vh;
+  --beeld-hoogte-kolom: 34vh;
   --plaatshouder-korrel-dekking: 0.08;
   --binnenkomst-kop: 0ms;
   --binnenkomst-regel-een: 100ms;
@@ -224,6 +227,13 @@
   --tekst-label-gewicht: var(--k-letter-gewicht-medium);
   --tekst-label-regelhoogte: var(--k-letter-regelhoogte-kop);
   --tekst-label-spatiering: var(--k-letter-spatiering-kapitaal);
+  --beeld-verhouding-liggend: var(--k-verhouding-liggend);
+  --beeld-verhouding-staand: var(--k-verhouding-staand);
+  --beeld-verhouding-vierkant: var(--k-verhouding-vierkant);
+  --beeld-verhouding-breed: var(--k-verhouding-breed);
+  --beeld-rand-onder: calc(var(--k-ruimte-8) - var(--ruimte-rij-md));
+  --beeld-bijschrift-vertraging: var(--k-beweging-duur-snel);
+  --beeld-schaal-hover: var(--k-beweging-schaal-hover);
   --bijschrift-ruimte-boven: var(--k-ruimte-3);
   --icoon-ruimte: var(--k-ruimte-2);
   --invoer-padding-inline: var(--k-ruimte-3);
@@ -247,6 +257,7 @@
   --pagina-blok-ruimte: var(--k-ruimte-8);
   --pagina-blok-ruimte-breed: var(--k-ruimte-4);
   --pagina-micro-ruimte: var(--k-ruimte-6);
+  --beeld-achtergrond: var(--kleur-achtergrond-tint);
   --bijschrift-grootte: var(--tekst-label-grootte);
   --bijschrift-spatiering: var(--tekst-label-spatiering);
   --bijschrift-gewicht: var(--tekst-label-gewicht);

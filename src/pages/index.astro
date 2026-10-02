@@ -1,7 +1,11 @@
 ---
+import dressoir from '@/assets/beelden/coming-soon/dressoir.jpg';
+import planken from '@/assets/beelden/coming-soon/planken.jpg';
+import Beeld from '@/components/Beeld.astro';
 import Contactrij from '@/components/Contactrij.astro';
 import PaginaKop from '@/components/PaginaKop.astro';
 import Basis from '@/layouts/Basis.astro';
+import { maakBronnen } from '@/lib/beeld';
 import { paginaovergang } from '@/lib/beweging/paginaovergang';
 
 const titel = 'Kolling, houtwerken en meubels uit Ommen';
@@ -11,13 +15,51 @@ const beschrijving =
 const statement = ['Houtwerken & meubels', 'uit Ommen.'];
 const intro =
   'Op maat gemaakt in eigen werkplaats aan de Strangeweg. De website volgt. Een idee bespreken kan nu al.';
+
+const MATEN_GROOT = '(min-width: 64rem) 34vw, 100vw';
+const MATEN_KLEIN = '16vw';
+const BREEDTES_KLEIN = [320, 480];
+
+// De pagina heeft de bronnen zelf nodig voor de preload van het dressoir en
+// voor de beeldenlijst in de JSON-LD. Astro maakt van een gelijke transformatie
+// hetzelfde bestand, dus het beeldcomponent levert geen tweede variant op.
+// Van onderen uitsnijden houdt het hele dressoir in beeld, met de poten en de
+// vloer; wat wegvalt is de bovenkant van de wand.
+const bronnenGroot = await maakBronnen({
+  beeld: dressoir,
+  verhouding: 'liggend',
+  positie: 'bottom',
+});
+const bronnenKlein = await maakBronnen({
+  beeld: planken,
+  verhouding: 'vierkant',
+  breedtes: BREEDTES_KLEIN,
+});
 ---
 
-<Basis titel={titel} beschrijving={beschrijving} suffix={false} jsonLd>
+<Basis
+  titel={titel}
+  beschrijving={beschrijving}
+  suffix={false}
+  jsonLd
+  beelden={[bronnenGroot.jpeg.src, bronnenKlein.jpeg.src]}
+  voorlaadBeeld={{ srcset: bronnenGroot.avif.srcset, maten: MATEN_GROOT }}
+>
   <div class="pagina">
     <PaginaKop />
 
     <main class="statement" transition:name="statement" transition:animate={paginaovergang}>
+      <Beeld
+        class="beeld-groot"
+        beeld={dressoir}
+        alt="Dressoir met geprofileerde houten schuifdeuren, een hand zet er een houten schaal op"
+        verhouding="liggend"
+        positie="bottom"
+        maten={MATEN_GROOT}
+        bijschrift="Dressoir, uit de werkplaats"
+        prioriteit
+      />
+
       <h1>
         {
           statement.map((regel) => (
@@ -28,6 +70,16 @@ const intro =
         }
       </h1>
       <p class="intro" data-onthul="omhoog">{intro}</p>
+
+      <Beeld
+        class="beeld-klein"
+        beeld={planken}
+        alt="Gestapelde boomstamplanken met schors"
+        verhouding="vierkant"
+        breedtes={BREEDTES_KLEIN}
+        maten={MATEN_KLEIN}
+        bijschrift="Boomstamplanken"
+      />
     </main>
 
     <Contactrij />
@@ -71,6 +123,62 @@ const intro =
     color: var(--kleur-voorgrond-gedempt);
   }
 
+  /* De beelden komen uit een component, dus hun klassen staan buiten het bereik
+     van de scoped CSS van deze pagina. Het pad erheen blijft beperkt tot de
+     middelste rij.
+
+     Het dressoir is tot 64 rem een band over de volle breedte boven het
+     statement; de planken staan daar niet. */
+  .statement :global(.beeld-groot) {
+    --beeld-vertraging: var(--binnenkomst-beeld-groot);
+    --beeld-max-hoogte: var(--beeld-band-hoogte);
+    grid-column: 1 / -1;
+  }
+
+  .statement :global(.beeld-klein) {
+    display: none;
+  }
+
+  /* De band krijgt de hoogte die na kop en intro overblijft, met de bandhoogte
+     als bovengrens. Daarmee kan hij de pagina niet langer maken dan het scherm,
+     hoe vaak de tekst ook afbreekt. */
+  @media (max-width: 63.9375rem) and (min-height: 48.75rem) {
+    .statement {
+      grid-template-rows: minmax(0, 1fr) auto auto;
+      min-block-size: 0;
+    }
+
+    /* Zonder min-block-size: 0 houdt de automatische minimumhoogte van een
+       rasteritem het kader op zijn volle maat en loopt de pagina over. */
+    .statement :global(.beeld-groot) {
+      grid-row: 1;
+      grid-template-rows: minmax(0, 1fr) auto;
+      min-block-size: 0;
+    }
+
+    /* Drie grenzen: de eigen verhouding, de hoogte die overblijft en de
+       bandhoogte. De kleinste wint. */
+    .statement :global(.beeld-groot > picture) {
+      min-block-size: 0;
+      max-block-size: min(100%, var(--beeld-max-hoogte));
+    }
+  }
+
+  /* Onder 780 px blijft er te weinig over voor een band die nog een meubel
+     laat zien. In de rechterkolom kost het beeld geen hoogte; daar is 512 px de
+     ondergrens. Leegte is een keuze, scrollen niet. */
+  @media (max-width: 63.9375rem) and (max-height: 48.6875rem) {
+    .statement :global(.beeld-groot) {
+      display: none;
+    }
+  }
+
+  @media (min-width: 64rem) and (max-height: 31.9375rem) {
+    .statement :global(.beeld-groot) {
+      display: none;
+    }
+  }
+
   @media (min-width: 48rem) {
     h1 {
       --cap: var(--statement-cap-breed);
@@ -79,6 +187,58 @@ const intro =
 
     .intro {
       grid-column: 2 / span 8;
+    }
+
+    .statement :global(.beeld-groot) {
+      --beeld-max-hoogte: var(--beeld-band-hoogte-breed);
+    }
+  }
+
+  /* Vanaf 64 rem staat het statement op de linkerhelft en het dressoir in de
+     rechterkolom, met de hoogte van de middelste rij als bovengrens. */
+  @media (min-width: 64rem) {
+    .statement {
+      grid-template-rows: auto 1fr auto;
+    }
+
+    h1 {
+      --cap: var(--statement-cap-naast-beeld);
+      grid-column: 2 / span 6;
+      grid-row: 1;
+    }
+
+    .intro {
+      grid-column: 2 / span 6;
+      grid-row: 2;
+      align-self: start;
+      max-inline-size: var(--statement-introbreedte);
+    }
+
+    .statement :global(.beeld-groot) {
+      --beeld-max-hoogte: var(--beeld-hoogte-kolom);
+      grid-column: 9 / span 4;
+      grid-row: 1 / -1;
+      align-self: end;
+      margin-block-end: var(--beeld-rand-onder);
+    }
+  }
+
+  /* Subgrid houdt beide randen van de planken op een rasterlijn: het beeld op
+     kolom 2 en 3, het bijschrift op 4 en 5. */
+  @media (min-width: 64rem) and (min-height: 51.25rem) {
+    .statement :global(.beeld-klein) {
+      --beeld-vertraging: var(--binnenkomst-beeld-klein);
+      display: grid;
+      grid-column: 2 / span 4;
+      grid-row: 3;
+      grid-template-columns: subgrid;
+      align-items: end;
+      margin-block-end: var(--beeld-rand-onder);
+    }
+
+    .statement :global(.beeld-klein > picture),
+    .statement :global(.beeld-klein > .bijschrift) {
+      grid-column: span 2;
     }
   }
 

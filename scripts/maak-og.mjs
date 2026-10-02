@@ -3,15 +3,17 @@ import sharp from 'sharp';
 
 const LOGO = 'src/assets/merk/d-logo.svg';
 const WOORDMERK = 'src/assets/merk/woordmerk.png';
-const OG = 'public/og.png';
+const DRESSOIR = 'src/assets/beelden/coming-soon/dressoir.jpg';
+const OG = 'public/og.jpg';
+const OG_KWALITEIT = 82;
 const FAVICON = 'public/favicon.png';
 
 const OG_BREEDTE = 1200;
 const OG_HOOGTE = 630;
-const WOORDMERK_BREEDTE = 560;
+const OG_WOORDMERK_BREEDTE = 200;
+const OG_WOORDMERK_RAND = 48;
 const WOORDMERK_BRON_BREEDTE = 480;
 const FAVICON_MAAT = 64;
-const PAPIER = { r: 250, g: 249, b: 247 };
 const INKT = { r: 27, g: 26, b: 24 };
 
 // Het aangeleverde SVG zet het woordmerk als luminantiemasker over zwarte inkt.
@@ -39,12 +41,21 @@ const masker = await haalMasker();
 
 await writeFile(WOORDMERK, await maakInkt(masker, WOORDMERK_BRON_BREEDTE));
 
-const inkt = await maakInkt(masker, WOORDMERK_BREEDTE);
-await sharp({
-  create: { width: OG_BREEDTE, height: OG_HOOGTE, channels: 3, background: PAPIER },
-})
-  .composite([{ input: inkt, gravity: 'center' }])
-  .png({ compressionLevel: 9 })
+// Het OG-beeld is het dressoir, van onderen uitgesneden zoals op de pagina,
+// met het woordmerk klein in de hoek boven de rustige wand.
+const dressoir = await sharp(DRESSOIR)
+  .resize({ width: OG_BREEDTE, height: OG_HOOGTE, fit: 'cover', position: 'bottom' })
+  .toBuffer();
+
+await sharp(dressoir)
+  .composite([
+    {
+      input: await maakInkt(masker, OG_WOORDMERK_BREEDTE),
+      top: OG_WOORDMERK_RAND,
+      left: OG_BREEDTE - OG_WOORDMERK_BREEDTE - OG_WOORDMERK_RAND,
+    },
+  ])
+  .jpeg({ quality: OG_KWALITEIT, mozjpeg: true })
   .toFile(OG);
 
 // Het woordmerk is twee keer zo breed als hoog; in een vierkant favicon staat

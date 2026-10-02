@@ -1,0 +1,18 @@
+{
+  "beeld": {
+    "verhouding-liggend": { "$value": "{primitief.verhouding.liggend}", "$type": "other" },
+    "verhouding-staand": { "$value": "{primitief.verhouding.staand}", "$type": "other" },
+    "verhouding-vierkant": { "$value": "{primitief.verhouding.vierkant}", "$type": "other" },
+    "verhouding-breed": { "$value": "{primitief.verhouding.breed}", "$type": "other" },
+    "achtergrond": { "$value": "{kleur.achtergrond-tint}", "$type": "color" },
+    "rand-onder": {
+      "$value": "calc({primitief.ruimte.8} - {ruimte.rij.md})",
+      "$type": "dimension"
+    },
+    "band-hoogte": { "$value": "26vh", "$type": "dimension" },
+    "band-hoogte-breed": { "$value": "32vh", "$type": "dimension" },
+    "hoogte-kolom": { "$value": "34vh", "$type": "dimension" },
+    "bijschrift-vertraging": { "$value": "{primitief.beweging.duur.snel}", "$type": "duration" },
+    "schaal-hover": { "$value": "{primitief.beweging.schaal.hover}", "$type": "number" }
+  }
+}
