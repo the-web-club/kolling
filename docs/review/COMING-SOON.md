@@ -228,60 +228,75 @@ Het dressoir niet. Een 4:5-uitsnede uit een liggende foto is 614 px breed, terwi
 
 Een 3:2-uitsnede verliest niets: het hele dressoir, de hand met de schaal en de wand erachter passen, en het bestand is dan precies groot genoeg voor de grootste gevraagde mobiele variant. Ook het OG-beeld van 1200 × 630 vraagt meer dan er is; uit 1024 px wordt dat 1,17 keer opschalen.
 
+### De drie antwoorden
+
+Beide foto's zijn eigen beeld van Kolling en mogen op kolling.nl staan. Er komt geen ruimer origineel. Het dressoir staat daarom in 3:2 in de rechterkolom in plaats van 4:5: het hele meubel in beeld, de hand met de schaal erbij, en het bestand precies groot genoeg voor de grootste variant.
+
+### Gebouwd
+
+`Beeld.astro` is het enige beeldcomponent van de site. Het maakt per beeld een `<picture>` met AVIF en WebP en een JPEG in de `<img>`, met `width`, `height` en `aspect-ratio` uit de tokens, zodat er geen layout shift is. De uitsnede gebeurt bij de build met `fit: 'cover'` en een `positie`; die zijde staat ook als `object-position` op de afbeelding, zodat de browser verder snijdt aan dezelfde kant als de build. Is `verhoudingMobiel` gezet, dan staan de desktopbronnen vooraan achter `media="(min-width: 64rem)"` en downloadt de browser nooit twee uitsnedes. Dat pad is apart gecontroleerd in de build: vier `<source>`-elementen, de eerste twee met media, plus de JPEG-terugval.
+
+`src/lib/beeld.ts` levert de bronnen. De verhouding komt uit `beeld.verhouding-*`, zodat de uitsnede bij de build en de `aspect-ratio` in de CSS niet uit elkaar kunnen lopen.
+
+De uitsnede van het dressoir is `bottom`: dat houdt het hele meubel met poten en vloer in beeld. `attention` en `centre` sneden de poten eraf. De planken staan op `attention`, wat het gelaagde schorsprofiel centraal in het vierkant legt.
+
 ### Layout per viewport
 
-Het één-scherm-principe blijft de bovengrens. `basis.css` zet `overflow: hidden` op `html` en `body`, dus een scrollbar kan niet verschijnen; het risico is afgesneden content. Daarom verdwijnt een beeld zodra de hoogte het niet meer draagt.
+Het één-scherm-principe blijft de bovengrens. `basis.css` zet `overflow: hidden` op `html` en `body`, dus een scrollbar kan niet verschijnen; het risico is afgesneden content. Gemeten in de preview, met de ruimte tussen de microregel en de onderrand:
 
-| Viewport    | Dressoir                      | Planken | Contactrij    |
-| ----------- | ----------------------------- | ------- | ------------- |
-| 320 × 568   | niet aanwezig                 | nee     | onder elkaar  |
-| 360 × 640   | niet aanwezig                 | nee     | twee kolommen |
-| 390 × 844   | band volle breedte, 3:2, 28vh | nee     | twee kolommen |
-| 768 × 1024  | band volle breedte, 3:2, 32vh | nee     | twee kolommen |
-| 844 × 390   | niet aanwezig                 | nee     | twee kolommen |
-| 1024 × 768  | rechterkolom, kolom 9 t/m 12  | nee     | drie kolommen |
-| 1280 × 720  | rechterkolom                  | nee     | drie kolommen |
-| 1440 × 900  | rechterkolom                  | ja      | drie kolommen |
-| 1920 × 1080 | rechterkolom                  | ja      | drie kolommen |
+| Formaat     | Dressoir        | Planken   | Onder de microregel |
+| ----------- | --------------- | --------- | ------------------- |
+| 320 × 568   | niet aanwezig   | nee       | 16 px               |
+| 360 × 640   | niet aanwezig   | nee       | 16 px               |
+| 390 × 844   | band 358 × 219  | nee       | 16 px               |
+| 768 × 1024  | band 715 × 328  | nee       | 27 px               |
+| 844 × 390   | niet aanwezig   | nee       | 16 px               |
+| 1024 × 768  | kolom 300 × 200 | nee       | 31 px               |
+| 1280 × 720  | kolom 379 × 245 | nee       | 36 px               |
+| 1440 × 900  | kolom 428 × 286 | 208 × 208 | 39 px               |
+| 1920 × 1080 | kolom 427 × 284 | 207 × 207 | 40 px               |
 
-De drempels: de beeldband vanaf 740 px hoogte, de rechterkolom vanaf 1024 px breedte, de planken vanaf 1024 bij 820 px. Daaronder is de pagina precies wat hij nu is.
+Vanaf 64 rem is de middelste rij een genest raster van twaalf kolommen met rijen `auto 1fr auto`. De kop staat op kolom 2 t/m 7 met een cap van 4,4 cqi, de intro eronder op 36 tekens breed, het dressoir op kolom 9 t/m 12 over alle drie de rijen en onderaan uitgelijnd. De planken staan op kolom 2 en 3 met hun bijschrift op 4 en 5; die figuur is een subgrid, zodat beide randen op een rasterlijn vallen. De bijschriften van de twee beelden eindigen daarmee op dezelfde regel, 32 px boven de haarlijn. Het lichtvlak zit in `LichtAchtergrond` op `z-index: -1` en kan niet over een beeld heen vallen.
 
-De middelste rij wordt op desktop een genest raster van twaalf kolommen met rijen `auto 1fr auto`. Kop en intro komen op kolom 2 t/m 7, het dressoir op kolom 9 t/m 12 over alle drie de rijen. De kop moet dan op de helft van de breedte nog op twee regels staan: de cap gaat van 7,4 cqi naar ongeveer 4,4 cqi, gemeten per formaat. Het lichtvlak zit in `LichtAchtergrond` op `z-index: -1` en kan dus niet over een beeld heen vallen.
+Tot 64 rem is het dressoir een band over de volle breedte tussen de koprij en het statement. Die band krijgt de hoogte die na kop en intro overblijft, met `beeld.band-hoogte` als bovengrens; de kleinste van de drie grenzen wint. Daarmee kan de band de pagina niet langer maken dan het scherm, hoe vaak de tekst ook afbreekt.
 
-Op mobiel schuift de contactrij naar twee kolommen zonder extra `div`: de drie bestaande blokken worden geplaatst met `grid-column` en `grid-row`, waarbij "Bespreek je idee" rechts over twee rijen staat. De DOM-volgorde blijft gelijk aan de leesvolgorde, dus de tabvolgorde verandert niet.
+De contactrij staat van 360 tot 768 px in twee kolommen, zonder extra `div`: de drie bestaande blokken zijn geplaatst met `grid-column` en `grid-row`, waarbij "Bespreek je idee" rechts over twee rijen staat. De DOM-volgorde blijft de leesvolgorde, dus de tabvolgorde verandert niet.
 
-### Bestanden
+### Drie dingen bleken anders dan gepland
 
-Nieuw: `src/components/Beeld.astro`, `src/lib/beeld.ts` (de bronnen van één beeld, zodat de preload en het component dezelfde varianten gebruiken), `src/assets/beelden/coming-soon/dressoir.jpg`, `src/assets/beelden/coming-soon/planken.jpg`, `tokens/componenten/beeld.json`.
+1. **De drempel van 740 px uit de opdracht klopt niet meer.** Met de koprij, de menuknop en vier contactlinks liep de pagina bij 360 × 740 nog 96 px over. In plaats van die drempel op te schroeven krijgt de band nu de hoogte die overblijft. Hij verdwijnt onder 780 px hoogte, waar er te weinig overblijft voor een band die nog een meubel laat zien; bij 360 × 780 is hij 120 px hoog en past de pagina met 16 px over.
+2. **Een kader dat krimpt vraagt drie correcties.** `aspect-ratio` met een begrensde hoogte laat een rasteritem ook in de breedte krimpen, dus staat de breedte van het kader expliciet op 100%. En de automatische minimumhoogte van een rasteritem houdt zo'n kader op zijn volle maat; zowel het statement als de figuur en het kader hebben daarom `min-block-size: 0`.
+3. **De planken halen de 1600 ms net niet met 450 ms vertraging.** Hun gordijn zou dan op 1650 ms eindigen. De vertraging is 400 ms geworden, waarmee de hele choreografie op 1600 ms sluit, gelijk met de haarlijn en met `beweging.duur.hero`.
 
-Gewijzigd: `src/pages/index.astro`, `src/styles/beweging.css` (gordijn en de twee bijschriftfades), `src/layouts/Basis.astro` (optionele preload in `<head>`), `src/lib/jsonld.ts` (`image` wordt een lijst), `scripts/maak-og.mjs` (OG uit het dressoir), `public/og.png`, `tokens/componenten/binnenkomst.json`, `tokens/componenten/statement.json`, `.cursor/rules/41-woordenlijst.mdc` en de twee gegenereerde tokenbestanden.
+De vertragingen, gemeten op de computed styles: dressoir 300 ms, zijn bijschrift 450 ms, planken 400 ms, hun bijschrift 550 ms, en daarna onveranderd intro 500 ms, haarlijn 700 ms en microregel 1000 ms. Bij `prefers-reduced-motion: reduce` blijven de beelden en bijschriften over met één fade van 200 ms, zonder clip, zonder schaal en zonder vertraging.
 
-### Tokens
+### Gemeten gewicht
 
-Componenten, in een nieuw `beeld.json`: `beeld.marge` (`ruimte.6`, boven en onder het grote beeld in de rechterkolom), `beeld.afstand-haarlijn` (`ruimte.8`, tussen de planken en de haarlijn), `beeld.band-hoogte` (28vh) en `beeld.band-hoogte-breed` (32vh), `beeld.kwaliteit-avif` (55) en `beeld.kwaliteit-webp` (72).
+Per viewport downloadt de pagina precies één variant van elk beeld, in AVIF. Op een telefoon wordt de planken-afbeelding niet opgehaald: het beeld staat op `display: none` en `loading="lazy"`, en dat samen houdt het verzoek tegen.
 
-In `binnenkomst.json` komen vier vertragingen bij: `beeld-groot` (300 ms), `bijschrift-groot` (450 ms), `beeld-klein` (450 ms) en `bijschrift-klein` (600 ms). In `statement.json` komt `cap-naast-beeld`. Nieuwe primitieven zijn niet nodig: `verhouding.*`, `beweging.afstand.masker`, `beweging.schaal.onthul`, `beweging.binnenkomst-beeld` en `beweging.hover-beeld` staan er al, en het bijschrift gebruikt de bestaande `bijschrift.*`.
+| Variant       | 320   | 480   | 768   | 1024  |
+| ------------- | ----- | ----- | ----- | ----- |
+| dressoir AVIF |       | 10 kB | 18 kB | 27 kB |
+| planken AVIF  | 24 kB | 44 kB |       |       |
 
-### Afwijkingen die ik wil maken
+Het hele kritieke pad, ongecomprimeerd: HTML 15,9 kB, twee stylesheets 47,6 kB, de router 16 kB, twee fonts 78,5 kB, woordmerk 2,7 kB, dressoir 26,8 kB en op desktop de planken 44,4 kB. Samen 231,8 kB op desktop en 187,3 kB op een telefoon, onder de 500 kB. Het dressoir is het LCP-element, met een preload in de `<head>` en `fetchpriority="high"`.
 
-1. **Het gordijn volgt `70-motion.mdc`, niet de prompt.** De regel beschrijft `clip-path` van `inset(0 0 var(--k-beweging-afstand-masker) 0)` naar `inset(0)`, de prompt noemt `inset(100% 0 0 0)`. Ik houd de regel aan, want die waarde staat als token vast en de rules gelden onverkort. Het beeld onthult daarmee van boven naar onder.
-2. **Geen `.contact-kolom`.** De twee kolommen op mobiel lukken met rasterplaatsing op de bestaande blokken. Een wikkelende `div` zou alleen bestaan om een kolom te maken, en `40-clean-code.mdc` regel 27 verbiedt dat. De class komt dus niet in de woordenlijst.
-3. **De preload staat in `Basis.astro`.** Een component in de `body` kan niets aan `<head>` toevoegen. `Beeld.astro` zet daarom zelf `loading="eager"`, `fetchpriority="high"` en `decoding="async"`, en de pagina geeft de AVIF-srcset van het dressoir aan de layout mee.
-4. **Geen `beweringen[]` op deze branch.** De contentcollecties staan op `feature/volledige-site`; hier bestaat alleen `instellingen`. Met de neutrale fallbacks ("Dressoir, uit de werkplaats" en "Boomstamplanken") staat er ook geen bewering in de bijschriften. Vult Rik of Thomas wel een titel, materiaal of jaar in, dan is dat een bewering en hoort die in `site.json` tot de volledige site terug is.
+### Afwijkingen van de opdracht
 
-### Stand van zaken
+1. **Het gordijn volgt `70-motion.mdc`, niet de prompt.** De regel beschrijft `clip-path` van `inset(0 0 var(--k-beweging-afstand-masker) 0)` naar `inset(0)`, de prompt noemt `inset(100% 0 0 0)`. De regel is aangehouden, want die waarde staat als token vast. Het beeld onthult van boven naar onder.
+2. **Geen `.contact-kolom`.** De twee kolommen lukken met rasterplaatsing op de bestaande blokken. Een wikkelende `div` zou alleen bestaan om een kolom te maken, en `40-clean-code.mdc` regel 27 verbiedt dat.
+3. **De preload staat in `Basis.astro`.** Een component in de `body` kan niets aan `<head>` toevoegen. `Beeld.astro` zet zelf `loading="eager"`, `fetchpriority="high"` en `decoding="async"`; de pagina geeft de AVIF-srcset van het dressoir aan de layout mee.
+4. **De planken staan op `loading="lazy"`.** De opdracht verbood dat omdat het beeld boven de vouw staat, maar het bestaat alleen vanaf 1024 bij 820 px. Met lazy slaat een telefoon het verzoek over; op een scherm waar het beeld wél staat, laadt de browser het direct mee.
+5. **Geen `overgangsnaam`-prop.** Paginaovergangen lopen nu via de middelste rij; een tweede naam op een beeld zou niets doen. De prop komt erbij zodra er een pagina is waar een beeld naar een andere pagina meeverhuist.
+6. **Geen kwaliteit in tokens.** AVIF 55, WebP 72 en JPEG 78 staan als constante in `src/lib/beeld.ts`. Een compressiegetal is geen ontwerpwaarde en is in CSS nooit nodig.
+7. **`public/og.png` wordt `public/og.jpg`.** Het OG-beeld is nu een foto; als PNG was het 1,1 MB, als JPEG 80 kB.
+8. **Geen `beweringen[]` op deze branch.** Er bestaat alleen de collectie `instellingen`. Met de neutrale fallbacks staat er ook geen bewering in de bijschriften.
+9. **De uitsnede is 3:2 in plaats van 4:5, en de contactrij in twee kolommen geldt ook op de sectiepagina's**, omdat `Contactrij.astro` door alle pagina's wordt gedeeld.
 
-De drie vragen hieronder zijn beantwoord: beide foto's mogen op kolling.nl, er komt geen ruimer origineel, en het dressoir krijgt daarom 3:2 in de rechterkolom in plaats van 4:5. Daarmee zijn `Beeld.astro`, `src/lib/beeld.ts`, `tokens/componenten/beeld.json`, het gordijn in `beweging.css` en de beeldenlijst in `maakLocalBusiness` gebouwd.
+### Wat Rik of Thomas nog kan aanleveren
 
-Die bouw is daarna uit deze werkmap gehaald en wacht op de header met navigatie en menu, omdat beide op hetzelfde moment aan `index.astro`, `Basis.astro`, `beweging.css` en de binnenkomsttokens werkten. Zodra de header staat, komt de diptiek er op het nieuwe `index.astro` bij. Wat dan nog moet: de layout per viewport, het OG-beeld uit het dressoir, de woordenlijst en de controle op de negen formaten.
-
-Twee dingen om bij die hervatting mee te nemen. De choreografie rekent nu met `--onthul-weging` als vermenigvuldiger op de vertraging; de vertragingen van de beelden horen dat te volgen. En de contactrij is naar `Contactrij.astro` verhuisd, dus de twee kolommen op mobiel horen daar thuis en niet meer in de pagina.
-
-### Drie vragen, en dan bouw ik af
-
-1. **Zijn beide foto's eigen beeld van Kolling, en mogen ze op kolling.nl staan?** Het dressoirbestand heet `wood_example` en het staat in een gestileerde studio-opstelling met objecten die niet van Kolling lijken. Zonder een expliciet ja gaat geen van de twee de repository in; dat is de reden dat ze er nu nog niet staan.
-2. **Komt er een origineel van minimaal 2400 px, en van het dressoir bij voorkeur ruimer gefotografeerd?** Met het huidige bestand is de rechterkolom op een 1440-breed scherm ongeveer 340 px breed en haalt 614 px net geen twee keer de pixeldichtheid. Met een ruimer origineel klopt zowel de uitsnede als de scherpte, en dan kan het OG-beeld zonder opschalen.
-3. **Als er geen ruimer origineel komt: 3:2 in de rechterkolom in plaats van 4:5?** Dan staat het hele dressoir in beeld, blijft de hand met de schaal erbij en is het bestand groot genoeg. Het beeld wordt lager dan de kolom hoog is, dus het staat onderaan uitgelijnd met het statement ernaast. Het alternatief is 4:5 met `position: 'right'`: strakker van vorm, maar met een half dressoir en zonder de hand.
+1. **Bijschriften.** Nu staan de neutrale fallbacks "Dressoir, uit de werkplaats" en "Boomstamplanken". Een titel, materiaal en jaar mogen erin zodra ze bevestigd zijn; het bijschrift splitst op de eerste komma, dus "Dressoir, es, 2026" wordt een kapitaaltitel met een gedempte toelichting.
+2. **Een ruimer origineel.** Op 1024 px aan de lange zijde haalt het dressoir in de rechterkolom ongeveer 1,8 keer de pixeldichtheid in plaats van 2, en het OG-beeld wordt 1,17 keer opgeschaald. Met een bestand van 2400 px of meer vervalt dat allebei, zonder dat er iets aan de code verandert.
 
 ## Wat open staat
 
