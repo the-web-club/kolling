@@ -298,6 +298,111 @@ Het hele kritieke pad, ongecomprimeerd: HTML 15,9 kB, twee stylesheets 47,6 kB, 
 1. **Bijschriften.** Nu staan de neutrale fallbacks "Dressoir, uit de werkplaats" en "Boomstamplanken". Een titel, materiaal en jaar mogen erin zodra ze bevestigd zijn; het bijschrift splitst op de eerste komma, dus "Dressoir, es, 2026" wordt een kapitaaltitel met een gedempte toelichting.
 2. **Een ruimer origineel.** Op 1024 px aan de lange zijde haalt het dressoir in de rechterkolom ongeveer 1,8 keer de pixeldichtheid in plaats van 2, en het OG-beeld wordt 1,17 keer opgeschaald. Met een bestand van 2400 px of meer vervalt dat allebei, zonder dat er iets aan de code verandert.
 
+## Licht en donker: audit voor de bouw
+
+Vooronderzoek voor het donkere thema en de schakelaar in de kop. Er is nog geen regel code gewijzigd. Het werk staat klaar op `feature/thema`: er is geen pull request open en `main` bevat de diptiek al, dus de vorige branch is geen plek om op verder te bouwen.
+
+Hieronder de tokenaanpak, de gemeten contrasten, de plek van de schakelaar en wat de bouw aan bestaande bestanden raakt. Daarna drie vragen die eerst een antwoord nodig hebben.
+
+### Tokenaanpak
+
+`tokens.css` krijgt drie blokken in deze volgorde:
+
+```css
+:root {
+  /* primitieven, lichte semantiek, componenten */
+}
+:root[data-thema='donker'] {
+  /* donkere semantiek */
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-thema='licht']) {
+    /* dezelfde donkere semantiek */
+  }
+}
+```
+
+De `selector`-optie van `css/variables` accepteert een array en nest die van buiten naar binnen, dus het mediablok komt uit de formatter zelf en niet uit een string met een handgeschreven accolade. Wat de formatter niet kan, is drie blokken in één bestand: dat is één bestand per `destination`. Een eigen format roept `css/variables` daarom drie keer aan met dezelfde dictionary, een andere tokenselectie en een andere selector, en zet de uitvoer achter elkaar. De verwijzingen blijven daarmee staan, dus in de browser lees je `--kleur-achtergrond: var(--k-kleur-nacht-900)`.
+
+De donkere waarden staan één keer in de bron, in `tokens/semantisch/donker.json`.
+
+Eén afwijking van de opdracht is onvermijdelijk: dat bestand kan niet dezelfde tokenpaden gebruiken als `tokens/semantisch/kleur.json`. Twee bestanden die beide `kleur.achtergrond` definiëren, zijn voor Style Dictionary een botsing en de laatste wint. Alles in `donker.json` nest daarom onder één sleutel `donker`, en het CSS-format laat die sleutel bij het schrijven weg. De variabelenamen in de drie blokken zijn daarmee exact gelijk, zoals de opdracht vraagt. In `tokens.gegenereerd.ts` blijft het pad wel `donker.kleur.achtergrond`, zodat de namen uniek blijven en `src/lib/beeld.ts` zijn verhoudingstoken nog ondubbelzinnig kan vinden.
+
+Drie dingen die per thema wisselen zijn geen kleur:
+
+| Token            | Licht    | Donker | Waarvoor                               |
+| ---------------- | -------- | ------ | -------------------------------------- |
+| `dekking.beeld`  | 1        | 0,94   | `beeld.dimmen`, het kader van een foto |
+| `dekking.korrel` | 0,035    | 0,05   | de korrel in `LichtAchtergrond`        |
+| `menging.korrel` | multiply | screen | dezelfde korrel, `mix-blend-mode`      |
+
+Ze horen in de semantische laag, want alleen die laag wisselt per thema; een componenttoken kan dat niet. Ze staan in `tokens/semantisch/dekking.json` en `beeld.dimmen` verwijst ernaar.
+
+`color-scheme` wordt ook een token: `kleur.schema` met de waarden `light` en `dark`, en `basis.css` zet `color-scheme: var(--kleur-schema)`. Zo staat er geen handgeschreven declaratie in een gegenereerd bestand.
+
+`kleur.licht.warm` en `kleur.licht.koel` worden `kleur.licht.vlak` en `kleur.licht.schaduw`. De lichte waarden blijven `hout.es.200` en `lijn.200`, dus het lichte thema verschuift geen tint; alleen de naam zegt nu wat de laag doet in plaats van welke kant hij op kleurt.
+
+Tot slot twee tokens die niemand verwacht in een kleurensysteem: `zicht.licht` en `zicht.donker`, met als waarde het `display`-sleutelwoord van de variant die bij het thema hoort. Twee plekken hebben een variant per thema die geen kleur is maar een element: het woordmerk, dat als PNG uit twee bestanden bestaat, en het woord op de schakelaar. Zonder deze tokens zou elk van die twee componenten de hele drieblokkenlogica met de hand nabouwen, inclusief de media query. Met deze tokens blijft het bij `display: var(--zicht-donker)` en weet het component nog steeds niet welk thema actief is.
+
+### Contrast gemeten
+
+Berekend op de tokenwaarden met de relatieve luminantie uit WCAG 2.1, niet geschat uit een schermafbeelding.
+
+| Paar                                  | Licht | Donker | Eis         |
+| ------------------------------------- | ----- | ------ | ----------- |
+| voorgrond op achtergrond              | 16,53 | 14,45  | 12:1        |
+| voorgrond op achtergrond-tint         | 15,41 | 13,58  | 12:1        |
+| voorgrond op achtergrond-verhoogd     | 17,39 | 12,70  | 12:1        |
+| voorgrond-gedempt op achtergrond      | 8,67  | 7,62   | 7:1         |
+| voorgrond-subtiel op achtergrond      | 2,79  | 3,82   | zie vraag 2 |
+| fout op achtergrond                   | 6,29  | 5,73   | 4,5:1       |
+| lijn op achtergrond                   | 1,25  | 1,41   | stil        |
+| lijn-sterk op achtergrond (focusring) | 16,53 | 14,45  | 3:1         |
+
+De haarlijn komt in beide thema's op dezelfde sterkte uit: zichtbaar als scheiding, nooit als streep die aandacht vraagt. De focusring en de rand van de schijf op de schakelaar gebruiken daarom niet `kleur.lijn` maar `kleur.lijn-sterk` respectievelijk `kleur.voorgrond`, want 1,25:1 haalt de 3:1 voor interactieve randen niet.
+
+De drie houttinten blijven hout: `es.300` komt op 9,36 tegen de nachtachtergrond, `eik.400` op 7,12 en `noten.600` op 2,61. Dat laatste is prima voor een vlak en onbruikbaar voor tekst; plaatshouders met een label komen pas terug met de volledige site. Om dezelfde reden is `kleur.accent` in het donker `papier.100` en niet een houttint: noten op nacht leest niet. `accent` wordt op deze branch nergens gebruikt.
+
+### Plek van de schakelaar
+
+| Breedte        | Links     | Midden                 | Rechts                    |
+| -------------- | --------- | ---------------------- | ------------------------- |
+| 1024 en breder | woordmerk | navigatie, gecentreerd | klok, dan schakelaar      |
+| 360 tot 1024   | woordmerk | klok                   | schakelaar, dan knop Menu |
+| onder 360      | woordmerk | leeg                   | schakelaar, dan knop Menu |
+
+De koprij gaat van drie naar vier cellen. De navigatie staat nu exact in het midden omdat de twee buitenste kolommen beide `1fr` zijn; met twee elementen rechts klopt die symmetrie niet meer. De navigatie krijgt daarom `grid-column: 1 / -1` met `justify-self: center`, wat haar op het midden van het raster houdt los van wat er links en rechts staat. De volgorde in de HTML blijft gelijk aan de volgorde op het scherm: woordmerk, navigatie, klok, schakelaar, knop. Het toetsenbord hoeft nergens terug te springen.
+
+De klok verdwijnt onder 360 px zoals nu; de schakelaar blijft. In het geopende menu staat een tweede schakelaar als laatste item in `.menu-voet`, naast het telefoonnummer en Instagram, in tekstvorm zonder schijf.
+
+De vorm: een `<button type="button">` met een schijf van 10 px en vanaf 48 rem het woord van het thema waar je naartoe schakelt. De maat van de schijf staat als `schakelaar.schijf-maat` op `0.625rem`, een rauwe waarde in de componentlaag zoals `merk.hoogte` en `navigatie.aanraakdoel` dat al zijn: de ruimteschaal heeft een stap van 8 en van 12 px, geen 10. Het aanraakdoel van 44 px komt uit verticale padding met een even grote negatieve marge, dezelfde truc als bij de knop Menu, zodat de koprij niet hoger wordt. Bij hover gaat de schijf naar `voorgrond-gedempt` en tekent de onderstreping onder het woord in, beide over 150 ms. De toegankelijke naam is vast: `aria-label="Donker thema"`, met `aria-pressed` op het donkere thema. Zonder JavaScript staat de schakelaar op `display: none` en regelt de media query het thema.
+
+### Scripts
+
+Het inline script in de `<head>` wordt er één, van vijf regels: `data-js` zetten, de opgeslagen keuze lezen, en alleen bij `licht` of `donker` het attribuut zetten. Het staat in een blok, want een `const` op het hoogste niveau van een script dat opnieuw draait, is een `SyntaxError`. Het krijgt `data-astro-rerun`, waarmee de router het bij elke wissel opnieuw uitvoert. Dat moet, want `swapRootAttributes` verwijdert eerst alle attributen van `<html>` en zet daarna die van het nieuwe document terug.
+
+Dat laatste bracht een bestaande fout boven. `data-js` overleeft een client-side navigatie nu niet. Gemeten in de preview: na een klik op "Over" houdt `<html>` alleen `lang` en `data-overgang` over, en `[data-onthul="omhoog"]` komt op `animation-name: none`. De choreografie draait dus alleen op de eerste pagina die je laadt, en de halvering via `data-overgang` heeft sinds de header nooit iets kunnen doen. Niets is kapot voor een bezoeker, want zonder `data-js` staat alles op zijn plek en op opacity 1. Het samenvoegen van de twee scripts repareert het en bewijst zichzelf: na de bouw hoort de binnenkomst ook op een sectiepagina te lopen, in de halve maat.
+
+`src/lib/thema.ts` koppelt beide schakelaars op `astro:page-load` en werkt de stand ook bij op `astro:after-swap`, zodat er geen frame met het verkeerde woord tussendoor komt. Klikken gaat via `document.startViewTransition` als die API bestaat en reduced motion uit staat, met de crossfade van 400 ms achter een attribuut op `<html>`; zonder dat attribuut raakt de duur de paginaovergang niet. De achtergrondkleur voor `meta[name="theme-color"]` komt uit `getComputedStyle` van `--kleur-achtergrond`, zodat er geen hexwaarde in TypeScript staat. Er blijven twee metatags met `media` voor het geval zonder keuze; bij een handmatige keuze krijgen ze beide de kleur van het gekozen thema, want anders zou de browser bij een tegengestelde systeemvoorkeur de verkeerde pakken.
+
+### Wat de bouw aan bestaande bestanden raakt
+
+1. **`Beeld.astro`** krijgt `opacity: var(--beeld-dimmen)` op het kader en 1 bij hover. Dat is de enige component die iets nieuws doet voor het donker, en hij doet het via een token: in het licht is de waarde 1, dus er verandert niets.
+2. **`LichtAchtergrond.astro`** wisselt naar `kleur.licht.vlak` en `kleur.licht.schaduw` en haalt de dekking en de menging van de korrel uit tokens. De animaties blijven ongemoeid, dus een themawissel kan ze niet herstarten; er verandert alleen een kleurwaarde.
+3. **`basis.css`**: `color-scheme` uit een token, `::selection` uit `kleur.selectie.*`. `@theme inline` blijft zoals het is, want dat mapt al op de semantische laag.
+4. **`PaginaKop.astro`** en **`Menu.astro`**: de schakelaar en het tweede woordmerk.
+5. **`Basis.astro`**: het samengevoegde script, twee themakleurtags en een tweede icoonlink.
+6. **`scripts/maak-og.mjs`**: het lichte woordmerk en een licht favicon. `og.jpg` blijft de lichte versie.
+7. **`menu.achtergrond`** blijft naar `kleur.achtergrond-verhoogd` wijzen en niet naar `kleur.achtergrond` zoals de opdracht zegt. De popover volgt het thema via die token net zo goed, en de opdracht vraagt ook dat het lichte thema niet verschuift; omzetten zou het witte vlak van de popover naar het warme wit van de pagina trekken.
+8. **Het favicon** kan niet worden wat de opdracht vraagt. Er is geen `favicon.svg` meer: die is er bewust uit gegaan omdat het logo een ingesloten bitmap van 54 kB is en `00-project.mdc` hertekenen verbiedt. Het voorstel is `public/favicon-licht.png` erbij en twee icoonlinks met `media`. Chrome kiest daarmee het juiste beeld; Firefox negeert `media` op een icoonlink, dus daar blijft het donkere monogram op een donkere balk staan, net als nu.
+9. **De selectiekleur in het licht** gaat van `papier.0` naar `papier.50` omdat de opdracht `kleur.selectie.voorgrond` daar op zet. Dat is het verschil tussen `#ffffff` en `#faf9f7` in een selectie; ik volg de opdracht en noem het hier omdat het strikt gezien een wijziging in het lichte thema is.
+
+### Drie vragen
+
+1. **Het witte woordmerk botst met de merkregel.** `00-project.mdc` en `docs/DESIGN-SYSTEM.md` zeggen: één logo, zwart op transparant, uitsluitend op lichte achtergronden, niet inverteren of herkleuren, en daarom heeft de site geen donkere logoplaatsingen. Een donker thema kan niet zonder die plaatsing. Het beloofde bestand `woordmerk-licht.png` staat niet in de repository. Ik kan het zelf maken: `pnpm og` haalt het woordmerk uit het luminantiemasker in `d-logo.svg` en zet er inkt achter, dus een tweede render in `papier.100` levert hetzelfde beeld in de lichte tint. Technisch is dat het witte origineel; formeel is het een herkleuring. Mijn voorstel is die render te gebruiken en de merkregel uit te breiden met een benoemde variant voor donkere vlakken, tot het officiële bestand er is. Akkoord, of lever je het witte bestand aan? De invert-truc uit de opdracht wil ik niet: op een transparante PNG keert die ook de alpharand om en geeft hij een grijze zoom.
+2. **`voorgrond-subtiel` haalt 4,5:1 in geen van beide thema's.** De opdracht noemt die token decoratief, maar hij kleurt nu drie koppen in de contactrij (`<h2>` Werkplaats, Bespreek je idee, Volg het werk), de titels van de bijschriften en de microregel. Dat is gewone tekst, en 2,79 in het licht is te weinig. Drie uitwegen: zo laten en het hier vastleggen als bewuste uitzondering; de koppen en bijschrifttitels naar `voorgrond-gedempt` tillen, wat 8,67 en 7,62 geeft maar het lichte ontwerp donkerder maakt; of in het donker `steen.400` gebruiken in plaats van `steen.500`, wat daar 5,54 oplevert en het lichte thema ongemoeid laat. Mijn voorstel is de tweede, omdat een kop die je niet leest geen kop is. De opdracht zegt echter dat het lichte thema exact blijft, dus dit is jouw keuze.
+3. **Waar landt dit en wie opent de pull request?** Er staat geen pull request open, dus ik werk op `feature/thema`. De `gh`-CLI is hier niet ingelogd, dus ik kan de pull request en de schermafbeeldingen niet zelf plaatsen. Ik kan de branch pushen en de tekst voor de pull request klaarzetten, of het werk net als de vorige drie keer rechtstreeks op `main` zetten. Wat wil je?
+
 ## Wat open staat
 
 1. **Woordmerk als SVG.** Het huidige `d-logo.svg` is een export met een ingesloten bitmap van 1065 px breed en een luminantiemasker. `pnpm og` rendert daaruit `woordmerk.png` op 480 px, het OG-beeld en het favicon. Een echte outline-SVG maakt die stap onnodig en is scherper op elk formaat.
