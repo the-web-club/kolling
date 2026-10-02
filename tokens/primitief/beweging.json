@@ -3,7 +3,9 @@
     "beweging": {
       "duur": {
         "snel": { "$value": "150ms", "$type": "duration" },
+        "kort": { "$value": "200ms", "$type": "duration" },
         "basis": { "$value": "300ms", "$type": "duration" },
+        "overgang": { "$value": "400ms", "$type": "duration" },
         "traag": { "$value": "600ms", "$type": "duration" },
         "trager": { "$value": "900ms", "$type": "duration" },
         "filmisch": { "$value": "1200ms", "$type": "duration" },

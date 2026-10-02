@@ -25,11 +25,19 @@
       "$type": "other"
     },
     "pagina-uit": {
-      "$value": "{primitief.beweging.duur.basis} {primitief.beweging.curve.in-uit-quart}",
+      "$value": "{primitief.beweging.duur.kort} {primitief.beweging.curve.in-uit-quart}",
       "$type": "other"
     },
     "pagina-in": {
+      "$value": "{primitief.beweging.duur.overgang} {primitief.beweging.curve.uit-quint}",
+      "$type": "other"
+    },
+    "menu": {
       "$value": "{primitief.beweging.duur.basis} {primitief.beweging.curve.uit-quint}",
+      "$type": "other"
+    },
+    "menu-vertrek": {
+      "$value": "{primitief.beweging.duur.kort} {primitief.beweging.curve.in-uit-quart}",
       "$type": "other"
     }
   }

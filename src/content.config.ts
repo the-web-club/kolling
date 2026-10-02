@@ -22,6 +22,10 @@ const instellingen = defineCollection({
     whatsapp: z.string().url(),
     bezoek: z.string().min(1),
     cta: z.object({ primair: z.string().min(1), secundair: z.string().min(1) }),
+    navigatie: z
+      .array(z.object({ label: z.string().min(1), pad: z.string().startsWith('/') }))
+      .nonempty(),
+    binnenkort: z.object({ kop: z.string().min(1), tekst: z.string().min(1) }),
     seo: z.object({ titelSuffix: z.string().min(1), beschrijving: z.string().min(1) }),
     beweringen: z.array(z.string().min(1)).default([]),
   }),

@@ -1,0 +1,63 @@
+---
+interface Props {
+  href: string;
+  tekst: string;
+}
+
+const { href, tekst } = Astro.props;
+const isExtern = href.startsWith('http');
+---
+
+<a class="schakel" href={href} rel={isExtern ? 'noopener' : undefined}>
+  <slot />
+  <span class="tekst">{tekst}</span>
+</a>
+
+<style>
+  .schakel {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--icoon-ruimte);
+  }
+
+  .schakel :global(.icoon) {
+    flex-shrink: 0;
+    color: var(--icoon-voorgrond);
+  }
+
+  /* De onderstreping zit op de tekst, niet op de link, zodat het icoon
+     onderstreping noch padding meekrijgt. */
+  .tekst {
+    background-image: linear-gradient(var(--kleur-voorgrond), var(--kleur-voorgrond));
+    background-repeat: no-repeat;
+    background-position: 100% 100%;
+    background-size: 0 var(--link-onderstreping-dikte);
+    padding-block-end: var(--link-onderstreping-afstand);
+  }
+
+  /* De lijn tekent van links in en trekt zich naar rechts terug: het
+     ankerpunt wisselt pas als de lijn weg is. */
+  @media (hover: hover) and (pointer: fine) {
+    .tekst {
+      transition:
+        background-size var(--beweging-hover),
+        background-position 0s var(--k-beweging-duur-snel);
+    }
+
+    .schakel :global(.icoon) {
+      transition: color var(--beweging-hover);
+    }
+
+    .schakel:hover .tekst {
+      background-position: 0 100%;
+      background-size: 100% var(--link-onderstreping-dikte);
+      transition:
+        background-size var(--beweging-hover),
+        background-position 0s;
+    }
+
+    .schakel:hover :global(.icoon) {
+      color: var(--icoon-voorgrond-hover);
+    }
+  }
+</style>

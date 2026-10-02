@@ -75,6 +75,30 @@ body {
   overscroll-behavior: none;
 }
 
+/* Elke pagina is hetzelfde scherm: koprij, middelste rij, contactrij. */
+.pagina {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--ruimte-rij-md);
+  block-size: 100dvh;
+  inline-size: 100%;
+  max-inline-size: var(--maat-container);
+  margin-inline: auto;
+  padding: var(--pagina-padding);
+}
+
+@media (min-width: 48rem) {
+  .pagina {
+    padding: var(--pagina-padding-breed);
+  }
+}
+
+@media (max-height: 44rem) {
+  .pagina {
+    gap: var(--ruimte-stapel-md);
+  }
+}
+
 :root {
   color-scheme: light;
   -webkit-text-size-adjust: 100%;

@@ -1,0 +1,14 @@
+{
+  "menu": {
+    "achtergrond": { "$value": "{kleur.achtergrond-verhoogd}", "$type": "color" },
+    "grootte": { "$value": "{tekst.menu.grootte}", "$type": "dimension" },
+    "grootte-kort": { "$value": "{tekst.menu-kort.grootte}", "$type": "dimension" },
+    "gewicht": { "$value": "{tekst.menu.gewicht}", "$type": "fontWeight" },
+    "familie": { "$value": "{tekst.menu.familie}", "$type": "fontFamily" },
+    "regelhoogte": { "$value": "{tekst.menu.regelhoogte}", "$type": "number" },
+    "spatiering": { "$value": "{tekst.menu.spatiering}", "$type": "dimension" },
+    "ruimte": { "$value": "{primitief.ruimte.4}", "$type": "dimension" },
+    "trap": { "$value": "{primitief.beweging.trap.snel}", "$type": "duration" },
+    "trap-start": { "$value": "100ms", "$type": "duration" }
+  }
+}

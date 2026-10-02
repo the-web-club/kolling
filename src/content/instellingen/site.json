@@ -24,6 +24,18 @@
       "primair": "Bespreek je idee",
       "secundair": "Langskomen in Ommen"
     },
+    "navigatie": [
+      { "label": "Over", "pad": "/over" },
+      { "label": "Voorbeelden", "pad": "/voorbeelden" },
+      { "label": "Collectie", "pad": "/collectie" },
+      { "label": "Werk", "pad": "/werk" },
+      { "label": "Nieuws", "pad": "/nieuws" },
+      { "label": "Downloads", "pad": "/downloads" }
+    ],
+    "binnenkort": {
+      "kop": "Binnenkort.",
+      "tekst": "Deze pagina is in de maak. Een idee bespreken kan nu al."
+    },
     "seo": {
       "titelSuffix": " | Kolling",
       "beschrijving": "Kolling maakt houtwerken en meubels op maat in de eigen werkplaats in Ommen. Bespreek je idee met Thomas en jullie werken het samen uit tot een ontwerp."

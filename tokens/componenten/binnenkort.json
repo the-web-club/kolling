@@ -1,0 +1,6 @@
+{
+  "binnenkort": {
+    "cap": { "$value": "17cqi", "$type": "dimension" },
+    "cap-breed": { "$value": "15cqi", "$type": "dimension" }
+  }
+}

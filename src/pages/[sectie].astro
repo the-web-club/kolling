@@ -1,0 +1,124 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Contactrij from '@/components/Contactrij.astro';
+import PaginaKop from '@/components/PaginaKop.astro';
+import Basis from '@/layouts/Basis.astro';
+import { paginaovergang } from '@/lib/beweging/paginaovergang';
+import { haalInstellingen } from '@/lib/content';
+
+export const getStaticPaths = (async () => {
+  const { navigatie } = await haalInstellingen();
+
+  return navigatie.map(({ label, pad }) => ({
+    params: { sectie: pad.slice(1) },
+    props: { label },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props;
+const { binnenkort } = await haalInstellingen();
+
+const beschrijving =
+  'Deze pagina van Kolling is in de maak. Houten maatwerk uit Ommen; een idee bespreken kan nu al via 06 13 62 22 76.';
+---
+
+<Basis titel={`${label}, binnenkort`} beschrijving={beschrijving} indexeerbaar={false}>
+  <div class="pagina">
+    <PaginaKop />
+
+    <main class="binnenkort" transition:name="binnenkort" transition:animate={paginaovergang}>
+      <p class="label" data-onthul="fade">{label}</p>
+      <h1>
+        <span class="regel" data-onthul-regel><span>{binnenkort.kop}</span></span>
+      </h1>
+      <p class="intro" data-onthul="omhoog">{binnenkort.tekst}</p>
+    </main>
+
+    <Contactrij />
+  </div>
+</Basis>
+
+<style>
+  .binnenkort {
+    container-type: inline-size;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--ruimte-stapel-md) var(--ruimte-goot);
+    align-content: center;
+  }
+
+  .label,
+  h1,
+  .intro {
+    grid-column: 1 / -1;
+  }
+
+  .label {
+    --onthul-vertraging: var(--binnenkomst-kop);
+    font-family: var(--tekst-label-familie);
+    font-size: var(--tekst-label-grootte);
+    font-weight: var(--tekst-label-gewicht);
+    letter-spacing: var(--tekst-label-spatiering);
+    text-transform: uppercase;
+    color: var(--kleur-voorgrond-subtiel);
+  }
+
+  /* Eén woord op één regel, net als het statement op de voorpagina: de
+     bovengrens is de kolombreedte, niet de viewport. */
+  h1 {
+    font-size: min(var(--tekst-display-grootte), var(--binnenkort-cap));
+    line-height: var(--tekst-display-regelhoogte);
+    letter-spacing: var(--tekst-display-spatiering);
+    text-wrap: nowrap;
+  }
+
+  .regel > span {
+    --onthul-vertraging: var(--binnenkomst-regel-een);
+  }
+
+  .intro {
+    --onthul-vertraging: var(--binnenkomst-intro);
+    font-size: var(--tekst-intro-grootte);
+    line-height: var(--tekst-intro-regelhoogte);
+    color: var(--kleur-voorgrond-gedempt);
+  }
+
+  @media (min-width: 48rem) {
+    .label,
+    h1,
+    .intro {
+      grid-column: 2 / span 6;
+    }
+
+    h1 {
+      font-size: min(var(--tekst-display-grootte), var(--binnenkort-cap-breed));
+    }
+  }
+
+  @media (max-height: 44rem) {
+    h1 {
+      font-size: min(var(--tekst-display-kort-grootte), var(--binnenkort-cap-breed));
+      line-height: var(--tekst-display-kort-regelhoogte);
+      letter-spacing: var(--tekst-display-kort-spatiering);
+    }
+
+    .intro {
+      font-size: var(--tekst-lopend-grootte);
+    }
+  }
+
+  @media (max-height: 30rem) {
+    h1 {
+      font-size: min(var(--tekst-kop3-grootte), var(--binnenkort-cap-breed));
+      line-height: var(--tekst-kop3-regelhoogte);
+    }
+
+    .intro {
+      font-size: var(--tekst-klein-grootte);
+    }
+  }
+</style>

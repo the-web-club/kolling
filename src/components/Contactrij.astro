@@ -1,0 +1,173 @@
+---
+import ContactLink from '@/components/ContactLink.astro';
+import { Envelop, Instagram, Pin, Telefoon, Whatsapp } from '@/components/iconen';
+import { haalInstellingen, isBekend } from '@/lib/content';
+
+const instellingen = await haalInstellingen();
+const { adres, telefoon } = instellingen;
+
+const heeftEmail = isBekend(instellingen.email);
+
+// De adresregel en de microregel staan in de frontmatter, niet in de template:
+// een regelafbreking tussen twee expressies verdwijnt in de uitvoer en plakt
+// dan woorden aan elkaar.
+const adresregel = `${adres.straat}, ${adres.postcode} ${adres.plaats}`;
+const microregel = isBekend(instellingen.kvk)
+  ? `${instellingen.naam}, ${adres.plaats}, KvK ${instellingen.kvk}`
+  : `${instellingen.naam}, ${adres.plaats}`;
+---
+
+<footer class="contactrij" transition:persist>
+  <div class="lijn" data-onthul="lijn"></div>
+
+  <div class="blokken">
+    <div class="blok" data-onthul="omhoog">
+      <h2 class="label">Werkplaats</h2>
+      <address class="regels">
+        <span class="regel-met-icoon"><Pin />{adresregel}</span>
+        <span class="noot">Bezoek op afspraak</span>
+      </address>
+    </div>
+
+    <div class="blok" data-onthul="omhoog">
+      <h2 class="label">{instellingen.cta.primair}</h2>
+      <div class="regels">
+        <ContactLink href={`tel:${telefoon.e164}`} tekst={telefoon.weergave}>
+          <Telefoon />
+        </ContactLink>
+        <ContactLink href={instellingen.whatsapp} tekst="WhatsApp">
+          <Whatsapp />
+        </ContactLink>
+        {
+          heeftEmail && (
+            <ContactLink href={`mailto:${instellingen.email}`} tekst={instellingen.email}>
+              <Envelop />
+            </ContactLink>
+          )
+        }
+      </div>
+    </div>
+
+    <div class="blok" data-onthul="omhoog">
+      <h2 class="label">Volg het werk</h2>
+      <div class="regels">
+        <ContactLink href={instellingen.instagram} tekst="Instagram">
+          <Instagram />
+        </ContactLink>
+      </div>
+    </div>
+  </div>
+
+  <p class="micro" data-onthul="fade">{microregel}</p>
+</footer>
+
+<style>
+  .contactrij {
+    display: grid;
+    gap: var(--pagina-micro-ruimte);
+  }
+
+  /* De haarlijn loopt door tot de schermranden; de tekst eronder blijft op de
+     padding van de pagina staan. */
+  .lijn {
+    --onthul-vertraging: var(--binnenkomst-lijn);
+    inline-size: 100vw;
+    margin-inline-start: calc(50% - 50vw);
+    block-size: var(--k-rand-haarlijn);
+    background-color: var(--kleur-lijn);
+  }
+
+  .blokken {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--pagina-blok-ruimte) var(--ruimte-goot);
+  }
+
+  .blok {
+    display: grid;
+    gap: var(--ruimte-stapel-sm);
+    grid-column: 1 / -1;
+    align-content: start;
+    font-size: var(--tekst-klein-grootte);
+    line-height: var(--tekst-lopend-regelhoogte);
+  }
+
+  .blok:nth-child(1) {
+    --onthul-vertraging: var(--binnenkomst-blok-een);
+  }
+
+  .blok:nth-child(2) {
+    --onthul-vertraging: var(--binnenkomst-blok-twee);
+  }
+
+  .blok:nth-child(3) {
+    --onthul-vertraging: var(--binnenkomst-blok-drie);
+  }
+
+  .regels {
+    display: grid;
+    gap: var(--ruimte-stapel-sm);
+    justify-items: start;
+  }
+
+  .regel-met-icoon {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--icoon-ruimte);
+  }
+
+  .regel-met-icoon :global(.icoon) {
+    flex-shrink: 0;
+    color: var(--icoon-voorgrond);
+  }
+
+  .noot {
+    padding-inline-start: calc(var(--icoon-maat) + var(--icoon-ruimte));
+  }
+
+  .micro {
+    --onthul-vertraging: var(--binnenkomst-micro);
+    max-inline-size: none;
+    font-size: var(--tekst-label-grootte);
+    text-align: end;
+    color: var(--kleur-voorgrond-subtiel);
+  }
+
+  @media (min-width: 48rem) {
+    .blokken {
+      gap: var(--pagina-blok-ruimte-breed) var(--ruimte-goot);
+    }
+
+    .blok:nth-child(1) {
+      grid-column: 2 / span 3;
+    }
+
+    .blok:nth-child(2) {
+      grid-column: 5 / span 3;
+    }
+
+    .blok:nth-child(3) {
+      grid-column: 8 / span 3;
+    }
+  }
+
+  @media (max-height: 44rem) {
+    .blokken {
+      gap: var(--ruimte-5) var(--ruimte-goot);
+    }
+
+    .regels {
+      gap: var(--ruimte-1);
+    }
+  }
+
+  @media (max-height: 30rem) {
+    .contactrij {
+      gap: var(--ruimte-stapel-md);
+    }
+
+    .blokken {
+      gap: var(--ruimte-stapel-sm) var(--ruimte-goot);
+    }
+  }
+</style>

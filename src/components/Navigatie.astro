@@ -1,0 +1,85 @@
+---
+import { haalInstellingen } from '@/lib/content';
+
+const { navigatie } = await haalInstellingen();
+const huidigPad = Astro.url.pathname;
+---
+
+<nav class="navigatie" aria-label="Hoofdnavigatie" data-onthul="fade">
+  <ul>
+    {
+      navigatie.map(({ label, pad }) => (
+        <li>
+          <a href={pad} aria-current={huidigPad === pad ? 'page' : undefined}>
+            {label}
+            {huidigPad === pad && <span class="indicator" transition:name="menu-indicator" />}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  /* De navigatie kent haar plek in het raster van PaginaKop: de middelste cel,
+     en alleen vanaf 64 rem. Daaronder staan de items in het menu. */
+  .navigatie {
+    --onthul-vertraging: var(--binnenkomst-kop);
+    display: none;
+  }
+
+  ul {
+    display: flex;
+    gap: var(--navigatie-ruimte);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    position: relative;
+    display: block;
+    font-size: var(--navigatie-grootte);
+    font-weight: var(--navigatie-gewicht);
+    color: var(--navigatie-voorgrond);
+    background-image: linear-gradient(var(--navigatie-voorgrond), var(--navigatie-voorgrond));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0 var(--link-onderstreping-dikte);
+    padding-block-end: var(--link-onderstreping-afstand);
+  }
+
+  .indicator {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: calc(100% + var(--navigatie-indicator-afstand));
+    block-size: var(--navigatie-indicator-dikte);
+    background-color: var(--navigatie-lijn-actief);
+  }
+
+  /* Bij hover op één item wijken de andere terug. De onderstreping tekent van
+     links in onder het item zelf; het actieve item houdt zijn haarlijn. */
+  @media (hover: hover) and (pointer: fine) {
+    a {
+      transition:
+        color var(--navigatie-overgang),
+        background-size var(--navigatie-overgang);
+    }
+
+    ul:has(a:hover) a:not(:hover) {
+      color: var(--navigatie-voorgrond-gedimd);
+    }
+
+    a:hover {
+      background-size: 100% var(--link-onderstreping-dikte);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .navigatie {
+      display: block;
+      grid-column: 2;
+      justify-self: center;
+    }
+  }
+</style>

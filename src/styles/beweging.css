@@ -1,6 +1,14 @@
 /* Beweging volgens 70-motion.mdc. Eén scherm, dus geen IntersectionObserver:
    de choreografie loopt op animation-delay. */
 
+:root {
+  --onthul-weging: var(--binnenkomst-factor);
+}
+
+[data-overgang='licht'] {
+  --onthul-weging: var(--binnenkomst-factor-licht);
+}
+
 @media (prefers-reduced-motion: no-preference) {
   [data-laag='licht'] {
     animation: licht-trekt var(--k-beweging-duur-ambient) var(--k-beweging-curve-ambient) infinite
@@ -15,20 +23,20 @@
   [data-js] [data-onthul='omhoog'] {
     opacity: 0;
     animation: omhoog var(--beweging-binnenkomst) both;
-    animation-delay: var(--onthul-vertraging, 0ms);
+    animation-delay: calc(var(--onthul-vertraging, 0ms) * var(--onthul-weging));
   }
 
   [data-js] [data-onthul='fade'] {
     opacity: 0;
     animation: verschijn var(--k-beweging-duur-basis) linear both;
-    animation-delay: var(--onthul-vertraging, 0ms);
+    animation-delay: calc(var(--onthul-vertraging, 0ms) * var(--onthul-weging));
   }
 
   [data-js] [data-onthul='lijn'] {
     scale: 0 1;
     transform-origin: left center;
     animation: lijn-tekent var(--k-beweging-duur-trager) var(--k-beweging-curve-uit-expo) both;
-    animation-delay: var(--onthul-vertraging, 0ms);
+    animation-delay: calc(var(--onthul-vertraging, 0ms) * var(--onthul-weging));
   }
 
   [data-js] [data-onthul-regel] {
@@ -39,7 +47,57 @@
   [data-js] [data-onthul-regel] > span {
     display: block;
     animation: regel-omhoog var(--k-beweging-duur-trager) var(--k-beweging-curve-uit-expo) both;
-    animation-delay: var(--onthul-vertraging, 0ms);
+    animation-delay: calc(var(--onthul-vertraging, 0ms) * var(--onthul-weging));
+  }
+
+  /* De items in het menu komen onder een masker omhoog zodra de popover van
+     display: none naar display: grid gaat. */
+  [data-menu]:popover-open li {
+    clip-path: inset(-0.1em 0 -0.25em 0);
+  }
+
+  [data-menu]:popover-open li > a {
+    animation: regel-omhoog var(--beweging-menu) both;
+    animation-delay: calc(var(--menu-trap-start) + var(--menu-trap) * var(--plek));
+  }
+}
+
+/* Het menu verschijnt en verdwijnt met een opacity-fade. De discrete
+   eigenschappen display en overlay lopen mee, zodat de fade bij het sluiten
+   nog te zien is. */
+[data-menu] {
+  opacity: 0;
+  transition:
+    opacity var(--beweging-menu-vertrek),
+    display var(--beweging-menu-vertrek) allow-discrete,
+    overlay var(--beweging-menu-vertrek) allow-discrete;
+}
+
+[data-menu]::backdrop {
+  background-color: transparent;
+  transition: background-color var(--beweging-menu-vertrek);
+}
+
+[data-menu]:popover-open {
+  opacity: 1;
+  transition:
+    opacity var(--beweging-menu),
+    display var(--beweging-menu) allow-discrete,
+    overlay var(--beweging-menu) allow-discrete;
+}
+
+[data-menu]:popover-open::backdrop {
+  background-color: var(--menu-achtergrond);
+  transition: background-color var(--beweging-menu);
+}
+
+@starting-style {
+  [data-menu]:popover-open {
+    opacity: 0;
+  }
+
+  [data-menu]:popover-open::backdrop {
+    background-color: transparent;
   }
 }
 
@@ -47,6 +105,18 @@
   [data-js] [data-onthul],
   [data-js] [data-onthul-regel] > span {
     animation: verschijn 200ms linear both;
+  }
+
+  [data-menu],
+  [data-menu]:popover-open {
+    transition:
+      opacity var(--beweging-menu-vertrek),
+      display var(--beweging-menu-vertrek) allow-discrete,
+      overlay var(--beweging-menu-vertrek) allow-discrete;
+  }
+
+  ::view-transition-group(*) {
+    animation: none;
   }
 }
 
@@ -111,5 +181,27 @@
   }
   to {
     scale: 1 1;
+  }
+}
+
+@keyframes pagina-uit {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+  to {
+    opacity: 0;
+    translate: 0 calc(var(--k-beweging-afstand-sm) * -1);
+  }
+}
+
+@keyframes pagina-in {
+  from {
+    opacity: 0;
+    translate: 0 var(--k-beweging-afstand-sm);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
   }
 }

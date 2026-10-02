@@ -218,3 +218,49 @@ Waar een token en een groep dezelfde naam zouden krijgen, staat er een koppeltek
 2. `public/fonts/instrument-sans-latijn.woff2`, `public/fonts/work-sans-latijn.woff2`
 3. `public/favicon.png`, `public/og.png` (beide gegenereerd)
 4. `scripts/maak-og.mjs` (rendert woordmerk, OG-beeld en favicon uit het logo)
+
+## Aangevuld voor de header met menu
+
+### Domein
+
+1. sectie (een hoofdonderdeel van de site met een eigen pad), meervoud secties
+2. navigatie (de zes secties in de koprij)
+3. menu (het fullscreen overzicht van de navigatie op smalle schermen)
+
+### Componenten
+
+1. `PaginaKop.astro` (woordmerk, navigatie, klok en de knop naar het menu)
+2. `Menu.astro` (het menu als popover, met de knop die het opent)
+3. `Contactrij.astro` (de onderste rij met haarlijn, contactblokken en microregel)
+
+### Classes
+
+1. `.pagina-kop` (de koprij), `.navigatie` (de zes items in de koprij), `.indicator` (de haarlijn onder het actieve item)
+2. `.menu` (de popover), `.menu-knop` (de tekstknop die het menu opent of sluit), `.menu-kop` (de bovenste rij in de popover), `.menu-voet` (de contactlinks onderin)
+3. `.contactrij` (de onderste rij, voorheen `.contact`), `.klok` (plaatsnaam met tijd, voorheen `.plaats`)
+4. `.binnenkort` (de middelste rij van een sectiepagina)
+
+### Data-attributen
+
+1. `data-menu` op de popover
+2. `data-menu-knop` op de knop die het menu opent
+3. `data-overgang="licht"` op `<html>` na de eerste client-side navigatie, voor de halve binnenkomst
+4. `data-plek` ook op een item in het menu, voor de trap in de onthulling
+
+`data-gekoppeld` staat op de klok in `PaginaKop`, zodat de blijvende klok bij een paginawissel maar één interval houdt.
+
+### Tokens
+
+1. Primitief: `beweging.duur.kort` (200ms), `beweging.duur.overgang` (400ms)
+2. Semantisch: `tekst.menu.*` en `tekst.menu-kort.*` (de menu-items), `beweging.menu`, `beweging.menu-vertrek`
+3. Componenten: `menu.*` (de popover), `binnenkort.*` (de sectiepagina), en `navigatie.*` aangevuld met `gewicht`, `ruimte`, `indicator-afstand`, `indicator-dikte`, `lijn-actief`, `overgang`, `aanraakdoel`, `trap`, `trap-start`
+
+### Bestanden
+
+1. `src/pages/[sectie].astro` (de zes "Binnenkort"-pagina's)
+2. `src/lib/menu.ts` (focus en `inert` bij het openen en sluiten van het menu)
+3. `src/lib/beweging/paginaovergang.ts` (de overgang van de middelste rij)
+
+### Contentvelden
+
+1. `instellingen/site.json`: `navigatie[]` (`label`, `pad`) en `binnenkort` (`kop`, `tekst`)

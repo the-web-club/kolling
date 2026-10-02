@@ -1,0 +1,154 @@
+---
+import { Picture } from 'astro:assets';
+import woordmerk from '@/assets/merk/woordmerk.png';
+import { haalInstellingen } from '@/lib/content';
+
+const { naam, navigatie, telefoon, instagram } = await haalInstellingen();
+const huidigPad = Astro.url.pathname;
+---
+
+<button class="menu-knop" type="button" popovertarget="menu" data-menu-knop data-onthul="fade">
+  Menu
+</button>
+
+<div class="menu" id="menu" popover data-menu>
+  <div class="menu-kop">
+    <div class="merk">
+      <Picture src={woordmerk} formats={['avif', 'webp']} alt={naam} width={56} height={28} />
+    </div>
+    <button class="menu-sluiten" type="button" popovertarget="menu" popovertargetaction="hide">
+      Sluiten
+    </button>
+  </div>
+
+  <ul>
+    {
+      navigatie.map(({ label, pad }, plek) => (
+        <li style={`--plek: ${plek}`}>
+          <a href={pad} aria-current={huidigPad === pad ? 'page' : undefined}>
+            {label}
+            {huidigPad === pad && <span class="indicator" />}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="menu-voet">
+    <a href={`tel:${telefoon.e164}`}>{telefoon.weergave}</a>
+    <a href={instagram} rel="noopener">Instagram</a>
+  </div>
+</div>
+
+<script>
+  import '@/lib/menu';
+</script>
+
+<style>
+  .menu-knop,
+  .menu-sluiten {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--navigatie-aanraakdoel);
+    padding: 0;
+    border: 0;
+    background: none;
+    font-family: var(--tekst-klein-familie);
+    font-size: var(--navigatie-grootte);
+    font-weight: var(--navigatie-gewicht);
+    color: var(--navigatie-voorgrond);
+    cursor: pointer;
+  }
+
+  .menu-knop {
+    --onthul-vertraging: var(--binnenkomst-kop);
+    grid-column: 3;
+    justify-self: end;
+  }
+
+  /* De popover vult de breedte en is zo hoog als haar inhoud. Het dekkende
+     papier zit op de backdrop, zodat een klik naast de lijst het menu sluit. */
+  .menu {
+    position: fixed;
+    inset: 0 0 auto 0;
+    inline-size: 100%;
+    max-inline-size: var(--maat-container);
+    margin-inline: auto;
+    padding: var(--pagina-padding);
+    border: 0;
+    background-color: transparent;
+    color: var(--kleur-voorgrond);
+  }
+
+  .menu:popover-open {
+    display: grid;
+    gap: var(--ruimte-rij-md);
+  }
+
+  .menu-kop {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--ruimte-stapel-md);
+  }
+
+  .merk :global(img) {
+    display: block;
+    block-size: var(--merk-hoogte);
+    inline-size: auto;
+  }
+
+  ul {
+    display: grid;
+    gap: var(--menu-ruimte);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  ul a {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-block-size: var(--navigatie-aanraakdoel);
+    font-family: var(--menu-familie);
+    font-size: var(--menu-grootte);
+    font-weight: var(--menu-gewicht);
+    line-height: var(--menu-regelhoogte);
+    letter-spacing: var(--menu-spatiering);
+  }
+
+  .indicator {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: var(--navigatie-indicator-dikte);
+    background-color: var(--navigatie-lijn-actief);
+  }
+
+  .menu-voet {
+    display: flex;
+    gap: var(--navigatie-ruimte);
+    font-size: var(--tekst-klein-grootte);
+  }
+
+  .menu-voet a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--navigatie-aanraakdoel);
+    color: var(--navigatie-voorgrond);
+    text-decoration-line: underline;
+  }
+
+  @media (max-height: 37.5rem) {
+    ul a {
+      font-size: var(--menu-grootte-kort);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .menu-knop {
+      display: none;
+    }
+  }
+</style>

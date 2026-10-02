@@ -1,12 +1,8 @@
 ---
-import { Picture } from 'astro:assets';
-import woordmerk from '@/assets/merk/woordmerk.png';
-import { Envelop, Instagram, Pin, Telefoon, Whatsapp } from '@/components/iconen';
+import Contactrij from '@/components/Contactrij.astro';
+import PaginaKop from '@/components/PaginaKop.astro';
 import Basis from '@/layouts/Basis.astro';
-import { haalInstellingen, isBekend } from '@/lib/content';
-
-const instellingen = await haalInstellingen();
-const { adres, telefoon } = instellingen;
+import { paginaovergang } from '@/lib/beweging/paginaovergang';
 
 const titel = 'Kolling, houtwerken en meubels uit Ommen';
 const beschrijving =
@@ -15,39 +11,13 @@ const beschrijving =
 const statement = ['Houtwerken & meubels', 'uit Ommen.'];
 const intro =
   'Op maat gemaakt in eigen werkplaats aan de Strangeweg. De website volgt. Een idee bespreken kan nu al.';
-
-const heeftEmail = isBekend(instellingen.email);
-
-// De adresregel en de microregel staan in de frontmatter, niet in de template:
-// een regelafbreking tussen twee expressies verdwijnt in de uitvoer en plakt
-// dan woorden aan elkaar.
-const adresregel = `${adres.straat}, ${adres.postcode} ${adres.plaats}`;
-const microregel = isBekend(instellingen.kvk)
-  ? `${instellingen.naam}, ${adres.plaats}, KvK ${instellingen.kvk}`
-  : `${instellingen.naam}, ${adres.plaats}`;
 ---
 
-<Basis titel={titel} beschrijving={beschrijving} suffix={false}>
+<Basis titel={titel} beschrijving={beschrijving} suffix={false} jsonLd>
   <div class="pagina">
-    <header class="kop">
-      <div class="merk" data-onthul="fade">
-        <Picture
-          src={woordmerk}
-          formats={['avif', 'webp']}
-          alt={instellingen.naam}
-          width={56}
-          height={28}
-          densities={[2]}
-          loading="eager"
-          fetchpriority="high"
-        />
-      </div>
-      <p class="plaats" data-onthul="fade">
-        {adres.plaats}<time data-klok></time>
-      </p>
-    </header>
+    <PaginaKop />
 
-    <main class="statement">
+    <main class="statement" transition:name="statement" transition:animate={paginaovergang}>
       <h1>
         {
           statement.map((regel) => (
@@ -60,110 +30,11 @@ const microregel = isBekend(instellingen.kvk)
       <p class="intro" data-onthul="omhoog">{intro}</p>
     </main>
 
-    <footer class="contact">
-      <div class="lijn" data-onthul="lijn"></div>
-
-      <div class="blokken">
-        <div class="blok" data-onthul="omhoog">
-          <h2 class="label">Werkplaats</h2>
-          <address class="regels">
-            <span class="regel-met-icoon"><Pin />{adresregel}</span>
-            <span class="noot">Bezoek op afspraak</span>
-          </address>
-        </div>
-
-        <div class="blok" data-onthul="omhoog">
-          <h2 class="label">{instellingen.cta.primair}</h2>
-          <div class="regels">
-            <a class="schakel" href={`tel:${telefoon.e164}`}>
-              <Telefoon />
-              <span class="tekst">{telefoon.weergave}</span>
-            </a>
-            <a class="schakel" href={instellingen.whatsapp} rel="noopener">
-              <Whatsapp />
-              <span class="tekst">WhatsApp</span>
-            </a>
-            {
-              heeftEmail && (
-                <a class="schakel" href={`mailto:${instellingen.email}`}>
-                  <Envelop />
-                  <span class="tekst">{instellingen.email}</span>
-                </a>
-              )
-            }
-          </div>
-        </div>
-
-        <div class="blok" data-onthul="omhoog">
-          <h2 class="label">Volg het werk</h2>
-          <div class="regels">
-            <a class="schakel" href={instellingen.instagram} rel="noopener">
-              <Instagram />
-              <span class="tekst">Instagram</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <p class="micro" data-onthul="fade">{microregel}</p>
-    </footer>
+    <Contactrij />
   </div>
 </Basis>
 
-<script is:inline>
-  const klok = document.querySelector('[data-klok]');
-  if (klok) {
-    const opmaak = new Intl.DateTimeFormat('nl-NL', {
-      timeZone: 'Europe/Amsterdam',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-    const zetTijd = () => {
-      const nu = new Date();
-      klok.dateTime = nu.toISOString();
-      klok.textContent = `, ${opmaak.format(nu)}`;
-    };
-    zetTijd();
-    setInterval(zetTijd, 60000);
-  }
-</script>
-
 <style>
-  .pagina {
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    gap: var(--ruimte-rij-md);
-    block-size: 100dvh;
-    inline-size: 100%;
-    max-inline-size: var(--maat-container);
-    margin-inline: auto;
-    padding: var(--pagina-padding);
-  }
-
-  .kop {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: var(--ruimte-stapel-md);
-  }
-
-  .merk {
-    --onthul-vertraging: var(--binnenkomst-kop);
-  }
-
-  .merk :global(img) {
-    display: block;
-    block-size: var(--merk-hoogte);
-    inline-size: auto;
-  }
-
-  .plaats {
-    --onthul-vertraging: var(--binnenkomst-kop);
-    font-size: var(--tekst-klein-grootte);
-    font-variant-numeric: tabular-nums;
-    color: var(--kleur-voorgrond-gedempt);
-  }
-
   .statement {
     container-type: inline-size;
     display: grid;
@@ -200,137 +71,7 @@ const microregel = isBekend(instellingen.kvk)
     color: var(--kleur-voorgrond-gedempt);
   }
 
-  .contact {
-    display: grid;
-    gap: var(--pagina-micro-ruimte);
-  }
-
-  /* De haarlijn loopt door tot de schermranden; de tekst eronder blijft op de
-     padding van de pagina staan. */
-  .lijn {
-    --onthul-vertraging: var(--binnenkomst-lijn);
-    inline-size: 100vw;
-    margin-inline-start: calc(50% - 50vw);
-    block-size: var(--k-rand-haarlijn);
-    background-color: var(--kleur-lijn);
-  }
-
-  .blokken {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: var(--pagina-blok-ruimte) var(--ruimte-goot);
-  }
-
-  .blok {
-    display: grid;
-    gap: var(--ruimte-stapel-sm);
-    grid-column: 1 / -1;
-    align-content: start;
-    font-size: var(--tekst-klein-grootte);
-    line-height: var(--tekst-lopend-regelhoogte);
-  }
-
-  .blok:nth-child(1) {
-    --onthul-vertraging: var(--binnenkomst-blok-een);
-  }
-
-  .blok:nth-child(2) {
-    --onthul-vertraging: var(--binnenkomst-blok-twee);
-  }
-
-  .blok:nth-child(3) {
-    --onthul-vertraging: var(--binnenkomst-blok-drie);
-  }
-
-  .label {
-    font-family: var(--tekst-lopend-familie);
-    font-size: var(--tekst-label-grootte);
-    font-weight: var(--tekst-label-gewicht);
-    letter-spacing: var(--tekst-label-spatiering);
-    text-transform: uppercase;
-    color: var(--kleur-voorgrond-subtiel);
-  }
-
-  .regels {
-    display: grid;
-    gap: var(--ruimte-stapel-sm);
-    justify-items: start;
-  }
-
-  .regel-met-icoon,
-  .schakel {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--icoon-ruimte);
-  }
-
-  /* De onderstreping zit op de tekst, niet op de link, zodat het icoon
-     onderstreping noch padding meekrijgt. */
-  .tekst {
-    background-image: linear-gradient(var(--kleur-voorgrond), var(--kleur-voorgrond));
-    background-repeat: no-repeat;
-    background-position: 100% 100%;
-    background-size: 0 var(--link-onderstreping-dikte);
-    padding-block-end: var(--link-onderstreping-afstand);
-  }
-
-  .regel-met-icoon :global(.icoon),
-  .schakel :global(.icoon) {
-    flex-shrink: 0;
-    color: var(--icoon-voorgrond);
-  }
-
-  .noot {
-    padding-inline-start: calc(var(--icoon-maat) + var(--icoon-ruimte));
-  }
-
-  .micro {
-    --onthul-vertraging: var(--binnenkomst-micro);
-    max-inline-size: none;
-    font-size: var(--tekst-label-grootte);
-    text-align: end;
-    color: var(--kleur-voorgrond-subtiel);
-  }
-
-  /* De lijn tekent van links in en trekt zich naar rechts terug: het
-     ankerpunt wisselt pas als de lijn weg is. */
-  @media (hover: hover) and (pointer: fine) {
-    .tekst {
-      transition:
-        background-size var(--beweging-hover),
-        background-position 0s var(--k-beweging-duur-snel);
-    }
-
-    .schakel :global(.icoon) {
-      transition: color var(--beweging-hover);
-    }
-
-    .schakel:hover .tekst {
-      background-position: 0 100%;
-      background-size: 100% var(--link-onderstreping-dikte);
-      transition:
-        background-size var(--beweging-hover),
-        background-position 0s;
-    }
-
-    .schakel:hover :global(.icoon) {
-      color: var(--icoon-voorgrond-hover);
-    }
-  }
-
   @media (min-width: 48rem) {
-    .pagina {
-      padding: var(--pagina-padding-breed);
-    }
-
-    .merk :global(img) {
-      block-size: var(--merk-hoogte-breed);
-    }
-
-    .blokken {
-      gap: var(--pagina-blok-ruimte-breed) var(--ruimte-goot);
-    }
-
     h1 {
       --cap: var(--statement-cap-breed);
       grid-column: 2 / span 10;
@@ -339,27 +80,11 @@ const microregel = isBekend(instellingen.kvk)
     .intro {
       grid-column: 2 / span 8;
     }
-
-    .blok:nth-child(1) {
-      grid-column: 2 / span 3;
-    }
-
-    .blok:nth-child(2) {
-      grid-column: 5 / span 3;
-    }
-
-    .blok:nth-child(3) {
-      grid-column: 8 / span 3;
-    }
   }
 
   /* Korte schermen: typografie en afstanden één stap kleiner, zodat de pagina
      nooit hoeft te scrollen. De tweede stap vangt een liggende telefoon op. */
   @media (max-height: 44rem) {
-    .pagina {
-      gap: var(--ruimte-stapel-md);
-    }
-
     h1 {
       font-size: min(var(--tekst-display-kort-grootte), var(--cap));
       line-height: var(--tekst-display-kort-regelhoogte);
@@ -372,14 +97,6 @@ const microregel = isBekend(instellingen.kvk)
 
     .statement {
       gap: var(--ruimte-stapel-md) var(--ruimte-goot);
-    }
-
-    .blokken {
-      gap: var(--ruimte-5) var(--ruimte-goot);
-    }
-
-    .regels {
-      gap: var(--ruimte-1);
     }
   }
 
@@ -396,18 +113,6 @@ const microregel = isBekend(instellingen.kvk)
 
     .statement {
       gap: var(--ruimte-stapel-sm) var(--ruimte-goot);
-    }
-
-    .contact {
-      gap: var(--ruimte-stapel-md);
-    }
-
-    .blokken {
-      gap: var(--ruimte-stapel-sm) var(--ruimte-goot);
-    }
-
-    .regels {
-      gap: var(--ruimte-1);
     }
   }
 </style>

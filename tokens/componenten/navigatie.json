@@ -2,11 +2,19 @@
   "navigatie": {
     "hoogte": { "$value": "5rem", "$type": "dimension" },
     "grootte": { "$value": "{tekst.klein.grootte}", "$type": "dimension" },
+    "gewicht": { "$value": "{tekst.klein.gewicht}", "$type": "fontWeight" },
     "spatiering": { "$value": "{primitief.letter.spatiering.kapitaal}", "$type": "dimension" },
+    "ruimte": { "$value": "{primitief.ruimte.6}", "$type": "dimension" },
     "voorgrond": { "$value": "{kleur.voorgrond}", "$type": "color" },
     "voorgrond-rust": { "$value": "{kleur.voorgrond-gedempt}", "$type": "color" },
+    "voorgrond-gedimd": { "$value": "{kleur.voorgrond-gedempt}", "$type": "color" },
     "lijn": { "$value": "{kleur.lijn}", "$type": "color" },
-    "laag": { "$value": "{primitief.laag.kop}", "$type": "number" }
+    "laag": { "$value": "{primitief.laag.kop}", "$type": "number" },
+    "indicator-afstand": { "$value": "{primitief.ruimte.1}", "$type": "dimension" },
+    "indicator-dikte": { "$value": "{primitief.rand.haarlijn}", "$type": "dimension" },
+    "lijn-actief": { "$value": "{kleur.lijn-sterk}", "$type": "color" },
+    "overgang": { "$value": "{beweging.menu}", "$type": "other" },
+    "aanraakdoel": { "$value": "2.75rem", "$type": "dimension" }
   },
   "link": {
     "onderstreping-afstand": { "$value": "0.15em", "$type": "dimension" },

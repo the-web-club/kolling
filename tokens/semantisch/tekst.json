@@ -42,6 +42,20 @@
       "regelhoogte": { "$value": "{primitief.letter.regelhoogte.kop}", "$type": "number" },
       "spatiering": { "$value": "{primitief.letter.spatiering.tekst}", "$type": "dimension" }
     },
+    "menu": {
+      "familie": { "$value": "{primitief.letter.familie.tekst}", "$type": "fontFamily" },
+      "grootte": { "$value": "{primitief.letter.grootte.3xl}", "$type": "dimension" },
+      "gewicht": { "$value": "{primitief.letter.gewicht.licht}", "$type": "fontWeight" },
+      "regelhoogte": { "$value": "{primitief.letter.regelhoogte.kop}", "$type": "number" },
+      "spatiering": { "$value": "{primitief.letter.spatiering.kop}", "$type": "dimension" }
+    },
+    "menu-kort": {
+      "familie": { "$value": "{primitief.letter.familie.tekst}", "$type": "fontFamily" },
+      "grootte": { "$value": "{primitief.letter.grootte.2xl}", "$type": "dimension" },
+      "gewicht": { "$value": "{primitief.letter.gewicht.licht}", "$type": "fontWeight" },
+      "regelhoogte": { "$value": "{primitief.letter.regelhoogte.kop}", "$type": "number" },
+      "spatiering": { "$value": "{primitief.letter.spatiering.kop}", "$type": "dimension" }
+    },
     "intro": {
       "familie": { "$value": "{primitief.letter.familie.tekst}", "$type": "fontFamily" },
       "grootte": { "$value": "{primitief.letter.grootte.lg}", "$type": "dimension" },

@@ -1,5 +1,5 @@
 ---
-import { isPreviewOmgeving } from '@/lib/seo';
+import { bepaalRobots } from '@/lib/seo';
 
 interface Props {
   titel: string;
@@ -15,13 +15,12 @@ if (!Astro.site) {
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogBeeld = new URL('/og.png', Astro.site).href;
-const mag = indexeerbaar && !isPreviewOmgeving;
 ---
 
 <title>{titel}</title>
 <meta name="description" content={beschrijving} />
 <link rel="canonical" href={canonical} />
-<meta name="robots" content={mag ? 'index, follow' : 'noindex, nofollow'} />
+<meta name="robots" content={bepaalRobots(indexeerbaar)} />
 
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="nl_NL" />
