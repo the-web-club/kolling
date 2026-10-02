@@ -403,6 +403,14 @@ Dat laatste bracht een bestaande fout boven. `data-js` overleeft een client-side
 2. **`voorgrond-subtiel` haalt 4,5:1 in geen van beide thema's.** De opdracht noemt die token decoratief, maar hij kleurt nu drie koppen in de contactrij (`<h2>` Werkplaats, Bespreek je idee, Volg het werk), de titels van de bijschriften en de microregel. Dat is gewone tekst, en 2,79 in het licht is te weinig. Drie uitwegen: zo laten en het hier vastleggen als bewuste uitzondering; de koppen en bijschrifttitels naar `voorgrond-gedempt` tillen, wat 8,67 en 7,62 geeft maar het lichte ontwerp donkerder maakt; of in het donker `steen.400` gebruiken in plaats van `steen.500`, wat daar 5,54 oplevert en het lichte thema ongemoeid laat. Mijn voorstel is de tweede, omdat een kop die je niet leest geen kop is. De opdracht zegt echter dat het lichte thema exact blijft, dus dit is jouw keuze.
 3. **Waar landt dit en wie opent de pull request?** Er staat geen pull request open, dus ik werk op `feature/thema`. De `gh`-CLI is hier niet ingelogd, dus ik kan de pull request en de schermafbeeldingen niet zelf plaatsen. Ik kan de branch pushen en de tekst voor de pull request klaarzetten, of het werk net als de vorige drie keer rechtstreeks op `main` zetten. Wat wil je?
 
+### De antwoorden
+
+De bouw wacht op de sticky koprij die nu onder handen is. Die vervangt het raster, `merk.hoogte` en de tokens waar de schakelaar in gaat staan, dus de headerindeling hierboven wordt opnieuw opgemeten zodra dat werk staat. Het thema landt daarna rechtstreeks op `main`.
+
+Het woordmerk krijgt voorlopig `filter: invert(1)` op het zwarte PNG, uitsluitend op het woordmerk zelf. Mijn waarschuwing bij vraag 1 was te zwaar: `invert()` keert de kleurkanalen om en laat alpha staan, dus zwarte inkt met een maskerrand wordt lichte inkt met dezelfde rand, zonder zoom. Wat blijft staan als open punt is dat de lichte tint daarmee `#ffffff` is en niet `papier.100`; zuiver wit is precies wat principe 4 niet wil. Een officieel wit bestand of een outline-SVG met `currentColor` haalt dat eruit.
+
+`voorgrond-subtiel` gaat van de koppen af: de drie `<h2>` in de contactrij en de titels van de bijschriften krijgen `voorgrond-gedempt` (8,67 in het licht, 7,62 in het donker). De microregel houdt `voorgrond-subtiel`, want dat is de enige plek waar de token echt decoratief is. Het lichte thema wordt daarmee op twee plekken donkerder dan nu; dat is een bewuste wijziging en geen gevolg van het donkere thema.
+
 ## Wat open staat
 
 1. **Woordmerk als SVG.** Het huidige `d-logo.svg` is een export met een ingesloten bitmap van 1065 px breed en een luminantiemasker. `pnpm og` rendert daaruit `woordmerk.png` op 480 px, het OG-beeld en het favicon. Een echte outline-SVG maakt die stap onnodig en is scherper op elk formaat.
