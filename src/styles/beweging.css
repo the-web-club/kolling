@@ -32,6 +32,20 @@
     animation-delay: calc(var(--onthul-vertraging, 0ms) * var(--onthul-weging));
   }
 
+  /* Het gordijn vult voorwaarts: de startstaat hierboven zou het beeld daarna
+     opnieuw verbergen. De schaal vult achterwaarts, zodat hover de afbeelding
+     na de binnenkomst weer kan schalen. */
+  [data-js] [data-onthul='gordijn'] {
+    clip-path: inset(0 0 var(--k-beweging-afstand-masker) 0);
+    animation: gordijn-opent var(--beweging-binnenkomst-beeld) both;
+    animation-delay: calc(var(--onthul-vertraging, 0ms) * var(--onthul-weging));
+  }
+
+  [data-js] [data-onthul='gordijn'] .afbeelding {
+    animation: beeld-schaalt var(--beweging-binnenkomst-beeld) backwards;
+    animation-delay: calc(var(--onthul-vertraging, 0ms) * var(--onthul-weging));
+  }
+
   [data-js] [data-onthul='lijn'] {
     scale: 0 1;
     transform-origin: left center;
@@ -172,6 +186,24 @@
   }
   to {
     translate: 0 0;
+  }
+}
+
+@keyframes gordijn-opent {
+  from {
+    clip-path: inset(0 0 var(--k-beweging-afstand-masker) 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes beeld-schaalt {
+  from {
+    scale: var(--k-beweging-schaal-onthul);
+  }
+  to {
+    scale: 1;
   }
 }
 

@@ -29,7 +29,7 @@ const { naam, adres } = await haalInstellingen();
 
   <Navigatie />
 
-  <p class="klok" data-onthul="fade" transition:persist>
+  <p class="klok" data-onthul="fade" transition:persist="klok">
     {adres.plaats}<time data-klok></time>
   </p>
 

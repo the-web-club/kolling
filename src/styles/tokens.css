@@ -99,6 +99,8 @@
   --binnenkomst-kop: 0ms;
   --binnenkomst-regel-een: 100ms;
   --binnenkomst-regel-twee: 190ms;
+  --binnenkomst-beeld-groot: 300ms;
+  --binnenkomst-beeld-klein: 400ms;
   --binnenkomst-intro: 500ms;
   --binnenkomst-lijn: 700ms;
   --binnenkomst-blok-een: 800ms;
@@ -122,6 +124,8 @@
   --merk-hoogte-breed: 2rem;
   --statement-cap: 8.9cqi;
   --statement-cap-breed: 7.4cqi;
+  --statement-cap-naast-beeld: 4.4cqi;
+  --statement-introbreedte: 36ch;
   --beweging-binnenkomst: var(--k-beweging-duur-traag) var(--k-beweging-curve-uit-quint);
   --beweging-binnenkomst-hero: var(--k-beweging-duur-hero) var(--k-beweging-curve-uit-expo);
   --beweging-binnenkomst-beeld: var(--k-beweging-duur-filmisch) var(--k-beweging-curve-uit-expo);

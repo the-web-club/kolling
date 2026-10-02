@@ -163,6 +163,42 @@ Vier posten: de router van Astro, `src/lib/menu.ts`, `src/lib/beweging/paginaove
 2. **Gewicht 300 bestaat niet in de huidige fonts.** Instrument Sans is geladen als variabele font met bereik 400 tot 700, dus de menu-items in `tekst.kop2` komen met gewicht 300 alsnog op 400 uit. Dat is dezelfde grens als afwijking 2 hierboven. Ik houd 400 aan tot de licentiefonts er zijn, tenzij je wilt dat ik het bereik van de webfont oprek.
 3. **Waar landt dit werk?** De opdracht noemt `feature/coming-soon-menu` met een pull request, de laatste instructie noemt `main`. Er staat geen pull request open en `main` loopt gelijk met `origin/main`, dus beide kan. Mijn voorstel is `main`, omdat de coming-soon pagina daar ook rechtstreeks op is geland.
 
+### Gebouwd en gemeten
+
+De navigatie staat in `navigatie[]` in `site.json`; `PaginaKop` leest die lijst, `Menu` ook, en `src/pages/[sectie].astro` maakt er met `getStaticPaths()` zes pagina's van. De build levert acht pagina's: de voorpagina, zes secties en de 404.
+
+Antwoorden op de drie vragen: `transition:persist` zit alleen op de klok, de lichtachtergrond en de contactrij; de navigatie wisselt mee, zodat `aria-current` klopt en de haarlijn met `transition:name="menu-indicator"` naar het nieuwe item schuift. De menu-items staan in Work Sans op gewicht 300: de kopfont heeft geen 300, de tekstfont wel, en navigatie is interface. Het werk is op `main` geland.
+
+Drie dingen bleken anders dan gepland:
+
+1. **Persist heeft een eigen naam nodig.** Zonder naam leidt Astro de persist-sleutel af uit de positie in de pagina, en die verschilt per route. De lichtachtergrond kreeg daardoor elke navigatie een nieuw element. Nu staan er vaste namen: `licht`, `klok` en `contactrij`.
+2. **Een blijvend element herstart zijn animatie.** Astro verplaatst het persistente element naar het nieuwe document en dat zet CSS-animaties terug op nul; het licht sprong bij elke wissel. `koppelPaginaovergang` bewaart daarom de stand bij `astro:before-swap` en zet die terug bij `astro:after-swap`. Gemeten over een navigatie: 8316 ms voor, 9332 ms na, dus de animatie loopt door.
+3. **Zes aanraakdoelen van 44 px passen niet op een liggende telefoon.** Het menu werd 514 px hoog in een scherm van 390 px. Onder 30 rem hoogte staat de lijst daarom in twee kolommen: 334 px hoog, met 72 px over.
+
+De middelste rij heeft een eigen naam per route (`statement`, `binnenkort`, `verdwaald`) in plaats van één gedeelde naam. Met dezelfde naam zou de view transition de twee rijen aan elkaar koppelen en hun verschil in hoogte wegvervormen; met eigen namen loopt de oude rij alleen uit en de nieuwe alleen in, zoals rule 70 vraagt.
+
+Geen verticale of horizontale overloop op de negen formaten uit de testmatrix, voor de voorpagina en voor een sectiepagina:
+
+| Formaat     | Voorpagina, ruimte onder de microregel | Sectiepagina |
+| ----------- | -------------------------------------- | ------------ |
+| 320 × 568   | 16 px                                  | 16 px        |
+| 360 × 640   | 16 px                                  | 16 px        |
+| 390 × 844   | 16 px                                  | 16 px        |
+| 768 × 1024  | 27 px                                  | 27 px        |
+| 1024 × 768  | 31 px                                  | 31 px        |
+| 1280 × 720  | 36 px                                  | 36 px        |
+| 1440 × 900  | 39 px                                  | 39 px        |
+| 1920 × 1080 | 40 px                                  | 40 px        |
+| 844 × 390   | 16 px                                  | 21 px        |
+
+Het geopende menu past ook: 514 px bij 320 × 568 met 70 px over, en 334 px in twee kolommen bij 844 × 390 met 72 px over. Niets scrollt.
+
+JavaScript in de productiebuild: één bestand van 16.357 bytes, gecomprimeerd 5591 bytes. Dat is de router van Astro met `menu.ts` en `paginaovergang.ts` erin, ruim onder de 15 kB. Daarnaast twee inline scripts: de `data-js`-vlag en de klok van vijftien regels.
+
+Verder gecontroleerd in de preview: de haarlijn staat onder het juiste item en schuift mee bij navigatie, de klok loopt door over een paginawissel (hetzelfde element, één interval, `data-gekoppeld`), de zes secties geven `noindex, follow` en de voorpagina `index, follow`, JSON-LD staat alleen op de voorpagina, het menu zet `inert` op `main` en `footer` en geeft de focus aan het eerste item en bij sluiten terug aan de knop. Bij `prefers-reduced-motion: reduce` blijven alleen elf opacity-fades van 200 ms over, zonder ambient licht en zonder trap. Zonder `data-js` draait geen enkele animatie en staat alles op opacity 1.
+
+Escape en een klik naast de lijst zijn gedragingen van de popover zelf; die heb ik niet met een synthetische toets kunnen aantonen, omdat een nagebootste toetsaanslag de close watcher van de browser niet opent. Het sluiten via de knop en via `hidePopover()` is wel gecontroleerd, inclusief focus en `inert`.
+
 ### Twee opmerkingen, geen vraag
 
 De beeldaanvulling staat niet op `main`: de homepage heeft nu geen diptiek en geen enkel beeld. "Geen beelden op de sectiepagina's" is daarmee vanzelf waar, en ik laat de homepage beeldloos zoals hij is.

@@ -1,6 +1,13 @@
 import { isBekend, type Instellingen } from '@/lib/content';
 
-export function maakLocalBusiness(instellingen: Instellingen, site: URL, logo: string): object {
+export function maakLocalBusiness(
+  instellingen: Instellingen,
+  site: URL,
+  logo: string,
+  beelden: readonly string[],
+): object {
+  const afbeeldingen = beelden.length > 0 ? beelden : [logo];
+
   return {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
@@ -8,7 +15,7 @@ export function maakLocalBusiness(instellingen: Instellingen, site: URL, logo: s
     name: instellingen.naam,
     url: site.href,
     logo: new URL(logo, site).href,
-    image: new URL(logo, site).href,
+    image: afbeeldingen.map((beeld) => new URL(beeld, site).href),
     telephone: instellingen.telefoon.e164,
     ...(isBekend(instellingen.email) ? { email: instellingen.email } : {}),
     founder: { '@type': 'Person', name: instellingen.maker },

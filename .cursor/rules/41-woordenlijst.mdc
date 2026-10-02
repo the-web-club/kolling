@@ -216,8 +216,8 @@ Waar een token en een groep dezelfde naam zouden krijgen, staat er een koppeltek
 
 1. `src/assets/merk/woordmerk.png` (gegenereerd uit `d-logo.svg`; later `woordmerk.svg`)
 2. `public/fonts/instrument-sans-latijn.woff2`, `public/fonts/work-sans-latijn.woff2`
-3. `public/favicon.png`, `public/og.png` (beide gegenereerd)
-4. `scripts/maak-og.mjs` (rendert woordmerk, OG-beeld en favicon uit het logo)
+3. `public/favicon.png`, `public/og.jpg` (beide gegenereerd)
+4. `scripts/maak-og.mjs` (rendert woordmerk, OG-beeld en favicon)
 
 ## Aangevuld voor de header met menu
 
@@ -230,13 +230,15 @@ Waar een token en een groep dezelfde naam zouden krijgen, staat er een koppeltek
 ### Componenten
 
 1. `PaginaKop.astro` (woordmerk, navigatie, klok en de knop naar het menu)
-2. `Menu.astro` (het menu als popover, met de knop die het opent)
-3. `Contactrij.astro` (de onderste rij met haarlijn, contactblokken en microregel)
+2. `Navigatie.astro` (de zes items in de koprij, met de haarlijn onder het actieve item)
+3. `Menu.astro` (het menu als popover, met de knop die het opent)
+4. `Contactrij.astro` (de onderste rij met haarlijn, contactblokken en microregel)
+5. `ContactLink.astro` (een link met icoon en intekenende onderstreping)
 
 ### Classes
 
 1. `.pagina-kop` (de koprij), `.navigatie` (de zes items in de koprij), `.indicator` (de haarlijn onder het actieve item)
-2. `.menu` (de popover), `.menu-knop` (de tekstknop die het menu opent of sluit), `.menu-kop` (de bovenste rij in de popover), `.menu-voet` (de contactlinks onderin)
+2. `.menu` (de popover), `.menu-knop` (de tekstknop die het menu opent), `.menu-sluiten` (de tekstknop die het sluit), `.menu-kop` (de bovenste rij in de popover), `.menu-voet` (de contactlinks onderin)
 3. `.contactrij` (de onderste rij, voorheen `.contact`), `.klok` (plaatsnaam met tijd, voorheen `.plaats`)
 4. `.binnenkort` (de middelste rij van een sectiepagina)
 
@@ -245,9 +247,19 @@ Waar een token en een groep dezelfde naam zouden krijgen, staat er een koppeltek
 1. `data-menu` op de popover
 2. `data-menu-knop` op de knop die het menu opent
 3. `data-overgang="licht"` op `<html>` na de eerste client-side navigatie, voor de halve binnenkomst
-4. `data-plek` ook op een item in het menu, voor de trap in de onthulling
 
 `data-gekoppeld` staat op de klok in `PaginaKop`, zodat de blijvende klok bij een paginawissel maar één interval houdt.
+
+### Namen in de paginaovergang
+
+1. `transition:persist="licht | klok | contactrij"` op de drie elementen die blijven staan
+2. `transition:name="menu-indicator"` op de haarlijn onder het actieve item
+3. `transition:name="statement | binnenkort | verdwaald"` op de middelste rij van respectievelijk de voorpagina, een sectiepagina en de 404
+
+### Lokale custom properties
+
+1. `--plek` op een menu-item, het nummer van het item voor de trap in de onthulling
+2. `--onthul-weging` op `<html>`, de factor waarmee de vertragingen van de binnenkomst meelopen
 
 ### Tokens
 
@@ -264,3 +276,47 @@ Waar een token en een groep dezelfde naam zouden krijgen, staat er een koppeltek
 ### Contentvelden
 
 1. `instellingen/site.json`: `navigatie[]` (`label`, `pad`) en `binnenkort` (`kop`, `tekst`)
+
+## Aangevuld voor de beelden op de coming-soon pagina
+
+### Domein
+
+1. uitsnede (het deel van de foto dat in het kader staat)
+2. positie (de zijde waar de uitsnede vandaan komt: `attention`, `centre`, `left`, `right`, `top`, `bottom`)
+3. bron (één formaat met zijn srcset), meervoud bronnen
+
+### Props
+
+1. `Beeld`: `beeld`, `alt`, `verhouding`, `verhoudingMobiel`, `maten` (de `sizes`-string), `bijschrift`, `positie`, `breedtes`, `prioriteit`, `onthul`, `class`
+2. `Basis`: `beelden` (absolute beeld-URL's voor de JSON-LD) en `voorlaadBeeld` (`srcset`, `maten`)
+
+### Classes
+
+1. `.beeld` (de `figure`), `.afbeelding` (de `img`), `.bijschrift` (de `figcaption`) met `.titel` en `.toelichting`
+2. `.beeld-groot` (het dressoir), `.beeld-klein` (de boomstamplanken)
+
+### Data-attributen
+
+1. `data-verhouding` en `data-verhouding-mobiel` op het beeldkader
+2. `data-positie` op `.beeld`, zodat de `object-position` dezelfde zijde kiest als de uitsnede bij de build
+3. `data-onthul="gordijn"` op het beeldkader
+
+### CSS-variabelen als invoer van buiten
+
+1. `--beeld-vertraging` (de plek van het beeld in de choreografie; het bijschrift telt er de eigen vertraging bij op)
+2. `--beeld-max-hoogte` (de bovengrens van het kader)
+
+### Tokens
+
+1. Componenten: `beeld.verhouding-*`, `beeld.achtergrond`, `beeld.rand-onder`, `beeld.band-hoogte`, `beeld.band-hoogte-breed`, `beeld.hoogte-kolom`, `beeld.bijschrift-vertraging`, `beeld.schaal-hover`
+2. Componenten aangevuld: `binnenkomst.beeld-groot`, `binnenkomst.beeld-klein`, `statement.cap-naast-beeld`, `statement.introbreedte`
+
+### Keyframes
+
+1. `gordijn-opent` (het kader dat opengaat), `beeld-schaalt` (de afbeelding die tot rust komt)
+
+### Bestanden
+
+1. `src/assets/beelden/` voor eigen fotografie, met `coming-soon/dressoir.jpg` en `coming-soon/planken.jpg`
+2. `src/lib/beeld.ts` (de bronnen van één beeld: uitsnede, breedtes en formaten)
+3. `public/og.jpg` vervangt `public/og.png`: een foto hoort in JPEG

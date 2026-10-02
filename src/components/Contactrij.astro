@@ -11,13 +11,17 @@ const heeftEmail = isBekend(instellingen.email);
 // De adresregel en de microregel staan in de frontmatter, niet in de template:
 // een regelafbreking tussen twee expressies verdwijnt in de uitvoer en plakt
 // dan woorden aan elkaar.
-const adresregel = `${adres.straat}, ${adres.postcode} ${adres.plaats}`;
+//
+// In twee kolommen past het adres niet op één regel. Harde spaties laten de
+// regel alleen na de komma afbreken, nooit binnen de postcode.
+const hardeSpaties = (tekst: string) => tekst.replaceAll(' ', '\u00a0');
+const adresregel = `${hardeSpaties(adres.straat)}, ${hardeSpaties(`${adres.postcode} ${adres.plaats}`)}`;
 const microregel = isBekend(instellingen.kvk)
   ? `${instellingen.naam}, ${adres.plaats}, KvK ${instellingen.kvk}`
   : `${instellingen.naam}, ${adres.plaats}`;
 ---
 
-<footer class="contactrij" transition:persist>
+<footer class="contactrij" transition:persist="contactrij">
   <div class="lijn" data-onthul="lijn"></div>
 
   <div class="blokken">
@@ -104,6 +108,15 @@ const microregel = isBekend(instellingen.kvk)
     --onthul-vertraging: var(--binnenkomst-blok-drie);
   }
 
+  .label {
+    font-family: var(--tekst-label-familie);
+    font-size: var(--tekst-label-grootte);
+    font-weight: var(--tekst-label-gewicht);
+    letter-spacing: var(--tekst-label-spatiering);
+    text-transform: uppercase;
+    color: var(--kleur-voorgrond-subtiel);
+  }
+
   .regels {
     display: grid;
     gap: var(--ruimte-stapel-sm);
@@ -131,6 +144,30 @@ const microregel = isBekend(instellingen.kvk)
     font-size: var(--tekst-label-grootte);
     text-align: end;
     color: var(--kleur-voorgrond-subtiel);
+  }
+
+  /* Twee kolommen zodra het past, zodat de voet een rij korter wordt en er
+     ruimte vrijkomt voor het beeld. De leesvolgorde blijft de DOM-volgorde:
+     werkplaats, contact, Instagram. */
+  @media (min-width: 22.5rem) and (max-width: 47.9375rem) {
+    .blokken {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .blok:nth-child(1) {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .blok:nth-child(2) {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+
+    .blok:nth-child(3) {
+      grid-column: 1;
+      grid-row: 2;
+    }
   }
 
   @media (min-width: 48rem) {

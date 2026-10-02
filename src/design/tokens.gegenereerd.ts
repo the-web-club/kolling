@@ -210,6 +210,8 @@ export const tokens: readonly Token[] = [
   { naam: 'binnenkomst-kop', pad: 'binnenkomst.kop', laag: 'componenten', waarde: "0ms" },
   { naam: 'binnenkomst-regel-een', pad: 'binnenkomst.regel-een', laag: 'componenten', waarde: "100ms" },
   { naam: 'binnenkomst-regel-twee', pad: 'binnenkomst.regel-twee', laag: 'componenten', waarde: "190ms" },
+  { naam: 'binnenkomst-beeld-groot', pad: 'binnenkomst.beeld-groot', laag: 'componenten', waarde: "300ms" },
+  { naam: 'binnenkomst-beeld-klein', pad: 'binnenkomst.beeld-klein', laag: 'componenten', waarde: "400ms" },
   { naam: 'binnenkomst-intro', pad: 'binnenkomst.intro', laag: 'componenten', waarde: "500ms" },
   { naam: 'binnenkomst-lijn', pad: 'binnenkomst.lijn', laag: 'componenten', waarde: "700ms" },
   { naam: 'binnenkomst-blok-een', pad: 'binnenkomst.blok-een', laag: 'componenten', waarde: "800ms" },
@@ -288,4 +290,6 @@ export const tokens: readonly Token[] = [
   { naam: 'merk-hoogte-breed', pad: 'merk.hoogte-breed', laag: 'componenten', waarde: "2rem" },
   { naam: 'statement-cap', pad: 'statement.cap', laag: 'componenten', waarde: "8.9cqi" },
   { naam: 'statement-cap-breed', pad: 'statement.cap-breed', laag: 'componenten', waarde: "7.4cqi" },
+  { naam: 'statement-cap-naast-beeld', pad: 'statement.cap-naast-beeld', laag: 'componenten', waarde: "4.4cqi" },
+  { naam: 'statement-introbreedte', pad: 'statement.introbreedte', laag: 'componenten', waarde: "36ch" },
 ];

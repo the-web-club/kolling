@@ -16,9 +16,19 @@ interface Props {
   indexeerbaar?: boolean;
   suffix?: boolean;
   jsonLd?: boolean;
+  beelden?: readonly string[];
+  voorlaadBeeld?: { srcset: string; maten: string };
 }
 
-const { titel, beschrijving, indexeerbaar = true, suffix = true, jsonLd = false } = Astro.props;
+const {
+  titel,
+  beschrijving,
+  indexeerbaar = true,
+  suffix = true,
+  jsonLd = false,
+  beelden = [],
+  voorlaadBeeld,
+} = Astro.props;
 const instellingen = await haalInstellingen();
 
 if (!Astro.site) {
@@ -26,7 +36,7 @@ if (!Astro.site) {
 }
 
 const volledigeTitel = suffix ? maakTitel(titel, instellingen.seo.titelSuffix) : titel;
-const werkplaats = maakLocalBusiness(instellingen, Astro.site, logo.src);
+const werkplaats = maakLocalBusiness(instellingen, Astro.site, logo.src, beelden);
 const website = maakWebsite(instellingen, Astro.site);
 ---
 
@@ -50,6 +60,17 @@ const website = maakWebsite(instellingen, Astro.site);
       type="font/woff2"
       crossorigin
     />
+    {
+      voorlaadBeeld && (
+        <link
+          rel="preload"
+          as="image"
+          type="image/avif"
+          imagesrcset={voorlaadBeeld.srcset}
+          imagesizes={voorlaadBeeld.maten}
+        />
+      )
+    }
     <Seo titel={volledigeTitel} beschrijving={beschrijving} indexeerbaar={indexeerbaar} />
     {jsonLd && <JsonLd schema={werkplaats} />}
     {jsonLd && <JsonLd schema={website} />}
@@ -62,9 +83,9 @@ const website = maakWebsite(instellingen, Astro.site);
     <LichtAchtergrond />
     <slot />
     <script>
-      import { zetLichteBinnenkomst } from '@/lib/beweging/paginaovergang';
+      import { koppelPaginaovergang } from '@/lib/beweging/paginaovergang';
 
-      zetLichteBinnenkomst();
+      koppelPaginaovergang();
     </script>
   </body>
 </html>
