@@ -233,6 +233,14 @@ In `binnenkomst.json` komen vier vertragingen bij: `beeld-groot` (300 ms), `bijs
 3. **De preload staat in `Basis.astro`.** Een component in de `body` kan niets aan `<head>` toevoegen. `Beeld.astro` zet daarom zelf `loading="eager"`, `fetchpriority="high"` en `decoding="async"`, en de pagina geeft de AVIF-srcset van het dressoir aan de layout mee.
 4. **Geen `beweringen[]` op deze branch.** De contentcollecties staan op `feature/volledige-site`; hier bestaat alleen `instellingen`. Met de neutrale fallbacks ("Dressoir, uit de werkplaats" en "Boomstamplanken") staat er ook geen bewering in de bijschriften. Vult Rik of Thomas wel een titel, materiaal of jaar in, dan is dat een bewering en hoort die in `site.json` tot de volledige site terug is.
 
+### Stand van zaken
+
+De drie vragen hieronder zijn beantwoord: beide foto's mogen op kolling.nl, er komt geen ruimer origineel, en het dressoir krijgt daarom 3:2 in de rechterkolom in plaats van 4:5. Daarmee zijn `Beeld.astro`, `src/lib/beeld.ts`, `tokens/componenten/beeld.json`, het gordijn in `beweging.css` en de beeldenlijst in `maakLocalBusiness` gebouwd.
+
+Die bouw is daarna uit deze werkmap gehaald en wacht op de header met navigatie en menu, omdat beide op hetzelfde moment aan `index.astro`, `Basis.astro`, `beweging.css` en de binnenkomsttokens werkten. Zodra de header staat, komt de diptiek er op het nieuwe `index.astro` bij. Wat dan nog moet: de layout per viewport, het OG-beeld uit het dressoir, de woordenlijst en de controle op de negen formaten.
+
+Twee dingen om bij die hervatting mee te nemen. De choreografie rekent nu met `--onthul-weging` als vermenigvuldiger op de vertraging; de vertragingen van de beelden horen dat te volgen. En de contactrij is naar `Contactrij.astro` verhuisd, dus de twee kolommen op mobiel horen daar thuis en niet meer in de pagina.
+
 ### Drie vragen, en dan bouw ik af
 
 1. **Zijn beide foto's eigen beeld van Kolling, en mogen ze op kolling.nl staan?** Het dressoirbestand heet `wood_example` en het staat in een gestileerde studio-opstelling met objecten die niet van Kolling lijken. Zonder een expliciet ja gaat geen van de twee de repository in; dat is de reden dat ze er nu nog niet staan.
