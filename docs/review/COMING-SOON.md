@@ -169,6 +169,76 @@ De beeldaanvulling staat niet op `main`: de homepage heeft nu geen diptiek en ge
 
 Het menu leunt op de Popover API, die zonder JavaScript opent en sluit. Een browser die `popover` niet kent, negeert het attribuut: het menu staat dan als gewone lijst in de pagina in plaats van fullscreen. De links blijven bereikbaar, maar de koprij is op zo'n browser hoger dan één regel. Dat raakt Safari voor 17 en Firefox voor 125.
 
+## Diptiek: audit voor de bouw
+
+Hieronder staat wat de bouw van het beeldpaar wordt: twee foto's op `/`, het dressoir groot en de boomstamplanken klein, met `Beeld.astro` als het beeldcomponent dat de volledige site straks hergebruikt. Er staat nog geen foto in de repository en er is nog geen regel code aangepast; dit is de audit die volgens de opdracht aan de bouw voorafgaat.
+
+### Wat de aangeleverde bestanden toelaten
+
+Beide foto's kwamen binnen op 1024 px aan de lange zijde. De opdracht vraagt minimaal 2400 px, `docs/FOTOGRAFIE.md` vraagt 3000 px.
+
+| Bestand  | Aangeleverd | Grootste uitsnede op maat           | Gevraagde grootste variant |
+| -------- | ----------- | ----------------------------------- | -------------------------- |
+| Dressoir | 1024 × 768  | 4:5 wordt 614 × 768, 3:2 1024 × 683 | 4:5 op 1280 × 1600         |
+| Planken  | 1024 × 683  | 1:1 wordt 683 × 683                 | 1:1 op 480 × 480           |
+
+De planken halen dat ruim: `position: 'attention'` legt het gelaagde schorsprofiel centraal in het vierkant en 683 px dekt een slot van 180 px breed tot ver voorbij twee keer de pixeldichtheid.
+
+Het dressoir niet. Een 4:5-uitsnede uit een liggende foto is 614 px breed, terwijl het dressoir zelf 635 px van de 1024 px inneemt. Alle drie de uitsnedes verliezen daarmee iets wat de opdracht wil behouden:
+
+- `attention` houdt de hand met de schaal vast en snijdt de rechterkant van het dressoir af, inclusief de tweede greep. De man staat er daarna voor driekwart op, zonder hoofd.
+- `centre` snijdt het dressoir aan beide kanten af en laat links een losse arm in beeld staan.
+- `right` geeft het rustigste beeld, maar zonder de hand en met het linkerdeel van het dressoir buiten het kader.
+
+Een 3:2-uitsnede verliest niets: het hele dressoir, de hand met de schaal en de wand erachter passen, en het bestand is dan precies groot genoeg voor de grootste gevraagde mobiele variant. Ook het OG-beeld van 1200 × 630 vraagt meer dan er is; uit 1024 px wordt dat 1,17 keer opschalen.
+
+### Layout per viewport
+
+Het één-scherm-principe blijft de bovengrens. `basis.css` zet `overflow: hidden` op `html` en `body`, dus een scrollbar kan niet verschijnen; het risico is afgesneden content. Daarom verdwijnt een beeld zodra de hoogte het niet meer draagt.
+
+| Viewport    | Dressoir                      | Planken | Contactrij    |
+| ----------- | ----------------------------- | ------- | ------------- |
+| 320 × 568   | niet aanwezig                 | nee     | onder elkaar  |
+| 360 × 640   | niet aanwezig                 | nee     | twee kolommen |
+| 390 × 844   | band volle breedte, 3:2, 28vh | nee     | twee kolommen |
+| 768 × 1024  | band volle breedte, 3:2, 32vh | nee     | twee kolommen |
+| 844 × 390   | niet aanwezig                 | nee     | twee kolommen |
+| 1024 × 768  | rechterkolom, kolom 9 t/m 12  | nee     | drie kolommen |
+| 1280 × 720  | rechterkolom                  | nee     | drie kolommen |
+| 1440 × 900  | rechterkolom                  | ja      | drie kolommen |
+| 1920 × 1080 | rechterkolom                  | ja      | drie kolommen |
+
+De drempels: de beeldband vanaf 740 px hoogte, de rechterkolom vanaf 1024 px breedte, de planken vanaf 1024 bij 820 px. Daaronder is de pagina precies wat hij nu is.
+
+De middelste rij wordt op desktop een genest raster van twaalf kolommen met rijen `auto 1fr auto`. Kop en intro komen op kolom 2 t/m 7, het dressoir op kolom 9 t/m 12 over alle drie de rijen. De kop moet dan op de helft van de breedte nog op twee regels staan: de cap gaat van 7,4 cqi naar ongeveer 4,4 cqi, gemeten per formaat. Het lichtvlak zit in `LichtAchtergrond` op `z-index: -1` en kan dus niet over een beeld heen vallen.
+
+Op mobiel schuift de contactrij naar twee kolommen zonder extra `div`: de drie bestaande blokken worden geplaatst met `grid-column` en `grid-row`, waarbij "Bespreek je idee" rechts over twee rijen staat. De DOM-volgorde blijft gelijk aan de leesvolgorde, dus de tabvolgorde verandert niet.
+
+### Bestanden
+
+Nieuw: `src/components/Beeld.astro`, `src/lib/beeld.ts` (de bronnen van één beeld, zodat de preload en het component dezelfde varianten gebruiken), `src/assets/beelden/coming-soon/dressoir.jpg`, `src/assets/beelden/coming-soon/planken.jpg`, `tokens/componenten/beeld.json`.
+
+Gewijzigd: `src/pages/index.astro`, `src/styles/beweging.css` (gordijn en de twee bijschriftfades), `src/layouts/Basis.astro` (optionele preload in `<head>`), `src/lib/jsonld.ts` (`image` wordt een lijst), `scripts/maak-og.mjs` (OG uit het dressoir), `public/og.png`, `tokens/componenten/binnenkomst.json`, `tokens/componenten/statement.json`, `.cursor/rules/41-woordenlijst.mdc` en de twee gegenereerde tokenbestanden.
+
+### Tokens
+
+Componenten, in een nieuw `beeld.json`: `beeld.marge` (`ruimte.6`, boven en onder het grote beeld in de rechterkolom), `beeld.afstand-haarlijn` (`ruimte.8`, tussen de planken en de haarlijn), `beeld.band-hoogte` (28vh) en `beeld.band-hoogte-breed` (32vh), `beeld.kwaliteit-avif` (55) en `beeld.kwaliteit-webp` (72).
+
+In `binnenkomst.json` komen vier vertragingen bij: `beeld-groot` (300 ms), `bijschrift-groot` (450 ms), `beeld-klein` (450 ms) en `bijschrift-klein` (600 ms). In `statement.json` komt `cap-naast-beeld`. Nieuwe primitieven zijn niet nodig: `verhouding.*`, `beweging.afstand.masker`, `beweging.schaal.onthul`, `beweging.binnenkomst-beeld` en `beweging.hover-beeld` staan er al, en het bijschrift gebruikt de bestaande `bijschrift.*`.
+
+### Afwijkingen die ik wil maken
+
+1. **Het gordijn volgt `70-motion.mdc`, niet de prompt.** De regel beschrijft `clip-path` van `inset(0 0 var(--k-beweging-afstand-masker) 0)` naar `inset(0)`, de prompt noemt `inset(100% 0 0 0)`. Ik houd de regel aan, want die waarde staat als token vast en de rules gelden onverkort. Het beeld onthult daarmee van boven naar onder.
+2. **Geen `.contact-kolom`.** De twee kolommen op mobiel lukken met rasterplaatsing op de bestaande blokken. Een wikkelende `div` zou alleen bestaan om een kolom te maken, en `40-clean-code.mdc` regel 27 verbiedt dat. De class komt dus niet in de woordenlijst.
+3. **De preload staat in `Basis.astro`.** Een component in de `body` kan niets aan `<head>` toevoegen. `Beeld.astro` zet daarom zelf `loading="eager"`, `fetchpriority="high"` en `decoding="async"`, en de pagina geeft de AVIF-srcset van het dressoir aan de layout mee.
+4. **Geen `beweringen[]` op deze branch.** De contentcollecties staan op `feature/volledige-site`; hier bestaat alleen `instellingen`. Met de neutrale fallbacks ("Dressoir, uit de werkplaats" en "Boomstamplanken") staat er ook geen bewering in de bijschriften. Vult Rik of Thomas wel een titel, materiaal of jaar in, dan is dat een bewering en hoort die in `site.json` tot de volledige site terug is.
+
+### Drie vragen, en dan bouw ik af
+
+1. **Zijn beide foto's eigen beeld van Kolling, en mogen ze op kolling.nl staan?** Het dressoirbestand heet `wood_example` en het staat in een gestileerde studio-opstelling met objecten die niet van Kolling lijken. Zonder een expliciet ja gaat geen van de twee de repository in; dat is de reden dat ze er nu nog niet staan.
+2. **Komt er een origineel van minimaal 2400 px, en van het dressoir bij voorkeur ruimer gefotografeerd?** Met het huidige bestand is de rechterkolom op een 1440-breed scherm ongeveer 340 px breed en haalt 614 px net geen twee keer de pixeldichtheid. Met een ruimer origineel klopt zowel de uitsnede als de scherpte, en dan kan het OG-beeld zonder opschalen.
+3. **Als er geen ruimer origineel komt: 3:2 in de rechterkolom in plaats van 4:5?** Dan staat het hele dressoir in beeld, blijft de hand met de schaal erbij en is het bestand groot genoeg. Het beeld wordt lager dan de kolom hoog is, dus het staat onderaan uitgelijnd met het statement ernaast. Het alternatief is 4:5 met `position: 'right'`: strakker van vorm, maar met een half dressoir en zonder de hand.
+
 ## Wat open staat
 
 1. **Woordmerk als SVG.** Het huidige `d-logo.svg` is een export met een ingesloten bitmap van 1065 px breed en een luminantiemasker. `pnpm og` rendert daaruit `woordmerk.png` op 480 px, het OG-beeld en het favicon. Een echte outline-SVG maakt die stap onnodig en is scherper op elk formaat.
