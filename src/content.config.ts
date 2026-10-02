@@ -19,6 +19,7 @@ const instellingen = defineCollection({
     kvk: z.string().min(1),
     geo: z.string().min(1),
     instagram: z.string().url(),
+    whatsapp: z.string().url(),
     bezoek: z.string().min(1),
     cta: z.object({ primair: z.string().min(1), secundair: z.string().min(1) }),
     seo: z.object({ titelSuffix: z.string().min(1), beschrijving: z.string().min(1) }),

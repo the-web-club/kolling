@@ -103,6 +103,8 @@
   --binnenkomst-blok-twee: 890ms;
   --binnenkomst-blok-drie: 980ms;
   --binnenkomst-micro: 1000ms;
+  --icoon-maat: 1rem;
+  --icoon-lijndikte: 1.1;
   --invoer-hoogte: 3rem;
   --invoer-grootte: 1rem;
   --knop-hoogte: 3rem;
@@ -197,6 +199,7 @@
   --tekst-label-regelhoogte: var(--k-letter-regelhoogte-kop);
   --tekst-label-spatiering: var(--k-letter-spatiering-kapitaal);
   --bijschrift-ruimte-boven: var(--k-ruimte-3);
+  --icoon-ruimte: var(--k-ruimte-2);
   --invoer-padding-inline: var(--k-ruimte-3);
   --invoer-radius: var(--k-radius-invoer);
   --label-gewicht: var(--k-letter-gewicht-medium);
@@ -219,6 +222,8 @@
   --bijschrift-voorgrond: var(--kleur-voorgrond-subtiel);
   --plaatshouder-label-grootte: var(--tekst-label-grootte);
   --plaatshouder-label-voorgrond: var(--kleur-voorgrond-gedempt);
+  --icoon-voorgrond: var(--kleur-voorgrond-subtiel);
+  --icoon-voorgrond-hover: var(--kleur-voorgrond);
   --invoer-achtergrond: var(--kleur-achtergrond-verhoogd);
   --invoer-voorgrond: var(--kleur-voorgrond);
   --invoer-rand: var(--kleur-lijn);

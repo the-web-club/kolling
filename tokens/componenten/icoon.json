@@ -1,0 +1,9 @@
+{
+  "icoon": {
+    "maat": { "$value": "1rem", "$type": "dimension" },
+    "lijndikte": { "$value": "1.1", "$type": "number" },
+    "voorgrond": { "$value": "{kleur.voorgrond-subtiel}", "$type": "color" },
+    "voorgrond-hover": { "$value": "{kleur.voorgrond}", "$type": "color" },
+    "ruimte": { "$value": "{primitief.ruimte.2}", "$type": "dimension" }
+  }
+}

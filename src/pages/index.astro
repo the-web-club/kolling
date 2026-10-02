@@ -1,6 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 import woordmerk from '@/assets/merk/woordmerk.png';
+import { Envelop, Instagram, Pin, Telefoon, Whatsapp } from '@/components/iconen';
 import Basis from '@/layouts/Basis.astro';
 import { haalInstellingen, isBekend } from '@/lib/content';
 
@@ -65,31 +66,42 @@ const microregel = isBekend(instellingen.kvk)
       <div class="blokken">
         <div class="blok" data-onthul="omhoog">
           <h2 class="label">Werkplaats</h2>
-          <address>
-            {adresregel}<br />
-            Bezoek op afspraak
+          <address class="regels">
+            <span class="regel-met-icoon"><Pin />{adresregel}</span>
+            <span class="noot">Bezoek op afspraak</span>
           </address>
         </div>
 
         <div class="blok" data-onthul="omhoog">
           <h2 class="label">{instellingen.cta.primair}</h2>
-          <p>
-            <a class="schakel" href={`tel:${telefoon.e164}`}>{telefoon.weergave}</a>
+          <div class="regels">
+            <a class="schakel" href={`tel:${telefoon.e164}`}>
+              <Telefoon />
+              <span class="tekst">{telefoon.weergave}</span>
+            </a>
+            <a class="schakel" href={instellingen.whatsapp} rel="noopener">
+              <Whatsapp />
+              <span class="tekst">WhatsApp</span>
+            </a>
             {
               heeftEmail && (
                 <a class="schakel" href={`mailto:${instellingen.email}`}>
-                  {instellingen.email}
+                  <Envelop />
+                  <span class="tekst">{instellingen.email}</span>
                 </a>
               )
             }
-          </p>
+          </div>
         </div>
 
         <div class="blok" data-onthul="omhoog">
           <h2 class="label">Volg het werk</h2>
-          <p>
-            <a class="schakel" href={instellingen.instagram} rel="noopener">Instagram</a>
-          </p>
+          <div class="regels">
+            <a class="schakel" href={instellingen.instagram} rel="noopener">
+              <Instagram />
+              <span class="tekst">Instagram</span>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -229,13 +241,37 @@ const microregel = isBekend(instellingen.kvk)
     color: var(--kleur-voorgrond-subtiel);
   }
 
+  .regels {
+    display: grid;
+    gap: var(--ruimte-stapel-sm);
+    justify-items: start;
+  }
+
+  .regel-met-icoon,
   .schakel {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--icoon-ruimte);
+  }
+
+  /* De onderstreping zit op de tekst, niet op de link, zodat het icoon
+     onderstreping noch padding meekrijgt. */
+  .tekst {
     background-image: linear-gradient(var(--kleur-voorgrond), var(--kleur-voorgrond));
     background-repeat: no-repeat;
-    background-position: 0 100%;
+    background-position: 100% 100%;
     background-size: 0 var(--link-onderstreping-dikte);
     padding-block-end: var(--link-onderstreping-afstand);
+  }
+
+  .regel-met-icoon :global(.icoon),
+  .schakel :global(.icoon) {
+    flex-shrink: 0;
+    color: var(--icoon-voorgrond);
+  }
+
+  .noot {
+    padding-inline-start: calc(var(--icoon-maat) + var(--icoon-ruimte));
   }
 
   .micro {
@@ -246,13 +282,29 @@ const microregel = isBekend(instellingen.kvk)
     color: var(--kleur-voorgrond-subtiel);
   }
 
+  /* De lijn tekent van links in en trekt zich naar rechts terug: het
+     ankerpunt wisselt pas als de lijn weg is. */
   @media (hover: hover) and (pointer: fine) {
-    .schakel {
-      transition: background-size var(--beweging-hover);
+    .tekst {
+      transition:
+        background-size var(--beweging-hover),
+        background-position 0s var(--k-beweging-duur-snel);
     }
 
-    .schakel:hover {
+    .schakel :global(.icoon) {
+      transition: color var(--beweging-hover);
+    }
+
+    .schakel:hover .tekst {
+      background-position: 0 100%;
       background-size: 100% var(--link-onderstreping-dikte);
+      transition:
+        background-size var(--beweging-hover),
+        background-position 0s;
+    }
+
+    .schakel:hover :global(.icoon) {
+      color: var(--icoon-voorgrond-hover);
     }
   }
 
@@ -309,7 +361,11 @@ const microregel = isBekend(instellingen.kvk)
     }
 
     .blokken {
-      gap: var(--ruimte-6) var(--ruimte-goot);
+      gap: var(--ruimte-5) var(--ruimte-goot);
+    }
+
+    .regels {
+      gap: var(--ruimte-1);
     }
   }
 
@@ -334,6 +390,10 @@ const microregel = isBekend(instellingen.kvk)
 
     .blokken {
       gap: var(--ruimte-stapel-sm) var(--ruimte-goot);
+    }
+
+    .regels {
+      gap: var(--ruimte-1);
     }
   }
 </style>

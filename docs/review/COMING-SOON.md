@@ -88,10 +88,21 @@ Per viewport uit de tabel: geen scrollbar, de microregel binnen beeld, de twee k
 
 Reduced motion zet je in de systeeminstellingen aan, of in DevTools onder Rendering. Zonder JavaScript test je door scripts te blokkeren; de pagina hoort dan volledig zichtbaar te zijn met alleen "Ommen" in plaats van "Ommen, 19:48".
 
+## Iconen, e-mail en WhatsApp
+
+Het e-mailadres is `thomas@kolling.nl`. De mailto-link stond al klaar en verschijnt nu automatisch. WhatsApp is toegevoegd als `https://wa.me/31613622276`, hetzelfde nummer als de telefoonlink; de bewering of dat nummer WhatsApp heeft is daarmee beantwoord en uit `site.json` gehaald.
+
+De voet heeft nu een eigen iconenset in `src/components/iconen/`: `Pin`, `Telefoon`, `Whatsapp`, `Envelop` en `Instagram`. Geen library, maar vijf inline SVG's met dezelfde haarlijn als de rest van de site: viewBox 24, lijndikte 1,1, vierkante uiteinden en hoeken in verstek. Dat sluit aan op radius 0 en de haarlijnen in het design system. De maat, de dikte, de kleur en de afstand tot de tekst staan in `tokens/componenten/icoon.json`.
+
+De iconen doen hier echt werk: telefoon, WhatsApp en e-mail zijn drie verschillende acties op dezelfde regel tekst, en zonder icoon zou je ze alleen aan hun label kunnen onderscheiden. Bij hover wordt het icoon van `voorgrond-subtiel` naar `voorgrond` en tekent de onderstreping onder de tekst in. Die lijn zit op een `span` om de tekst, niet op de link, zodat het icoon geen streep meekrijgt.
+
+Let op: de oorspronkelijke opdracht voor deze pagina zei "geen social-iconen". Die zijn er nu wel, op jouw verzoek. Ze zijn eigen werk in de huisstijl, geen merkglyphs uit een pakket.
+
+Door de twee extra regels liep 320 bij 568 vier pixels over. De regelafstand binnen een blok gaat daarom onder 44 rem hoogte naar `ruimte.1` en de blokafstand naar `ruimte.5`. Alle acht formaten passen weer, met minimaal 16 px over.
+
 ## Wat open staat
 
 1. **Woordmerk als SVG.** Het huidige `d-logo.svg` is een export met een ingesloten bitmap van 1065 px breed en een luminantiemasker. `pnpm og` rendert daaruit `woordmerk.png` op 480 px, het OG-beeld en het favicon. Een echte outline-SVG maakt die stap onnodig en is scherper op elk formaat.
-2. **E-mailadres.** Nog `[VUL IN]` in `site.json`. De pagina laat de mailto-link dan weg; zodra het veld gevuld is verschijnt die automatisch onder "Bespreek je idee".
-3. **KvK-nummer.** Ook nog `[VUL IN]`. De microregel voegt het er zelf bij zodra het bekend is.
-4. **Licentiefonts.** Mint Grotesk en Apercu vervangen Instrument Sans en Work Sans met één tokenwijziging plus twee bestanden in `public/fonts`. De metrische correcties op de terugvalstack horen dan opnieuw bepaald te worden.
-5. **Lighthouse.** Meten op de productie-URL, volgens `docs/DEPLOY.md`.
+2. **KvK-nummer.** Nog `[VUL IN]` in `site.json`. De microregel voegt het er zelf bij zodra het bekend is.
+3. **Licentiefonts.** Mint Grotesk en Apercu vervangen Instrument Sans en Work Sans met één tokenwijziging plus twee bestanden in `public/fonts`. De metrische correcties op de terugvalstack horen dan opnieuw bepaald te worden.
+4. **Lighthouse.** Meten op de productie-URL, volgens `docs/DEPLOY.md`.
