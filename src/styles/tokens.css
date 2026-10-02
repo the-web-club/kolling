@@ -257,6 +257,7 @@
   --pagina-blok-ruimte: var(--k-ruimte-8);
   --pagina-blok-ruimte-breed: var(--k-ruimte-4);
   --pagina-micro-ruimte: var(--k-ruimte-6);
+  --pagina-kopruimte-breed: var(--k-ruimte-8);
   --beeld-achtergrond: var(--kleur-achtergrond-tint);
   --bijschrift-grootte: var(--tekst-label-grootte);
   --bijschrift-spatiering: var(--tekst-label-spatiering);

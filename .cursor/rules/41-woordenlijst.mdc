@@ -265,7 +265,7 @@ Waar een token en een groep dezelfde naam zouden krijgen, staat er een koppeltek
 
 1. Primitief: `beweging.duur.kort` (200ms), `beweging.duur.overgang` (400ms)
 2. Semantisch: `tekst.menu.*` en `tekst.menu-kort.*` (de menu-items), `beweging.menu`, `beweging.menu-vertrek`
-3. Componenten: `menu.*` (de popover), `binnenkort.*` (de sectiepagina), en `navigatie.*` aangevuld met `gewicht`, `ruimte`, `indicator-afstand`, `indicator-dikte`, `lijn-actief`, `overgang`, `aanraakdoel`, `trap`, `trap-start`
+3. Componenten: `menu.*` (de popover), `binnenkort.*` (de sectiepagina), `pagina.kopruimte-breed` (de ruimte onder de koprij vanaf 64 rem), en `navigatie.*` aangevuld met `gewicht`, `ruimte`, `indicator-afstand`, `indicator-dikte`, `lijn-actief`, `overgang`, `aanraakdoel`, `trap`, `trap-start`
 
 ### Bestanden
 

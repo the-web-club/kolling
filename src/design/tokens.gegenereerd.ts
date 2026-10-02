@@ -297,6 +297,7 @@ export const tokens: readonly Token[] = [
   { naam: 'pagina-blok-ruimte', pad: 'pagina.blok-ruimte', laag: 'componenten', waarde: "2rem" },
   { naam: 'pagina-blok-ruimte-breed', pad: 'pagina.blok-ruimte-breed', laag: 'componenten', waarde: "1rem" },
   { naam: 'pagina-micro-ruimte', pad: 'pagina.micro-ruimte', laag: 'componenten', waarde: "1.5rem" },
+  { naam: 'pagina-kopruimte-breed', pad: 'pagina.kopruimte-breed', laag: 'componenten', waarde: "2rem" },
   { naam: 'merk-hoogte', pad: 'merk.hoogte', laag: 'componenten', waarde: "2.1875rem" },
   { naam: 'merk-hoogte-breed', pad: 'merk.hoogte-breed', laag: 'componenten', waarde: "2.5rem" },
   { naam: 'statement-cap', pad: 'statement.cap', laag: 'componenten', waarde: "8.9cqi" },

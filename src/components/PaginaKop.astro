@@ -108,4 +108,13 @@ const { naam, adres } = await haalInstellingen();
       grid-column: 3;
     }
   }
+
+  /* Vanaf 64 rem staat de navigatie in de koprij en komt de kop van de pagina
+     er vlak onder. De extra ruimte valt weg op korte schermen, waar de pagina
+     binnen één beeld moet blijven. */
+  @media (min-width: 64rem) and (min-height: 44.0625rem) {
+    .pagina-kop {
+      padding-block-end: var(--pagina-kopruimte-breed);
+    }
+  }
 </style>
