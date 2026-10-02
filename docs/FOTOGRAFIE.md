@@ -14,12 +14,12 @@ De site is gebouwd op een witte galerie: veel ruimte, rustige typografie en het 
 
 De site gebruikt vier verhoudingen. Fotografeer ruim, zodat elke uitsnede nog kan.
 
-| Verhouding | Waarvoor |
-| --- | --- |
-| 3:2 liggend | totaalbeeld van een meubel in een ruimte |
-| 4:5 staand | hoge kasten, detail van een verbinding, Thomas aan het werk |
-| 1:1 vierkant | materiaal en close-ups |
-| 16:9 breed | een wand of keuken over de volle breedte |
+| Verhouding   | Waarvoor                                                    |
+| ------------ | ----------------------------------------------------------- |
+| 3:2 liggend  | totaalbeeld van een meubel in een ruimte                    |
+| 4:5 staand   | hoge kasten, detail van een verbinding, Thomas aan het werk |
+| 1:1 vierkant | materiaal en close-ups                                      |
+| 16:9 breed   | een wand of keuken over de volle breedte                    |
 
 ## Per project
 

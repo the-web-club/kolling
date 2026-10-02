@@ -1,104 +1,115 @@
+/* Beweging volgens 70-motion.mdc. Eén scherm, dus geen IntersectionObserver:
+   de choreografie loopt op animation-delay. */
+
 @media (prefers-reduced-motion: no-preference) {
-  :root {
-    scroll-behavior: smooth;
+  [data-laag='licht'] {
+    animation: licht-trekt var(--k-beweging-duur-ambient) var(--k-beweging-curve-ambient) infinite
+      alternate;
   }
 
-  [data-binnenkomst='hero'] {
-    animation: hero-omhoog var(--beweging-binnenkomst-hero) both;
+  [data-laag='schaduw'] {
+    animation: schaduw-trekt calc(var(--k-beweging-duur-ambient) * 1.55)
+      var(--k-beweging-curve-ambient) infinite alternate;
   }
 
   [data-js] [data-onthul='omhoog'] {
     opacity: 0;
-    translate: 0 var(--k-beweging-afstand-md);
-    transition:
-      opacity var(--beweging-binnenkomst),
-      translate var(--beweging-binnenkomst);
-    transition-delay: var(--onthul-vertraging, 0ms);
+    animation: omhoog var(--beweging-binnenkomst) both;
+    animation-delay: var(--onthul-vertraging, 0ms);
   }
 
-  /* Het masker staat op het eerste kind, niet op het element zelf: een element met
-     een clip-path van nul oppervlak kruist nooit de viewport en zou nooit onthullen. */
-  [data-js] [data-onthul='gordijn'] > :first-child {
-    clip-path: inset(0 0 var(--k-beweging-afstand-masker) 0);
-    scale: var(--k-beweging-schaal-onthul);
-    transition:
-      clip-path var(--beweging-binnenkomst-beeld),
-      scale var(--beweging-binnenkomst-beeld);
-    transition-delay: var(--onthul-vertraging, 0ms);
+  [data-js] [data-onthul='fade'] {
+    opacity: 0;
+    animation: verschijn var(--k-beweging-duur-basis) linear both;
+    animation-delay: var(--onthul-vertraging, 0ms);
   }
 
   [data-js] [data-onthul='lijn'] {
     scale: 0 1;
     transform-origin: left center;
-    transition: scale var(--beweging-binnenkomst);
-    transition-delay: var(--onthul-vertraging, 0ms);
+    animation: lijn-tekent var(--k-beweging-duur-trager) var(--k-beweging-curve-uit-expo) both;
+    animation-delay: var(--onthul-vertraging, 0ms);
   }
 
   [data-js] [data-onthul-regel] {
     display: block;
-    overflow: clip;
+    clip-path: inset(-0.1em 0 -0.25em 0);
   }
 
   [data-js] [data-onthul-regel] > span {
     display: block;
-    translate: 0 110%;
-    transition: translate var(--beweging-binnenkomst);
-    transition-delay: var(--onthul-vertraging, 0ms);
-  }
-
-  [data-onthul='omhoog'][data-in-beeld] {
-    opacity: 1;
-    translate: 0 0;
-  }
-
-  [data-onthul='gordijn'][data-in-beeld] > :first-child {
-    clip-path: inset(0);
-    scale: 1;
-  }
-
-  [data-onthul='lijn'][data-in-beeld] {
-    scale: 1 1;
-  }
-
-  [data-onthul-regel][data-in-beeld] > span {
-    translate: 0 0;
-  }
-
-  ::view-transition-old(root) {
-    animation: pagina-weg var(--beweging-pagina-uit) both;
-  }
-
-  ::view-transition-new(root) {
-    animation: pagina-terug var(--beweging-pagina-in) both;
+    animation: regel-omhoog var(--k-beweging-duur-trager) var(--k-beweging-curve-uit-expo) both;
+    animation-delay: var(--onthul-vertraging, 0ms);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-js] [data-onthul] {
-    opacity: 0;
-    transition: opacity 200ms linear;
+  [data-js] [data-onthul],
+  [data-js] [data-onthul-regel] > span {
+    animation: verschijn 200ms linear both;
   }
+}
 
-  [data-onthul][data-in-beeld] {
+@keyframes licht-trekt {
+  from {
+    translate: -6% -3%;
+    rotate: -2deg;
+    opacity: 0.55;
+  }
+  to {
+    translate: 6% 3%;
+    rotate: 2deg;
+    opacity: 0.85;
+  }
+}
+
+@keyframes schaduw-trekt {
+  from {
+    translate: 5% 2%;
+    rotate: 1.5deg;
+    opacity: 0.8;
+  }
+  to {
+    translate: -5% -2%;
+    rotate: -1.5deg;
+    opacity: 0.45;
+  }
+}
+
+@keyframes verschijn {
+  from {
+    opacity: 0;
+  }
+  to {
     opacity: 1;
   }
 }
 
-@keyframes hero-omhoog {
+@keyframes omhoog {
   from {
     opacity: 0;
-    translate: 0 var(--k-beweging-afstand-lg);
+    translate: 0 var(--k-beweging-afstand-md);
   }
-}
-
-@keyframes pagina-weg {
   to {
-    opacity: 0;
+    opacity: 1;
+    translate: 0 0;
   }
 }
 
-@keyframes pagina-terug {
+@keyframes regel-omhoog {
   from {
-    opacity: 0;
+    translate: 0 110%;
+  }
+  to {
+    translate: 0 0;
+  }
+}
+
+@keyframes lijn-tekent {
+  from {
+    scale: 0 1;
+  }
+  to {
+    scale: 1 1;
   }
 }

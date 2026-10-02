@@ -1,9 +1,6 @@
 import StyleDictionary from 'style-dictionary';
 
-export const GEGENEREERDE_BESTANDEN = [
-  'src/styles/tokens.css',
-  'src/design/tokens.gegenereerd.ts',
-];
+export const GEGENEREERDE_BESTANDEN = ['src/styles/tokens.css', 'src/design/tokens.gegenereerd.ts'];
 
 const LAGEN = ['primitief', 'semantisch', 'componenten'];
 
@@ -36,7 +33,8 @@ StyleDictionary.registerFormat({
   name: 'ts/kolling',
   format: ({ dictionary }) => {
     const regels = dictionary.allTokens.map((token) => {
-      const pad = token.path[0] === 'primitief' ? token.path.slice(1).join('.') : token.path.join('.');
+      const pad =
+        token.path[0] === 'primitief' ? token.path.slice(1).join('.') : token.path.join('.');
       return `  { naam: '${token.name}', pad: '${pad}', laag: '${laagVan(token)}', waarde: ${JSON.stringify(String(token.$value))} },`;
     });
 
@@ -62,11 +60,7 @@ StyleDictionary.registerFormat({
 
 export function maakConfiguratie(doelmap) {
   return {
-    source: [
-      'tokens/primitief/*.json',
-      'tokens/semantisch/*.json',
-      'tokens/componenten/*.json',
-    ],
+    source: ['tokens/primitief/*.json', 'tokens/semantisch/*.json', 'tokens/componenten/*.json'],
     log: { verbosity: 'silent' },
     platforms: {
       css: {

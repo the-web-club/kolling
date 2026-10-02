@@ -1,6 +1,4 @@
 @import './tokens.css';
-@import '@fontsource-variable/instrument-sans/wght.css';
-@import '@fontsource-variable/work-sans/wght.css';
 @import 'tailwindcss';
 
 @theme inline {
@@ -30,6 +28,24 @@
   --spacing-rij-lg: var(--ruimte-rij-lg);
 }
 
+@font-face {
+  font-family: 'Instrument Sans Variable';
+  src: url('/fonts/instrument-sans-latijn.woff2') format('woff2-variations');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+2000-206F, U+20AC, U+2122, U+2212;
+}
+
+@font-face {
+  font-family: 'Work Sans Variable';
+  src: url('/fonts/work-sans-latijn.woff2') format('woff2-variations');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+2000-206F, U+20AC, U+2122, U+2212;
+}
+
 /* Terugval zolang Mint Grotesk en Apercu niet gelicentieerd zijn. De overrides
    benaderen de metriek van de webfonts, zodat tekst niet zichtbaar verspringt. */
 @font-face {
@@ -50,6 +66,15 @@
   line-gap-override: 0%;
 }
 
+/* De site is nu één scherm. Deze regels gaan weg zodra de volledige site
+   terugkomt; die scrollt wel. */
+html,
+body {
+  block-size: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 :root {
   color-scheme: light;
   -webkit-text-size-adjust: 100%;
@@ -58,10 +83,6 @@
 
 body {
   margin: 0;
-  min-block-size: 100vh;
-  /* Secties met een doorlopende tint rekenen met 100vw; clip voorkomt dat de
-     breedte van de verticale scrollbar horizontaal scrollen oplevert. */
-  overflow-x: clip;
   font-family: var(--tekst-lopend-familie);
   font-size: var(--tekst-lopend-grootte);
   font-weight: var(--tekst-lopend-gewicht);
@@ -69,22 +90,6 @@ body {
   font-kerning: normal;
   color: var(--kleur-voorgrond);
   background-color: var(--kleur-achtergrond);
-}
-
-main {
-  display: grid;
-  gap: var(--ruimte-sectie);
-  padding-block: var(--ruimte-sectie);
-}
-
-section {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: var(--ruimte-goot);
-  inline-size: 100%;
-  max-inline-size: var(--maat-container);
-  margin-inline: auto;
-  padding-inline: var(--ruimte-goot);
 }
 
 h1,
@@ -138,17 +143,12 @@ a {
   text-underline-offset: var(--link-onderstreping-afstand);
 }
 
-figure {
-  margin: 0;
+address {
+  font-style: normal;
 }
 
-figcaption {
-  margin-block-start: var(--bijschrift-ruimte-boven);
-  font-size: var(--bijschrift-grootte);
-  font-weight: var(--bijschrift-gewicht);
-  letter-spacing: var(--bijschrift-spatiering);
-  text-transform: uppercase;
-  color: var(--bijschrift-voorgrond);
+figure {
+  margin: 0;
 }
 
 ::selection {
@@ -159,21 +159,4 @@ figcaption {
 :focus-visible {
   outline: 2px solid var(--kleur-lijn-sterk);
   outline-offset: 2px;
-}
-
-@media print {
-  body {
-    color: var(--k-kleur-inkt-1000);
-    background: none;
-  }
-
-  main {
-    gap: var(--ruimte-blok);
-    padding-block: 0;
-  }
-
-  a::after {
-    content: ' (' attr(href) ')';
-    font-size: var(--tekst-klein-grootte);
-  }
 }

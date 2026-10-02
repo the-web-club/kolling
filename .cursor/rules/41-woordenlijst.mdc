@@ -187,3 +187,34 @@ Waar een token en een groep dezelfde naam zouden krijgen, staat er een koppeltek
 7. `data-richting="onder | rechts"` op `Chevron`
 8. `data-gescrold` op `<html>` na acht pixels scrollen
 9. `data-gekoppeld` op `PaginaKop`, zodat de blijvende kop maar één keer luisteraars krijgt
+
+## Aangevuld voor de coming-soon pagina
+
+### Componenten
+
+1. `LichtAchtergrond.astro` (het bewegende licht achter de pagina)
+
+### Classes
+
+1. `.licht` (de vaste laag achter alles), `.vlak` (één lichtvlak), `.korrel` (de statische textuur)
+2. `.pagina` (het ene scherm), `.kop` (bovenste rij), `.statement` (middelste rij), `.contact` (onderste rij)
+3. `.blokken` (het raster met de drie contactblokken), `.blok` (één blok), `.lijn` (de haarlijn), `.micro` (de microregel), `.merk` (het woordmerk), `.plaats` (plaatsnaam met tijd), `.regel` (één regel van de kop), `.schakel` (een link met intekenende onderstreping), `.voet` (de voet van de 404)
+
+### Data-attributen
+
+1. `data-laag="licht | schaduw"` op een lichtvlak
+2. `data-onthul="fade"` naast `omhoog` en `lijn`, voor een enkele opacity-fade
+3. `data-klok` op het `time`-element dat de lokale tijd in Ommen toont
+
+### Tokens
+
+1. Primitief: `beweging.duur.ambient`, `beweging.curve.ambient`
+2. Semantisch: `kleur.licht.warm`, `kleur.licht.koel`, `tekst.display-kort.*`
+3. Componenten: `binnenkomst.*` (de vertraging per element in de choreografie), `merk.hoogte`, `merk.hoogte-breed`
+
+### Bestanden
+
+1. `src/assets/merk/woordmerk.png` (gegenereerd uit `d-logo.svg`; later `woordmerk.svg`)
+2. `public/fonts/instrument-sans-latijn.woff2`, `public/fonts/work-sans-latijn.woff2`
+3. `public/favicon.png`, `public/og.png` (beide gegenereerd)
+4. `scripts/maak-og.mjs` (rendert woordmerk, OG-beeld en favicon uit het logo)

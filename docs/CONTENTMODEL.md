@@ -4,14 +4,14 @@ Alles wat op de site staat komt uit `src/content`. De schema's staan in `src/con
 
 ## Collecties
 
-| Collectie | Bron | Route |
-| --- | --- | --- |
-| `projecten` | `src/content/projecten/*.md` | `/werk` en `/werk/[slug]` |
-| `diensten` | `src/content/diensten/*.md` | `/maatwerk` en `/maatwerk/[slug]` |
-| `edities` | `src/content/edities/*.md` | `/edities` en `/edities/[slug]` |
-| `locaties` | `src/content/locaties/*.md` | `/werkgebied` en `/werkgebied/[plaats]` |
-| `faq` | `src/content/faq/algemeen.json` | hergebruikt per pagina via `paginas[]` |
-| `instellingen` | `src/content/instellingen/site.json` | overal |
+| Collectie      | Bron                                 | Route                                   |
+| -------------- | ------------------------------------ | --------------------------------------- |
+| `projecten`    | `src/content/projecten/*.md`         | `/werk` en `/werk/[slug]`               |
+| `diensten`     | `src/content/diensten/*.md`          | `/maatwerk` en `/maatwerk/[slug]`       |
+| `edities`      | `src/content/edities/*.md`           | `/edities` en `/edities/[slug]`         |
+| `locaties`     | `src/content/locaties/*.md`          | `/werkgebied` en `/werkgebied/[plaats]` |
+| `faq`          | `src/content/faq/algemeen.json`      | hergebruikt per pagina via `paginas[]`  |
+| `instellingen` | `src/content/instellingen/site.json` | overal                                  |
 
 ## projecten
 

@@ -15,6 +15,10 @@
       "eik": { "$value": "{primitief.kleur.hout.eik.400}", "$type": "color" },
       "noten": { "$value": "{primitief.kleur.hout.noten.700}", "$type": "color" },
       "es": { "$value": "{primitief.kleur.hout.es.200}", "$type": "color" }
+    },
+    "licht": {
+      "warm": { "$value": "{primitief.kleur.hout.es.200}", "$type": "color" },
+      "koel": { "$value": "{primitief.kleur.lijn.200}", "$type": "color" }
     }
   }
 }

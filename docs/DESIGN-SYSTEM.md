@@ -4,11 +4,11 @@ Eén bron, drie lagen, gegenereerde output. De visuele referentie staat op `/des
 
 ## Lagen
 
-| Laag | Map | CSS-variabele | Verwijst naar |
-| --- | --- | --- | --- |
-| Primitief | `tokens/primitief` | `--k-kleur-inkt-900` | niets, dit zijn de ruwe waarden |
-| Semantisch | `tokens/semantisch` | `--kleur-voorgrond` | primitief |
-| Componenten | `tokens/componenten` | `--knop-hoogte` | semantisch, of primitief voor maten zonder semantische tegenhanger |
+| Laag        | Map                  | CSS-variabele        | Verwijst naar                                                      |
+| ----------- | -------------------- | -------------------- | ------------------------------------------------------------------ |
+| Primitief   | `tokens/primitief`   | `--k-kleur-inkt-900` | niets, dit zijn de ruwe waarden                                    |
+| Semantisch  | `tokens/semantisch`  | `--kleur-voorgrond`  | primitief                                                          |
+| Componenten | `tokens/componenten` | `--knop-hoogte`      | semantisch, of primitief voor maten zonder semantische tegenhanger |
 
 Componenten gebruiken componenttokens of semantische tokens. Nooit een primitieve token in een component en nooit een losse waarde.
 

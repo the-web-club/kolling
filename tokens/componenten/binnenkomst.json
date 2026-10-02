@@ -1,0 +1,17 @@
+{
+  "binnenkomst": {
+    "kop": { "$value": "0ms", "$type": "duration" },
+    "regel-een": { "$value": "100ms", "$type": "duration" },
+    "regel-twee": { "$value": "190ms", "$type": "duration" },
+    "intro": { "$value": "500ms", "$type": "duration" },
+    "lijn": { "$value": "700ms", "$type": "duration" },
+    "blok-een": { "$value": "800ms", "$type": "duration" },
+    "blok-twee": { "$value": "890ms", "$type": "duration" },
+    "blok-drie": { "$value": "980ms", "$type": "duration" },
+    "micro": { "$value": "1000ms", "$type": "duration" }
+  },
+  "merk": {
+    "hoogte": { "$value": "1.375rem", "$type": "dimension" },
+    "hoogte-breed": { "$value": "1.75rem", "$type": "dimension" }
+  }
+}

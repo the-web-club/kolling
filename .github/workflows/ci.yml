@@ -29,8 +29,8 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      - name: Tests
-        run: pnpm test
+      - name: Opmaak
+        run: pnpm format:check
 
       - name: Build
         run: pnpm build

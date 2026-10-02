@@ -1,65 +1,43 @@
 # Deployment
 
-Vercel met de officiële Astro-adapter. Alle pagina's zijn statisch; alleen `/api/aanvraag` is een serverless functie.
+De coming-soon pagina is een statische Astro-build. Geen adapter, geen serverless functie, geen database.
 
-## Vercel instellen
+## Vercel-project
 
-1. Importeer de repository in Vercel. Het framework wordt automatisch als Astro herkend.
-2. Build command `pnpm build`, output directory laat je leeg (de adapter regelt dat).
-3. Node 22. Dat staat in `.nvmrc` en in `engines`.
-4. Zet `kolling.nl` en `www.kolling.nl` als domeinen en laat `www` doorverwijzen naar het hoofddomein.
-
-Verander niets aan de bestaande MX-, SPF- of DKIM-records van het hoofddomein. De mailinrichting op ProtonMail blijft zoals ze is.
+1. Maak het project aan onder team **tapro** en koppel het aan de repository `the-web-club/kolling`.
+2. Framework preset: **Astro**. Build command `pnpm build`, install command `pnpm install --frozen-lockfile`. De output directory laat je op de standaardwaarde staan.
+3. Productie-branch: **main**. Elke andere branch levert een preview-deployment op.
+4. Node 22. Dat staat in `.nvmrc` en in `engines`.
 
 ## Environment variables
 
-Zet deze in Vercel voor Production en Preview. De namen en lege waarden staan in `.env.example`.
+Alleen `PUBLIC_SITE_URL` met de waarde `https://kolling.nl`, voor Production en Preview. Verder heeft deze pagina geen variabelen nodig; er is geen formulier en geen e-mailverzending.
 
-| Variabele | Nodig | Wat het doet |
-| --- | --- | --- |
-| `RESEND_API_KEY` | ja, voor verzenden | API-sleutel van Resend |
-| `AANVRAAG_ONTVANGER` | ja, voor verzenden | adres waar een aanvraag binnenkomt |
-| `AANVRAAG_AFZENDER` | ja, voor verzenden | afzender, op het geverifieerde subdomein |
-| `AANVRAAG_BCC` | nee | tweede adres dat meeleest |
-| `PUBLIC_TURNSTILE_SITE_KEY` | nee | zet de Turnstile-widget aan |
-| `TURNSTILE_SECRET_KEY` | nee | zet de servercontrole aan |
-| `CRM_WEBHOOK_URL` | nee | tweede afnemer van een aanvraag |
-| `CRM_WEBHOOK_GEHEIM` | nee | bearer-token voor die webhook |
+De canonical en de structured data komen uit `site` in `astro.config.mjs`, niet uit een variabele, zodat een ontbrekende variabele de URL's nooit stil verkeerd zet.
 
-Ontbreken de eerste drie, dan meldt `/contact` dat verzenden niet beschikbaar is en verwijst naar telefoon en Instagram. Het formulier wordt dan niet getoond. Dat is bewust: liever geen formulier dan een formulier dat stilletjes niets doet.
+## Domein
 
-De Turnstile-controle is pas actief als `TURNSTILE_SECRET_KEY` staat ingevuld. Zet die dus niet aan zonder ook `PUBLIC_TURNSTILE_SITE_KEY`, want dan heeft het formulier geen token om mee te sturen en wordt elke aanvraag stil geweigerd.
+1. Voeg in Vercel zowel `kolling.nl` als `www.kolling.nl` toe.
+2. Zet in de DNS van `kolling.nl` de records die Vercel laat zien: een A-record op de apex naar het IP-adres dat Vercel noemt, en een CNAME op `www` naar het Vercel-adres.
+3. Stel in Vercel in dat `www.kolling.nl` doorverwijst naar de apex, zodat er één adres overblijft.
+4. Wacht tot Vercel het certificaat heeft uitgegeven.
 
-## Resend op een subdomein
+**Laat MX-, SPF-, DKIM- en DMARC-records ongemoeid.** Alleen het A-record op de apex en het CNAME op `www` veranderen. De mailinrichting op ProtonMail blijft werken; deze pagina verstuurt zelf geen e-mail.
 
-Verifieer `mail.kolling.nl`, niet het hoofddomein. Zo blijft de bestaande mailinrichting onaangeroerd en raakt een fout in de DNS van het subdomein de gewone mail niet.
+## Na de eerste productiedeploy controleren
 
-1. Voeg in Resend het domein `mail.kolling.nl` toe.
-2. Zet de records die Resend geeft bij de DNS van `kolling.nl`:
-   - de DKIM-record op `resend._domainkey.mail`
-   - de SPF-record op `send.mail` (dat is het return-path van Resend, niet het hoofddomein)
-   - een MX-record op `send.mail` voor bounces
-3. Laat de SPF-record van `kolling.nl` zelf ongemoeid.
-4. Wacht tot Resend het domein als geverifieerd meldt.
-5. Zet `AANVRAAG_AFZENDER` op een adres op dat subdomein, bijvoorbeeld `Kolling <site@mail.kolling.nl>`.
-6. DMARC: staat er nog geen record op `kolling.nl`, begin dan met `p=none` en lees eerst de rapporten.
-
-Zolang het subdomein niet geverifieerd is, kun je testen met het testafzenderadres van Resend naar het adres van je eigen Resend-account. Verstuur tijdens het testen geen berichten naar Thomas.
-
-## Verzending controleren na de eerste deploy
-
-1. Vul de drie variabelen en deploy opnieuw.
-2. Open `/contact` en controleer dat het formulier er staat in plaats van de melding.
-3. Verstuur één aanvraag naar je eigen adres.
-4. Controleer dat de notificatie aankomt met de aanvrager als reply-to, en dat de aanvrager een bevestiging krijgt.
-5. Controleer dat je op `/bedankt` uitkomt. Kom je daar niet, dan is er niets afgeleverd; de site meldt dan ook geen succes.
-
-Meld verzending pas als werkend als deze vijf stappen zijn gelopen.
+1. `https://kolling.nl` toont de pagina op één scherm, zonder scrollbar.
+2. `https://kolling.nl/robots.txt` geeft `User-agent: *` met `Allow: /`. Staat er `Disallow: /`, dan is de productiebuild per ongeluk als preview gebouwd.
+3. De HTML bevat `<meta name="robots" content="index, follow">`.
+4. Een willekeurige onbekende URL geeft de eigen 404 in dezelfde stijl.
+5. `https://kolling.nl/og.png` bestaat, zodat een gedeelde link een afbeelding heeft.
+6. Haal de pagina door de Rich Results Test en controleer dat `LocalBusiness` wordt herkend, zonder `geo` en zonder openingstijden.
+7. Meet Lighthouse mobiel op de productie-URL. Lokaal is dat niet gemeten.
 
 ## Preview-deployments
 
-Vercel zet `VERCEL_ENV=preview`. De site maakt dan elke pagina `noindex`, geeft `robots.txt` een volledige `Disallow: /` en laat `/sitemap.xml` een 404 geven. Controleer na de eerste productiedeploy dat `https://kolling.nl/robots.txt` wel `Allow: /` geeft, zodat productie die instelling niet heeft geërfd.
+Vercel zet `VERCEL_ENV=preview`. De pagina krijgt dan `noindex, nofollow` en `robots.txt` geeft `Disallow: /`. Controleer na de eerste productiedeploy dat productie die instelling niet heeft geërfd (punt 2 hierboven).
 
-## Wat niet in deze opzet zit
+## Later: de volledige site
 
-Geen database, geen analytics, geen cookiemelding, geen edge middleware, geen ISR en geen Vercel-beeldoptimalisatie. Astro maakt de beeldvarianten tijdens de build.
+De volledige site staat op branch `feature/volledige-site`. Die brengt een `@astrojs/vercel`-adapter en één serverless functie voor het aanvraagformulier mee, plus de environment variables uit die branch. Op het moment dat die branch naar `main` gaat, horen die variabelen in Vercel te staan voordat je deployt. De stappen daarvoor staan in `docs/DEPLOY.md` op die branch.

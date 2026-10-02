@@ -1,0 +1,7 @@
+dist/
+.astro/
+.vercel/
+pnpm-lock.yaml
+src/styles/tokens.css
+src/design/tokens.gegenereerd.ts
+docs/FEITENCHECK.md

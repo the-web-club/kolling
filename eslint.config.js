@@ -47,9 +47,15 @@ export default tseslint.config(
     rules: kernregels,
   },
   {
-    files: ['*.config.{js,ts,mjs}', 'tokens/**/*.mjs'],
+    files: ['*.config.{js,ts,mjs}', 'tokens/**/*.mjs', 'scripts/**/*.mjs'],
     languageOptions: {
-      globals: { process: 'readonly', console: 'readonly', URL: 'readonly' },
+      globals: {
+        process: 'readonly',
+        console: 'readonly',
+        URL: 'readonly',
+        Buffer: 'readonly',
+        fetch: 'readonly',
+      },
     },
   },
 );

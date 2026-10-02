@@ -7,12 +7,14 @@
         "traag": { "$value": "600ms", "$type": "duration" },
         "trager": { "$value": "900ms", "$type": "duration" },
         "filmisch": { "$value": "1200ms", "$type": "duration" },
-        "hero": { "$value": "1600ms", "$type": "duration" }
+        "hero": { "$value": "1600ms", "$type": "duration" },
+        "ambient": { "$value": "90000ms", "$type": "duration" }
       },
       "curve": {
         "uit-quint": { "$value": "cubic-bezier(0.22, 1, 0.36, 1)", "$type": "cubicBezier" },
         "uit-expo": { "$value": "cubic-bezier(0.16, 1, 0.3, 1)", "$type": "cubicBezier" },
-        "in-uit-quart": { "$value": "cubic-bezier(0.76, 0, 0.24, 1)", "$type": "cubicBezier" }
+        "in-uit-quart": { "$value": "cubic-bezier(0.76, 0, 0.24, 1)", "$type": "cubicBezier" },
+        "ambient": { "$value": "cubic-bezier(0.37, 0, 0.63, 1)", "$type": "cubicBezier" }
       },
       "trap": {
         "snel": { "$value": "60ms", "$type": "duration" },

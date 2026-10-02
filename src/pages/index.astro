@@ -1,190 +1,320 @@
 ---
-import Beeld from '@/components/Beeld.astro';
-import CtaStrook from '@/components/CtaStrook.astro';
-import Hero from '@/components/Hero.astro';
-import MateriaalLijst from '@/components/MateriaalLijst.astro';
-import ProcesStappen from '@/components/ProcesStappen.astro';
-import SectieIntro from '@/components/SectieIntro.astro';
-import TekstLink from '@/components/TekstLink.astro';
-import WerkRaster from '@/components/WerkRaster.astro';
+import { Picture } from 'astro:assets';
+import woordmerk from '@/assets/merk/woordmerk.png';
 import Basis from '@/layouts/Basis.astro';
-import { haalDiensten, haalInstellingen, haalUitgelichtWerk } from '@/lib/content';
+import { haalInstellingen, isBekend } from '@/lib/content';
 
 const instellingen = await haalInstellingen();
-const uitgelicht = await haalUitgelichtWerk(3);
-const diensten = await haalDiensten();
+const { adres, telefoon } = instellingen;
 
-const PROCES = [
-  {
-    kop: 'Je idee',
-    tekst: 'Je stuurt wat je in gedachten hebt, met maten en foto\u2019s van de ruimte. Daar begint het gesprek.',
-  },
-  {
-    kop: 'Ontwerp en maat',
-    tekst: 'We bepalen de maatvoering, de houtsoort en de afwerking. Bij inbouwwerk wordt er eerst ingemeten.',
-  },
-  {
-    kop: 'In de werkplaats',
-    tekst: 'Het werk wordt in Ommen gemaakt en daar compleet afgewerkt, zodat er op locatie zo weinig mogelijk hoeft te gebeuren.',
-  },
-  {
-    kop: 'Plaatsen',
-    tekst: 'Het meubel wordt geleverd en op zijn plek gezet. Inbouwwerk wordt ter plekke gesteld en afgewerkt.',
-  },
-];
+const titel = 'Kolling, houten maatwerk uit Ommen';
+const beschrijving =
+  'Meubels en houtwerk op maat, gemaakt in eigen werkplaats in Ommen. De website volgt; een idee bespreken kan nu al via 06 13 62 22 76.';
 
-const HEROBEELD = {
-  alt: 'Een eettafel van massief eiken in een lichte ruimte, gezien vanaf de korte zijde',
-  plaatshouder: { tint: 'eik', label: 'Beeld volgt' },
-  verhouding: 'staand',
-} as const;
+const statement = ['Houten maatwerk', 'uit Ommen.'];
+const intro =
+  'Meubels en houtwerk op maat, gemaakt in eigen werkplaats aan de Strangeweg. De website volgt. Een idee bespreken kan nu al.';
+
+const heeftEmail = isBekend(instellingen.email);
+const heeftKvk = isBekend(instellingen.kvk);
 ---
 
-<Basis
-  titel="Meubels en houtwerk op maat"
-  beschrijving={instellingen.seo.beschrijving}
->
-  <Hero
-    kop="Hout dat de ruimte rustiger maakt"
-    intro="Kolling maakt meubels en houtwerk op maat in de eigen werkplaats in Ommen. Eén maker, van het eerste gesprek tot het plaatsen."
-    beeld={HEROBEELD}
-    primair={{ naam: instellingen.cta.primair, pad: '/contact' }}
-    secundair={{ naam: 'Bekijk het werk', pad: '/werk' }}
-  />
+<Basis titel={titel} beschrijving={beschrijving} suffix={false}>
+  <div class="pagina">
+    <header class="kop">
+      <div class="merk" data-onthul="fade">
+        <Picture
+          src={woordmerk}
+          formats={['avif', 'webp']}
+          alt={instellingen.naam}
+          width={56}
+          height={28}
+          densities={[2]}
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+      <p class="plaats" data-onthul="fade">
+        {adres.plaats}<time data-klok></time>
+      </p>
+    </header>
 
-  <section>
-    <SectieIntro label="Werk" kop="Uitgelicht werk">
-      <p>
-        Per stuk gemaakt, dus geen twee projecten zijn gelijk. Bij elk project staat waar het van
-        is en hoe groot het is.
-      </p>
-      <p class="aanduiding">
-        De beelden zijn nog impressies. Eigen projectfoto&rsquo;s volgen.
-      </p>
-    </SectieIntro>
-    <WerkRaster projecten={uitgelicht} />
-    <p class="verder">
-      <TekstLink href="/werk" variant="intekenend">Al het werk bekijken</TekstLink>
-    </p>
-  </section>
+    <main class="statement">
+      <h1>
+        {
+          statement.map((regel) => (
+            <span class="regel" data-onthul-regel>
+              <span>{regel}</span>
+            </span>
+          ))
+        }
+      </h1>
+      <p class="intro" data-onthul="omhoog">{intro}</p>
+    </main>
 
-  <section>
-    <SectieIntro label="Maatwerk" kop="Wat Thomas maakt">
-      <p>
-        Vier soorten werk, elk met een eigen aanpak. Per categorie lees je wat er mogelijk is, voor
-        wie het meestal is en hoe een opdracht verloopt.
-      </p>
-    </SectieIntro>
-    <div class="diensten">
-      {
-        diensten.map((dienst) => (
-          <MateriaalLijst kop={dienst.data.titel} items={dienst.data.voorWie.slice(0, 2)} />
-        ))
-      }
-    </div>
-    <p class="verder">
-      <TekstLink href="/maatwerk" variant="intekenend">Alles over maatwerk</TekstLink>
-    </p>
-  </section>
+    <footer class="contact">
+      <div class="lijn" data-onthul="lijn"></div>
 
-  <section>
-    <SectieIntro label="Werkplaats" kop="Eén werkplaats in Ommen">
-      <p>
-        Alles wordt gemaakt aan de Strangeweg in Ommen. Je kunt op afspraak langskomen om het hout
-        te zien voordat er iets gezaagd wordt.
-      </p>
-      <p>
-        <TekstLink href="/werkplaats" variant="intekenend">Over Thomas en de werkplaats</TekstLink>
-      </p>
-    </SectieIntro>
-    <div class="werkplaatsbeeld">
-      <Beeld
-        beeld={{
-          alt: 'De werkbank in de werkplaats in Ommen, met gereedschap binnen handbereik',
-          plaatshouder: { tint: 'noten', label: 'Beeld volgt' },
-          verhouding: 'breed',
-        }}
-      />
-    </div>
-  </section>
+      <div class="blokken">
+        <div class="blok" data-onthul="omhoog">
+          <h2 class="label">Werkplaats</h2>
+          <address>
+            {adres.straat}, {adres.postcode}
+            {adres.plaats}<br />
+            Bezoek op afspraak
+          </address>
+        </div>
 
-  <section>
-    <SectieIntro label="Werkwijze" kop="Van idee naar uitvoering">
-      <p>Vier stappen, van het eerste bericht tot het meubel dat staat.</p>
-    </SectieIntro>
-    <ProcesStappen stappen={PROCES} />
-  </section>
+        <div class="blok" data-onthul="omhoog">
+          <h2 class="label">{instellingen.cta.primair}</h2>
+          <p>
+            <a class="schakel" href={`tel:${telefoon.e164}`}>{telefoon.weergave}</a>
+            {
+              heeftEmail && (
+                <a class="schakel" href={`mailto:${instellingen.email}`}>
+                  {instellingen.email}
+                </a>
+              )
+            }
+          </p>
+        </div>
 
-  <section class="tintstrook">
-    <SectieIntro label="Edities" kop="Ook Thomas heeft zo zijn ideeën">
-      <p>
-        Naast opdrachten werkt hij aan eigen ontwerpen, die in een beperkte oplage worden gemaakt.
-        Die collectie is nog in ontwikkeling, dus er is nog niets te koop.
-      </p>
-      <p>
-        <TekstLink href="/edities" variant="intekenend">Wat Edities worden</TekstLink>
-      </p>
-    </SectieIntro>
-  </section>
+        <div class="blok" data-onthul="omhoog">
+          <h2 class="label">Volg het werk</h2>
+          <p>
+            <a class="schakel" href={instellingen.instagram} rel="noopener">Instagram</a>
+          </p>
+        </div>
+      </div>
 
-  <CtaStrook
-    kop="Wat heb je in gedachten?"
-    tekst="Een maat, een foto van de ruimte, of alleen een idee dat nog niet rond is. Dat is genoeg om te beginnen."
-  />
+      <p class="micro" data-onthul="fade">
+        {instellingen.naam}, {adres.plaats}{heeftKvk && `, KvK ${instellingen.kvk}`}
+      </p>
+    </footer>
+  </div>
 </Basis>
 
+<script is:inline>
+  const klok = document.querySelector('[data-klok]');
+  if (klok) {
+    const opmaak = new Intl.DateTimeFormat('nl-NL', {
+      timeZone: 'Europe/Amsterdam',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+    const zetTijd = () => {
+      const nu = new Date();
+      klok.dateTime = nu.toISOString();
+      klok.textContent = `, ${opmaak.format(nu)}`;
+    };
+    zetTijd();
+    setInterval(zetTijd, 60000);
+  }
+</script>
+
 <style>
-  .verder {
-    grid-column: 1 / -1;
-    margin-block-start: var(--ruimte-stapel-lg);
+  .pagina {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: var(--ruimte-rij-md);
+    block-size: 100dvh;
+    inline-size: 100%;
+    max-inline-size: var(--maat-container);
+    margin-inline: auto;
+    padding: var(--ruimte-goot);
   }
 
-  .aanduiding {
+  .kop {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--ruimte-stapel-md);
+  }
+
+  .merk {
+    --onthul-vertraging: var(--binnenkomst-kop);
+  }
+
+  .merk :global(img) {
+    display: block;
+    block-size: var(--merk-hoogte);
+    inline-size: auto;
+  }
+
+  .plaats {
+    --onthul-vertraging: var(--binnenkomst-kop);
     font-size: var(--tekst-klein-grootte);
+    font-variant-numeric: tabular-nums;
+    color: var(--kleur-voorgrond-gedempt);
+  }
+
+  .statement {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--ruimte-stapel-lg) var(--ruimte-goot);
+    align-content: center;
+  }
+
+  h1 {
+    grid-column: 1 / -1;
+    font-size: var(--tekst-display-grootte);
+    line-height: var(--tekst-display-regelhoogte);
+    letter-spacing: var(--tekst-display-spatiering);
+  }
+
+  .regel:first-child > span {
+    --onthul-vertraging: var(--binnenkomst-regel-een);
+  }
+
+  .regel:last-child > span {
+    --onthul-vertraging: var(--binnenkomst-regel-twee);
+  }
+
+  .intro {
+    --onthul-vertraging: var(--binnenkomst-intro);
+    grid-column: 1 / -1;
+    font-size: var(--tekst-intro-grootte);
+    line-height: var(--tekst-intro-regelhoogte);
+    color: var(--kleur-voorgrond-gedempt);
+  }
+
+  .contact {
+    display: grid;
+    gap: var(--ruimte-4);
+  }
+
+  .lijn {
+    --onthul-vertraging: var(--binnenkomst-lijn);
+    block-size: var(--k-rand-haarlijn);
+    background-color: var(--kleur-lijn);
+  }
+
+  .blokken {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--ruimte-4) var(--ruimte-goot);
+  }
+
+  .blok {
+    display: grid;
+    gap: var(--ruimte-stapel-sm);
+    grid-column: 1 / -1;
+    align-content: start;
+    font-size: var(--tekst-klein-grootte);
+    line-height: var(--tekst-lopend-regelhoogte);
+  }
+
+  .blok:nth-child(1) {
+    --onthul-vertraging: var(--binnenkomst-blok-een);
+  }
+
+  .blok:nth-child(2) {
+    --onthul-vertraging: var(--binnenkomst-blok-twee);
+  }
+
+  .blok:nth-child(3) {
+    --onthul-vertraging: var(--binnenkomst-blok-drie);
+  }
+
+  .label {
+    font-family: var(--tekst-lopend-familie);
+    font-size: var(--tekst-label-grootte);
+    font-weight: var(--tekst-label-gewicht);
+    letter-spacing: var(--tekst-label-spatiering);
+    text-transform: uppercase;
     color: var(--kleur-voorgrond-subtiel);
   }
 
-  .diensten {
-    display: grid;
-    grid-column: 1 / -1;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: var(--ruimte-rij-md) var(--ruimte-goot);
+  .schakel {
+    display: inline-block;
+    background-image: linear-gradient(var(--kleur-voorgrond), var(--kleur-voorgrond));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0 var(--link-onderstreping-dikte);
+    padding-block-end: var(--link-onderstreping-afstand);
   }
 
-  .diensten > :global(*) {
-    grid-column: 1 / -1;
+  .micro {
+    --onthul-vertraging: var(--binnenkomst-micro);
+    max-inline-size: none;
+    font-size: var(--tekst-label-grootte);
+    text-align: end;
+    color: var(--kleur-voorgrond-subtiel);
   }
 
-  .werkplaatsbeeld {
-    grid-column: 1 / -1;
-    margin-block-start: var(--ruimte-stapel-lg);
-  }
+  @media (hover: hover) and (pointer: fine) {
+    .schakel {
+      transition: background-size var(--beweging-hover);
+    }
 
-  .tintstrook {
-    position: relative;
-    padding-block: var(--ruimte-sectie);
-  }
-
-  /* De tint loopt door tot de schermranden; het raster blijft op de goot staan. */
-  .tintstrook::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    inline-size: 100vw;
-    margin-inline-start: calc(50% - 50vw);
-    background-color: var(--kleur-achtergrond-tint);
-  }
-
-  @media (min-width: 48rem) {
-    .diensten > :global(*) {
-      grid-column: span 6;
+    .schakel:hover {
+      background-size: 100% var(--link-onderstreping-dikte);
     }
   }
 
-  @media (min-width: 64rem) {
-    .diensten > :global(*) {
-      grid-column: span 3;
+  @media (min-width: 48rem) {
+    .merk :global(img) {
+      block-size: var(--merk-hoogte-breed);
+    }
+
+    h1,
+    .intro {
+      grid-column: 2 / span 8;
+    }
+
+    .blok:nth-child(1) {
+      grid-column: 2 / span 3;
+    }
+
+    .blok:nth-child(2) {
+      grid-column: 5 / span 3;
+    }
+
+    .blok:nth-child(3) {
+      grid-column: 8 / span 3;
+    }
+  }
+
+  /* Korte schermen: typografie en afstanden één stap kleiner, zodat de pagina
+     nooit hoeft te scrollen. De tweede stap vangt een liggende telefoon op. */
+  @media (max-height: 44rem) {
+    .pagina {
+      gap: var(--ruimte-stapel-md);
+    }
+
+    h1 {
+      font-size: var(--tekst-display-kort-grootte);
+      line-height: var(--tekst-display-kort-regelhoogte);
+      letter-spacing: var(--tekst-display-kort-spatiering);
+    }
+
+    .intro {
+      font-size: var(--tekst-lopend-grootte);
+    }
+
+    .statement {
+      gap: var(--ruimte-stapel-md) var(--ruimte-goot);
+    }
+  }
+
+  @media (max-height: 30rem) {
+    h1 {
+      font-size: var(--tekst-kop3-grootte);
+      line-height: var(--tekst-kop3-regelhoogte);
+      letter-spacing: var(--tekst-kop3-spatiering);
+    }
+
+    .intro {
+      font-size: var(--tekst-klein-grootte);
+    }
+
+    .statement {
+      gap: var(--ruimte-stapel-sm) var(--ruimte-goot);
+    }
+
+    .contact,
+    .blokken {
+      gap: var(--ruimte-stapel-sm) var(--ruimte-goot);
     }
   }
 </style>

@@ -1,0 +1,62 @@
+---
+
+---
+
+<div class="licht" aria-hidden="true">
+  <div class="vlak" data-laag="licht"></div>
+  <div class="vlak" data-laag="schaduw"></div>
+  <div class="korrel"></div>
+</div>
+
+<style>
+  .licht {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    background-color: var(--kleur-achtergrond);
+    pointer-events: none;
+  }
+
+  /* De vlakken lopen buiten het scherm door, zodat de zachte rand van het
+     licht nooit als rand van een element te zien is. */
+  .vlak {
+    position: absolute;
+    inset: -20%;
+  }
+
+  .vlak[data-laag='licht'] {
+    background-image: radial-gradient(
+      55% 45% at 38% 32%,
+      color-mix(in oklab, var(--kleur-licht-warm) 35%, transparent) 0%,
+      color-mix(in oklab, var(--kleur-licht-warm) 18%, transparent) 45%,
+      transparent 72%
+    );
+    opacity: 0.7;
+  }
+
+  .vlak[data-laag='schaduw'] {
+    background-image: radial-gradient(
+      60% 50% at 72% 74%,
+      color-mix(in oklab, var(--kleur-licht-koel) 50%, transparent) 0%,
+      color-mix(in oklab, var(--kleur-licht-koel) 22%, transparent) 50%,
+      transparent 78%
+    );
+    opacity: 0.6;
+  }
+
+  .korrel {
+    position: absolute;
+    inset: 0;
+    opacity: 0.035;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='k'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23k)'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .vlak {
+      will-change: translate;
+    }
+  }
+</style>

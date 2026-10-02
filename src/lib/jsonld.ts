@@ -1,11 +1,4 @@
-import type { Instellingen } from '@/lib/content';
-import type { Kruimel } from '@/lib/seo';
-
-const ONBEKEND = '[VUL IN]';
-
-function isBekend(waarde: string): boolean {
-  return waarde !== ONBEKEND;
-}
+import { isBekend, type Instellingen } from '@/lib/content';
 
 export function maakLocalBusiness(instellingen: Instellingen, site: URL, logo: string): object {
   return {
@@ -43,32 +36,5 @@ export function maakWebsite(instellingen: Instellingen, site: URL): object {
     name: instellingen.naam,
     url: site.href,
     inLanguage: 'nl-NL',
-  };
-}
-
-export function maakKruimelpad(kruimels: readonly Kruimel[], site: URL): object {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: kruimels.map((kruimel, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: kruimel.naam,
-      item: new URL(kruimel.pad, site).href,
-    })),
-  };
-}
-
-export function maakVragenpagina(
-  vragen: readonly { vraag: string; antwoord: string }[],
-): object {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: vragen.map((item) => ({
-      '@type': 'Question',
-      name: item.vraag,
-      acceptedAnswer: { '@type': 'Answer', text: item.antwoord },
-    })),
   };
 }

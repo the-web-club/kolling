@@ -1,84 +1,78 @@
 # Coming-soon pagina
 
-Plan voor review. Nog niets gebouwd behalve dit document. Branch `feature/coming-soon`.
+Gebouwd op branch `feature/coming-soon`. De volledige site staat veilig op `feature/volledige-site`.
 
-## Audit: de opdracht gaat uit van een lege repository
+## Wat er staat
 
-De opdracht beschrijft de coming-soon pagina als eerste oplevering en vraagt om het projectfundament. Dat fundament staat er al: de volledige site is gebouwd en op `main` gemerged (`6f2ce9e`). Concreet aanwezig en herbruikbaar zonder aanpassing:
+Eén scherm op `/` dat niet scrollt: woordmerk en de lokale tijd in Ommen bovenaan, een statement in twee regels in het midden, en onderaan een haarlijn met drie contactblokken en een microregel. Daarnaast een 404 in dezelfde compositie, een `robots.txt` die alles toelaat en bij een preview alles afschermt, en een OG-beeld.
 
-pnpm met vastgezette versie, Astro 7.3.5 met TypeScript strict, Tailwind v4 via `@tailwindcss/vite` met `@theme inline`, Style Dictionary 5 met DTCG-tokens in drie lagen, `src/styles/tokens.css` (gegenereerd), `basis.css`, `beweging.css`, `Basis.astro`, `Seo.astro`, `JsonLd.astro`, `site.json`, ESLint, `.nvmrc`, `.env.example`, README en een groene CI-workflow.
+`LichtAchtergrond` zet twee zachte lichtvlakken achter de pagina die tegengesteld en heel traag over het wit trekken, met een statische korrel erover. Negentig seconden voor het warme vlak, honderdveertig voor het koelere. Op een stilstaand moment lijkt de pagina gewoon wit.
 
-Daarnaast staan er 19 paginabestanden en 26 componenten, waaronder een volledige homepage, `PaginaKop` en `PaginaVoet`. Dat raakt direct aan vraag 1 hieronder.
+Het enige script is de klok: vijftien regels inline, 422 bytes, die de tijd in `Europe/Amsterdam` elke minuut verzet. Zonder JavaScript staat er alleen "Ommen" en is de hele pagina direct zichtbaar, omdat alle entreeanimaties achter `[data-js]` staan.
 
-Wat nog ontbreekt en ik ga toevoegen: `.editorconfig`, Prettier, `scripts/maak-og.mjs`, en de coming-soon pagina zelf met zijn achtergrond.
+## Wat er uit de repository is gehaald
 
-## Bestanden
+De volledige site stond al op `main` en zou naast een pagina die zegt "de website volgt" een doorklikbare site met plaatshouderfoto's hebben opgeleverd. Die staat nu op `feature/volledige-site`: 17 paginabestanden, 24 componenten, vijf content collections, het aanvraagendpoint en de tests. Niets is verloren; het is één merge terug.
 
-Nieuw:
+Wat bleef, is het fundament dat de volledige site straks weer gebruikt: de tokens in drie lagen, `basis.css`, `beweging.css`, `Basis.astro`, `Seo.astro`, `JsonLd.astro`, `site.json`, ESLint en de CI-workflow.
 
-1. `src/pages/index.astro` wordt de coming-soon pagina. De huidige homepage verhuist (zie vraag 1).
-2. `src/components/LichtAchtergrond.astro` met `.licht`, `.vlak`, `.korrel` en `data-laag`.
-3. `scripts/maak-og.mjs` dat `public/og.png` genereert met sharp, dat al in de boom zit via Astro.
-4. `.editorconfig`, `prettier.config.js` en een `format`-script.
+Ook weg op deze branch: de `@astrojs/vercel`-adapter, het `astro:env`-schema, zod en Vitest. Zonder server-route is er geen adapter nodig en worden er geen functies gebouwd. Ze komen met de volledige site terug.
 
-Gewijzigd:
+## Tokens die zijn toegevoegd
 
-5. `src/styles/beweging.css` krijgt de choreografie van deze pagina met `animation-delay`, en de ambient-animaties.
-6. `src/pages/404.astro` krijgt dezelfde compositie op één scherm.
-7. `tokens/primitief/beweging.json` en `tokens/semantisch/kleur.json` krijgen de tokens hieronder.
-8. `.cursor/rules/41-woordenlijst.mdc` krijgt de nieuwe namen.
-9. `docs/DEPLOY.md` krijgt de Vercel- en DNS-stappen voor het team tapro.
+Primitief: `beweging.duur.ambient` (90000ms) en `beweging.curve.ambient` (`cubic-bezier(0.37, 0, 0.63, 1)`). De 140 seconden van de schaduwlaag is `calc(var(--k-beweging-duur-ambient) * 1.55)`.
 
-## Tokens die ik toevoeg
+Semantisch: `kleur.licht.warm` en `kleur.licht.koel`, die naar `hout.es.200` en `lijn.200` verwijzen. De opdracht noemde die primitieven rechtstreeks, maar `10-design-system.mdc` staat geen primitieve tokens in een component toe; via deze laag blijft de regel intact en blijven de waarden gelijk. Verder `tekst.display-kort.*` voor de compacte stap op korte schermen.
 
-Primitief, in `tokens/primitief/beweging.json`:
+Componenten: `binnenkomst.*` met de vertraging per element in de choreografie, en `merk.hoogte` plus `merk.hoogte-breed`. Die staan als token omdat de timing anders negen losse getallen in de CSS zou zijn, en rule 17 geen magische waarden toestaat.
 
-- `beweging.duur.ambient` 90000ms
-- `beweging.curve.ambient` `cubic-bezier(0.37, 0, 0.63, 1)`
+## Afwijkingen van de opdracht
 
-Semantisch, in `tokens/semantisch/kleur.json`:
+1. **Padding van `.pagina`** is `ruimte.goot`, niet `maat.container.inline`. Die laatste is 76rem en bedoeld als tekstbreedte; als padding zou ze het scherm vullen.
+2. **Fontgewichten** zijn 400 en 500, niet 300 en 400. Instrument Sans heeft geen 300 en de bestaande componenttokens gebruiken 500 voor kapitaallabels. Wel zoals gevraagd: twee bestanden, Latin-subset, zelf gehost, beide met `preload`.
+3. **`robots.txt` blijft een endpoint** in plaats van een statisch bestand in `public`. Een statisch bestand zou de preview-afscherming overschrijven en previews indexeerbaar maken.
+4. **Het favicon is geen monogram.** `00-project.mdc` verbiedt het logo te hertekenen. Het is nu het woordmerk, gerenderd op 64 bij 64 met transparante ruimte, 1,5 kB. Het oude `favicon.svg` was het volledige logo met ingesloten bitmap en woog 54 kB, meer dan een derde van het gewichtsbudget.
+5. **Twee hoogtestappen** in plaats van één. De opdracht noemde `max-height: 560px`, maar bij 320 bij 568 viel de microregel buiten het scherm. Nu verkleint de typografie onder 44rem en nog een stap onder 30rem.
+6. **Lighthouse is niet gemeten.** Dat kan ik lokaal niet. Wat ik wel heb gemeten staat hieronder.
 
-- `kleur.licht.warm` naar `{primitief.kleur.hout.es.200}`
-- `kleur.licht.koel` naar `{primitief.kleur.lijn.200}`
+## Gemeten
 
-Die twee semantische tokens zijn nodig omdat `10-design-system.mdc` geen primitieve tokens in een component toestaat. De opdracht noemt `kleur.hout.es.200` en `kleur.lijn.200` rechtstreeks; via deze laag blijft de regel intact en blijven de waarden hetzelfde.
+Gewicht van het kritieke pad in de productiebuild, ongecomprimeerd: HTML 9,1 kB, CSS 27,4 kB, twee fonts 78,5 kB, woordmerk als AVIF 2,6 kB. Samen 117,7 kB, onder de 150 kB. Over de lijn met compressie blijft daar ongeveer 90 kB van over, want de fonts zijn al gecomprimeerd. Eigen JavaScript: 487 bytes.
 
-De 140 seconden van de schaduwlaag wordt `calc(var(--k-beweging-duur-ambient) * 1.55)`, zoals gevraagd.
+Alle acht viewports uit de opdracht passen zonder verticale of horizontale overflow, met de microregel binnen het scherm:
 
-## Afwijkingen van de opdracht, met reden
+| Formaat     | Past | Breedte H1 |
+| ----------- | ---- | ---------- |
+| 320 × 568   | ja   | 280 px     |
+| 360 × 640   | ja   | 320 px     |
+| 390 × 844   | ja   | 350 px     |
+| 768 × 1024  | ja   | 468 px     |
+| 1280 × 720  | ja   | 794 px     |
+| 1440 × 900  | ja   | 895 px     |
+| 1920 × 1080 | ja   | 893 px     |
+| 844 × 390   | ja   | 516 px     |
 
-1. **Padding van `.pagina`.** De opdracht noemt `maat.container.inline` als padding rondom. Die token is 76rem en bedoeld als tekstbreedte; als padding zou ze het scherm vullen. Ik gebruik `ruimte.goot`, de enige gootmaat in het systeem, en `maat.container` als maximale breedte.
-2. **Fontgewichten.** Gevraagd zijn 300 en 400. Instrument Sans heeft geen 300 (de variabele as loopt van 400 tot 700), en de bestaande componenttokens gebruiken 500 voor labels en kapitalen. Ik houd 400 en 500 en subset naar Latin. De fonts zijn al lokaal gebundeld via `@fontsource-variable`, dus niet van een extern domein.
-3. **`public/robots.txt`.** Er staat al een `robots.txt`-endpoint dat bij `VERCEL_ENV=preview` alles afschermt. Een statisch bestand zou dat overschrijven en previews indexeerbaar maken. Ik houd het endpoint en haal de sitemapregel eruit zolang er één pagina is.
-4. **Favicon als monogram.** `00-project.mdc` verbiedt het logo te hertekenen, en een monogram bestaat niet. Het huidige favicon is het woordmerk op eigen verhouding; dat blijft.
-5. **Lighthouse 0.98.** Ik kan dat lokaal niet meten. Ik lever de controles die ik wel kan doen (gewicht, geen layout shift, één scriptje onder 1 kB) en meld de score als ongemeten tot er een preview-URL is.
+Bij `prefers-reduced-motion: reduce` staan beide lichtvlakken stil (`animation-name: none`) en verschijnt alles met één fade van 200ms. Zonder JavaScript staat er geen enkel element op opacity 0.
 
-## Open vragen
+De klok toont de tijd in Amsterdam, ook als de machine in een andere zone staat; bij de controle gaf het systeem 20:48 en de pagina 19:48.
 
-**1. Wat gebeurt er met de volledige site die al op `main` staat?**
+`pnpm tokens:check`, `pnpm check` (13 bestanden), `pnpm lint`, `pnpm format:check` en `pnpm build` zijn schoon.
 
-Een pagina die zegt "de website volgt" naast een volledig doorklikbare site met plaatshouderbeelden spreekt zichzelf tegen, en de sitemap zou dertien onafgemaakte pagina's aanmelden.
+## Hoe te testen
 
-Mijn voorstel: ik zet de huidige staat van `main` veilig op `feature/volledige-site` en push die. Daarna bevat `main` het fundament plus de coming-soon pagina, en komt de volledige site terug zodra er foto's en bevestigde feiten zijn. Niets gaat verloren; de branch is één merge van terugkomen.
+```bash
+pnpm build
+pnpm preview
+```
 
-Alternatief: alles blijft op `main` en alleen `/` wordt de coming-soon pagina. Dan blijven `/werk`, `/maatwerk` en de rest bereikbaar via een directe link. Dat kan, maar dan is "de website volgt" niet waar.
+Per viewport uit de tabel: geen scrollbar, de microregel binnen beeld, de twee kopregels op hun eigen regel. Verder: de choreografie loopt binnen 1600 ms af, de achtergrond beweegt merkbaar traag als je een halve minuut wacht, de drie links krijgen een intekenende onderstreping bij hover en een zichtbare focusring met het toetsenbord.
 
-**2. Welk logobestand gebruik ik?**
+Reduced motion zet je in de systeeminstellingen aan, of in DevTools onder Rendering. Zonder JavaScript test je door scripts te blokkeren; de pagina hoort dan volledig zichtbaar te zijn met alleen "Ommen" in plaats van "Ommen, 19:48".
 
-De opdracht vraagt `src/assets/merk/woordmerk.png`. In de repository staat `src/assets/merk/d-logo.svg`: hetzelfde woordmerk, maar een export met een ingesloten bitmap van 1065 px breed. Dat werkt en wordt nooit opgeschaald, maar het is 55 kB.
+## Wat open staat
 
-Heb je een schone export, dan gebruik ik die. Zo niet, dan render ik uit het bestaande bestand een PNG op de exacte weergavemaat, zodat de pagina onder de 150 kB blijft. Hertekenen doe ik niet.
-
-**3. E-mailadres en KvK blijven weg?**
-
-Beide staan nog als `[VUL IN]` in `site.json`. Volgens de opdracht laat ik ze dan weg, dus de pagina biedt telefoon en Instagram. Bevestig je dat, of heb je ze inmiddels?
-
-## Hoe ik ga testen
-
-Viewports 320×568, 360×640, 390×844, 768×1024, 1280×720, 1440×900, 1920×1080 en 844×390 liggend. Per formaat: geen scrollbar, `scrollHeight` gelijk aan de viewporthoogte, geen afgesneden tekst.
-
-Verder: de choreografie binnen 1600 ms, reduced motion als enkele fade, de klok die ververst, de pagina zonder JavaScript volledig zichtbaar, zichtbare focus op de drie links, en `pnpm check`, `pnpm lint` en `pnpm build` schoon.
-
-## Wacht op
-
-`GO`, plus een antwoord op vraag 1. Vraag 2 en 3 kan ik met de standaard afdekken als je ze open laat.
+1. **Woordmerk als SVG.** Het huidige `d-logo.svg` is een export met een ingesloten bitmap van 1065 px breed en een luminantiemasker. `pnpm og` rendert daaruit `woordmerk.png` op 480 px, het OG-beeld en het favicon. Een echte outline-SVG maakt die stap onnodig en is scherper op elk formaat.
+2. **E-mailadres.** Nog `[VUL IN]` in `site.json`. De pagina laat de mailto-link dan weg; zodra het veld gevuld is verschijnt die automatisch onder "Bespreek je idee".
+3. **KvK-nummer.** Ook nog `[VUL IN]`. De microregel voegt het er zelf bij zodra het bekend is.
+4. **Licentiefonts.** Mint Grotesk en Apercu vervangen Instrument Sans en Work Sans met één tokenwijziging plus twee bestanden in `public/fonts`. De metrische correcties op de terugvalstack horen dan opnieuw bepaald te worden.
+5. **Lighthouse.** Meten op de productie-URL, volgens `docs/DEPLOY.md`.

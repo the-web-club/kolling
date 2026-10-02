@@ -2,6 +2,12 @@
 
 De opdracht staat in `docs/STARTPROMPT.md`. Hieronder staat waar deze implementatie daarvan afwijkt en waarom.
 
+## Coming-soon pagina eerst
+
+0. `main` bevat nu alleen het fundament en de coming-soon pagina. De volledige site staat gebouwd op `feature/volledige-site` en komt terug zodra er echte projectfoto's en bevestigde feiten zijn. Reden: een pagina die zegt "de website volgt" naast een doorklikbare site met plaatshouderbeelden spreekt zichzelf tegen, en de sitemap zou dertien onafgemaakte pagina's aanmelden. De onderbouwing en alle metingen staan in `docs/review/COMING-SOON.md`.
+
+Op deze branch zijn daarom ook de Vercel-adapter, het `astro:env`-schema, zod en Vitest weggehaald. Zonder server-route is er geen adapter nodig en worden er geen functies gebouwd. Ze komen met de volledige site terug. De punten hieronder blijven gelden voor die site.
+
 ## Techniek
 
 1. Astro 7 met pnpm, TypeScript strict en Node 22. De startprompt liet de versie open.
