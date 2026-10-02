@@ -92,11 +92,22 @@ const instellingen = await haalInstellingen();
 
   .voet {
     --onthul-vertraging: var(--binnenkomst-micro);
+    position: relative;
     padding-block-start: var(--ruimte-stapel-md);
     font-size: var(--tekst-label-grootte);
     text-align: end;
     color: var(--kleur-voorgrond-subtiel);
-    border-block-start: var(--k-rand-haarlijn) solid var(--kleur-lijn);
+  }
+
+  /* Dezelfde doorlopende haarlijn als op de voorpagina. */
+  .voet::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: calc(50% - 50vw);
+    inline-size: 100vw;
+    block-size: var(--k-rand-haarlijn);
+    background-color: var(--kleur-lijn);
   }
 
   @media (min-width: 48rem) {

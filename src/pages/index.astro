@@ -205,8 +205,12 @@ const microregel = isBekend(instellingen.kvk)
     gap: var(--pagina-micro-ruimte);
   }
 
+  /* De haarlijn loopt door tot de schermranden; de tekst eronder blijft op de
+     padding van de pagina staan. */
   .lijn {
     --onthul-vertraging: var(--binnenkomst-lijn);
+    inline-size: 100vw;
+    margin-inline-start: calc(50% - 50vw);
     block-size: var(--k-rand-haarlijn);
     background-color: var(--kleur-lijn);
   }
