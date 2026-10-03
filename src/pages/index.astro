@@ -146,7 +146,7 @@ const bronnenKlein = await maakBronnen({
      hoe vaak de tekst ook afbreekt. De container is de zichtbare hoogte, niet
      de layoutviewport. De negatieve marge heft de rijafstand van de pagina op,
      zodat de band de kop raakt. */
-  @container scherm (max-width: 1023.98px) and (min-height: 780px) {
+  @container scherm (max-width: 1023.98px) and (min-height: 481px) {
     .statement {
       grid-template-rows: minmax(0, 1fr) auto auto;
       min-block-size: 0;
@@ -175,7 +175,7 @@ const bronnenKlein = await maakBronnen({
 
   /* Op een telefoon loopt de foto tot de schermrand. Het bijschrift blijft in
      de kolom, op de padding van de pagina. */
-  @container scherm (max-width: 767.98px) and (min-height: 780px) {
+  @container scherm (max-width: 767.98px) and (min-height: 481px) {
     .statement :global(.beeld-groot > picture) {
       inline-size: calc(100% + 2 * var(--pagina-padding));
       max-inline-size: none;
@@ -183,10 +183,10 @@ const bronnenKlein = await maakBronnen({
     }
   }
 
-  /* Onder 780 px blijft er te weinig over voor een band die nog een meubel
-     laat zien. In de rechterkolom kost het beeld geen hoogte; daar is 512 px de
-     ondergrens. Leegte is een keuze, scrollen niet. */
-  @container scherm (max-width: 1023.98px) and (max-height: 779.98px) {
+  /* Een staande telefoon meet met de browserbalk vaak onder 780 px. De band
+     hoort daar wel. Alleen een liggend scherm is te laag. In de rechterkolom
+     kost het beeld geen hoogte; daar is 512 px de ondergrens. */
+  @container scherm (max-width: 1023.98px) and (max-height: 480px) {
     .statement :global(.beeld-groot) {
       display: none;
     }
