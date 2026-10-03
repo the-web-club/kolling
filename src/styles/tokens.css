@@ -261,7 +261,7 @@
   --beeld-bijschrift-vertraging: var(--k-beweging-duur-snel);
   --beeld-schaal-hover: var(--k-beweging-schaal-hover);
   --beeld-dimmen: var(--dekking-beeld);
-  --bijschrift-ruimte-boven: var(--k-ruimte-3);
+  --bijschrift-ruimte-boven: var(--k-ruimte-1);
   --icoon-ruimte: var(--k-ruimte-2);
   --invoer-padding-inline: var(--k-ruimte-3);
   --invoer-radius: var(--k-radius-invoer);

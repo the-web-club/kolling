@@ -144,26 +144,32 @@ const bronnenKlein = await maakBronnen({
   /* De band krijgt de hoogte die na kop en intro overblijft, met de bandhoogte
      als bovengrens. Daarmee kan hij de pagina niet langer maken dan het scherm,
      hoe vaak de tekst ook afbreekt. De container is de zichtbare hoogte, niet
-     de layoutviewport. */
+     de layoutviewport. De negatieve marge heft de rijafstand van de pagina op,
+     zodat de band de kop raakt. */
   @container scherm (max-width: 1023.98px) and (min-height: 780px) {
     .statement {
       grid-template-rows: minmax(0, 1fr) auto auto;
       min-block-size: 0;
+      margin-block-start: calc(-1 * var(--ruimte-rij-md));
     }
 
     /* Zonder min-block-size: 0 houdt de automatische minimumhoogte van een
-       rasteritem het kader op zijn volle maat en loopt de pagina over. */
+       rasteritem het kader op zijn volle maat en loopt de pagina over. De
+       vrije hoogte valt in de derde rij, onder het bijschrift, anders ontstaat
+       er ruimte tussen de foto en het bijschrift. */
     .statement :global(.beeld-groot) {
       grid-row: 1;
-      grid-template-rows: minmax(0, 1fr) auto;
+      grid-template-rows: auto auto minmax(0, 1fr);
       min-block-size: 0;
     }
 
-    /* Drie grenzen: de eigen verhouding, de hoogte die overblijft en de
-       bandhoogte. De kleinste wint. */
+    /* De verhouding bepaalt de uitsnede, niet de rijhoogte. Anders rekent het
+       raster de volle 3:2 en blijft er ruimte over onder de afgekapte foto. */
     .statement :global(.beeld-groot > picture) {
+      --beeld-verhouding-liggend: auto;
+      block-size: var(--beeld-max-hoogte);
       min-block-size: 0;
-      max-block-size: min(100%, var(--beeld-max-hoogte));
+      max-block-size: var(--beeld-max-hoogte);
     }
   }
 

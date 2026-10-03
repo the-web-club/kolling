@@ -269,7 +269,7 @@ export const tokens: readonly Token[] = [
   { naam: 'bijschrift-spatiering', pad: 'bijschrift.spatiering', laag: 'componenten', waarde: "0.08em" },
   { naam: 'bijschrift-gewicht', pad: 'bijschrift.gewicht', laag: 'componenten', waarde: "500" },
   { naam: 'bijschrift-voorgrond', pad: 'bijschrift.voorgrond', laag: 'componenten', waarde: "#4a4844" },
-  { naam: 'bijschrift-ruimte-boven', pad: 'bijschrift.ruimte-boven', laag: 'componenten', waarde: "0.75rem" },
+  { naam: 'bijschrift-ruimte-boven', pad: 'bijschrift.ruimte-boven', laag: 'componenten', waarde: "0.25rem" },
   { naam: 'plaatshouder-label-grootte', pad: 'plaatshouder.label-grootte', laag: 'componenten', waarde: "0.75rem" },
   { naam: 'plaatshouder-label-voorgrond', pad: 'plaatshouder.label-voorgrond', laag: 'componenten', waarde: "#4a4844" },
   { naam: 'plaatshouder-korrel-dekking', pad: 'plaatshouder.korrel-dekking', laag: 'componenten', waarde: "0.08" },
