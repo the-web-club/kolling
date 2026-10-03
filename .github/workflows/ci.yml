@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v4
 
@@ -34,6 +36,9 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: SEO
+        run: pnpm test:seo
 
       - name: Chromium voor de viewportcontrole
         run: pnpm exec playwright install --with-deps chromium

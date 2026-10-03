@@ -10,15 +10,21 @@ Verder: absolute canonicals, `lang="nl"`, één `og:image` (`public/og.png`), be
 
 ## noindex
 
-`/design-system`, `/bedankt`, de 404 en elk project met `plaatshouder: true` krijgen `noindex, nofollow` en staan niet in de sitemap. Locaties met `publiceren: false` bestaan niet als route.
+`/design-system`, `/bedankt`, de 404, "Binnenkort"-pagina's zonder inhoud en elk project met `plaatshouder: true` krijgen `noindex, follow` en staan niet in de sitemap. Locaties met `publiceren: false` komen niet in de routes.
 
-`robots.txt` sluit `/design-system`, `/bedankt`, `/feitencheck.md` en `/api/` uit.
+`robots.txt` op productie staat `/` toe, sluit `/api/` uit en wijst naar de sitemap. Pagina's die niet geïndexeerd worden, regelt `noindex`, niet `Disallow`.
 
 ## Sitemap
 
-`src/pages/sitemap.xml.ts` bouwt de sitemap uit de content. Daardoor kan er geen pagina in staan die `noindex` is: de sitemap gebruikt dezelfde `isIndexeerbaar`-controle als de pagina zelf.
+`src/pages/sitemap.xml.ts` is een prerendered `GET`-route. De URL's komen uit `haalIndexeerbareRoutes()` in `src/lib/routes.ts`. `Seo.astro` bepaalt de `robots`-meta met `isIndexeerbaar()` op diezelfde lijst, dus een `noindex`-pagina staat niet in de sitemap.
 
-Nu in de sitemap: `/`, `/werk`, `/maatwerk`, de vier `/maatwerk/*`-pagina's, `/edities`, `/werkplaats`, `/werkgebied`, `/werkgebied/ommen`, `/contact` en `/privacy`. De zes voorbeeldprojecten staan er bewust niet in. Zodra een project echte foto's heeft en `plaatshouder: false` staat, komt het er automatisch bij.
+Op main staan twee URL's in de sitemap: `https://kolling.nl/` en `https://kolling.nl/contact`. De zes "Binnenkort"-pagina's en de 404 zijn `noindex` en ontbreken. `/privacy`, `/bedankt` en `/design-system` bestaan hier niet als route. Projecten, diensten, edities, locaties, nieuwsberichten en downloads komen erbij zodra hun pagina en bronbestand bestaan. Een project met `plaatshouder: true` en een locatie zonder `publiceren: true` blijven erbuiten.
+
+Elke URL heeft een `lastmod` in ISO 8601 met tijdzone: `git log -1 --format=%cI` van het bronbestand. Geeft git geen datum, dan is het de buildtijd. Geen `changefreq` en geen `priority`. Onder de 1000 URL's blijft het één bestand.
+
+Vercel kloont met `--depth=10`. `git log -1` werkt daar en geeft een datum terug. Een bestand dat in die tien commits is gewijzigd, krijgt zijn echte committerdatum. Een bestand daarbuiten krijgt de datum van de oudste opgehaalde commit, niet de echte laatste wijziging. CI haalt de volledige geschiedenis (`fetch-depth: 0`). Een volledige kloon op Vercel vraagt `VERCEL_DEEP_CLONE=true` in het project; die variabele staat niet in de repo.
+
+`robots.txt` op productie bevat `Allow: /`, `Disallow: /api/` en één regel `Sitemap: https://kolling.nl/sitemap.xml`. Bij `VERCEL_ENV=preview` blijft het `Disallow: /`, zonder sitemapregel. De build schrijft dan geen `sitemap.xml`, omdat een lege 404-body door Astro niet als bestand wordt weggeschreven. Een statische host geeft daardoor 404 in plaats van de XML met status 200.
 
 ## Preview-deployments
 

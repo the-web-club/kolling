@@ -1,6 +1,6 @@
 ---
 description: Copy, contentmodel, feitencheck, SEO en GEO (vindbaarheid in zoekmachines en AI-antwoordmachines) zonder doorway abuse
-globs: src/content/**,src/pages/**,src/components/Seo.astro,src/components/JsonLd.astro,src/lib/seo.ts,src/lib/jsonld.ts,public/**,vercel.json
+globs: src/content/**,src/pages/**,src/components/Seo.astro,src/components/JsonLd.astro,src/lib/seo.ts,src/lib/routes.ts,src/lib/jsonld.ts,public/**,vercel.json
 alwaysApply: false
 ---
 

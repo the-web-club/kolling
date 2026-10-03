@@ -1,6 +1,8 @@
 # SEO en GEO, audit
 
-Status: wacht op GO. Niets van de bouw hieronder is uitgevoerd. `.cursor/rules/20-content-seo.mdc` is al vervangen door de meegeleverde versie; die is leidend zodra de bouw start.
+De sitemap bevat `https://kolling.nl/` en `https://kolling.nl/contact`. `lastmod` is `git log -1 --format=%cI` van het bronbestand, met de buildtijd als git geen datum geeft. Vercel kloont met diepte 10: `git log` werkt, maar een bestand buiten die tien commits krijgt de datum van de oudste opgehaalde commit. De drie curl-controles na de deploy van deze sitemap worden in deze alinea aangevuld.
+
+Status: de sitemap is gebouwd. De rest van deze audit wacht nog. `.cursor/rules/20-content-seo.mdc` is al vervangen door de meegeleverde versie; die is leidend zodra de bouw start.
 
 Gemeten op 3 oktober 2026 tegen `https://www.kolling.nl` (de host die nu 200 geeft) en tegen de code op `main`. De werkboom heeft losse, niet-gestage wijzigingen (viewports, thema, beweging). Die blijven buiten de SEO-commits.
 

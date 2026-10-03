@@ -1,19 +1,19 @@
 ---
-import { bepaalRobots } from '@/lib/seo';
+import { bepaalRobots, isIndexeerbaar, maakCanonical } from '@/lib/seo';
 
 interface Props {
   titel: string;
   beschrijving: string;
-  indexeerbaar?: boolean;
 }
 
-const { titel, beschrijving, indexeerbaar = true } = Astro.props;
+const { titel, beschrijving } = Astro.props;
 
 if (!Astro.site) {
   throw new Error('astro.config.mjs mist de site-URL, dus canonicals kunnen niet absoluut zijn.');
 }
 
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const canonical = maakCanonical(Astro.url.pathname, Astro.site);
+const indexeerbaar = isIndexeerbaar(Astro.url.pathname);
 const ogBeeld = new URL('/og.jpg', Astro.site).href;
 ---
 

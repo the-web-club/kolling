@@ -64,7 +64,7 @@ Dit is de enige bron voor namen in deze repo. Een woord dat hier niet staat, wor
 1. Mappen volgens Astro: `src/pages`, `src/content`, `src/components`, `src/layouts`, `src/lib`, `src/styles`, `src/assets`, `public`.
 2. Layouts: `src/layouts/Basis.astro`.
 3. Stijlen: `src/styles/tokens.css` (gegenereerd), `src/styles/basis.css` (reset, elementtypografie, Tailwind-import, `@theme inline`), `src/styles/beweging.css` (entrance en overgangen).
-4. Lib: `src/lib/aanvraag-schema.ts`, `src/lib/formatteer.ts`, `src/lib/seo.ts`, `src/lib/jsonld.ts`, `src/lib/content.ts`, `src/lib/beweging/onthul.ts`, `src/lib/beweging/splits-regels.ts`, `src/lib/beweging/paginaovergang.ts`.
+4. Lib: `src/lib/aanvraag-schema.ts`, `src/lib/formatteer.ts`, `src/lib/seo.ts`, `src/lib/routes.ts`, `src/lib/jsonld.ts`, `src/lib/content.ts`, `src/lib/beweging/onthul.ts`, `src/lib/beweging/splits-regels.ts`, `src/lib/beweging/paginaovergang.ts`.
 5. API: `src/pages/api/aanvraag.ts`.
 6. Content: `src/content/projecten/`, `diensten/`, `edities/`, `locaties/`, `faq/`, `instellingen/site.json`; schema's in `src/content.config.ts`.
 7. Tokens: `tokens/primitief/`, `tokens/semantisch/`, `tokens/componenten/`, `tokens/config.mjs`; gegenereerd: `src/design/tokens.gegenereerd.ts`.
@@ -372,3 +372,15 @@ Waar een token en een groep dezelfde naam zouden krijgen, staat er een koppeltek
 ### Opslag
 
 1. `kolling-thema` in `localStorage`
+
+## Aangevuld voor de sitemap
+
+### Bestanden
+
+1. `src/lib/routes.ts` (`haalIndexeerbareRoutes`, `haalLaatsteWijziging`)
+2. `scripts/controleer-seo.mjs` (`pnpm test:seo`)
+
+### Functies
+
+1. `isIndexeerbaar(pad)` en `maakCanonical(pad, site)` in `src/lib/seo.ts`
+2. `bronbestand` op een indexeerbare route: het pad waarvan `lastmod` de commitdatum haalt

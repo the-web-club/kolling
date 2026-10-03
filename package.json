@@ -18,7 +18,8 @@
     "og": "node scripts/maak-og.mjs",
     "tokens:build": "node tokens/controle.mjs --schrijf",
     "tokens:check": "node tokens/controle.mjs",
-    "test:viewports": "node scripts/controleer-viewports.mjs"
+    "test:viewports": "node scripts/controleer-viewports.mjs",
+    "test:seo": "node scripts/controleer-seo.mjs"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
