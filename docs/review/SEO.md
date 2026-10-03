@@ -1,6 +1,6 @@
 # SEO en GEO, audit
 
-De sitemap bevat `https://kolling.nl/` en `https://kolling.nl/contact`. `lastmod` is `git log -1 --format=%cI` van het bronbestand, met de buildtijd als git geen datum geeft. Vercel kloont met diepte 10: `git log` werkt, maar een bestand buiten die tien commits krijgt de datum van de oudste opgehaalde commit. De drie curl-controles na de deploy van deze sitemap worden in deze alinea aangevuld.
+De sitemap bevat `https://kolling.nl/` en `https://kolling.nl/contact`. `lastmod` komt uit `git log -1 --format=%cI` van het bronbestand; op deze deploy is dat voor beide pagina's `2026-10-03T11:55:38+03:00`, de commit die ze het laatst wijzigde. Een bestand dat in die tien commits niet is gewijzigd, krijgt de datum van de oudste opgehaalde commit; ontbreekt git, dan geldt de buildtijd. `curl -I https://kolling.nl/sitemap.xml` geeft 308 naar `https://www.kolling.nl/sitemap.xml`. `curl -I https://www.kolling.nl/sitemap.xml` geeft 200 met `Content-Type: application/xml`. `curl https://kolling.nl/robots.txt` geeft diezelfde 308; op `https://www.kolling.nl/robots.txt` staat `Sitemap: https://kolling.nl/sitemap.xml`. De hostredirect wijst van de apex naar `www`.
 
 Status: de sitemap is gebouwd. De rest van deze audit wacht nog. `.cursor/rules/20-content-seo.mdc` is al vervangen door de meegeleverde versie; die is leidend zodra de bouw start.
 
