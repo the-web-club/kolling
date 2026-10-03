@@ -13,6 +13,7 @@
     "band-hoogte-breed": { "$value": "32vh", "$type": "dimension" },
     "hoogte-kolom": { "$value": "34vh", "$type": "dimension" },
     "bijschrift-vertraging": { "$value": "{primitief.beweging.duur.snel}", "$type": "duration" },
-    "schaal-hover": { "$value": "{primitief.beweging.schaal.hover}", "$type": "number" }
+    "schaal-hover": { "$value": "{primitief.beweging.schaal.hover}", "$type": "number" },
+    "dimmen": { "$value": "{dekking.beeld}", "$type": "number" }
   }
 }

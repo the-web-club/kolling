@@ -1,4 +1,5 @@
 import StyleDictionary from 'style-dictionary';
+import { fileHeader, formattedVariables } from 'style-dictionary/utils';
 
 export const GEGENEREERDE_BESTANDEN = ['src/styles/tokens.css', 'src/design/tokens.gegenereerd.ts'];
 
@@ -26,6 +27,49 @@ StyleDictionary.registerTransform({
   transform: (token) => {
     const [laag, ...rest] = token.path;
     return laag === 'primitief' ? `k-${rest.join('-')}` : token.path.join('-');
+  },
+});
+
+StyleDictionary.registerFormat({
+  name: 'css/kolling',
+  format: async ({ dictionary, file, options }) => {
+    const header = await fileHeader({ file, options });
+    const usesDtcg = options.usesDtcg === true;
+
+    const blok = (tokens, selectors) => {
+      const variabelen = formattedVariables({
+        format: 'css',
+        dictionary: {
+          allTokens: tokens,
+          tokens: dictionary.tokens,
+          unfilteredTokens: dictionary.unfilteredTokens,
+        },
+        outputReferences: true,
+        usesDtcg,
+        formatting: { indentation: '  '.repeat(selectors.length) },
+      });
+
+      return selectors
+        .slice()
+        .reverse()
+        .reduce((inhoud, selector, index) => {
+          const inspringing = '  '.repeat(selectors.length - 1 - index);
+          return `${inspringing}${selector} {\n${inhoud}\n${inspringing}}`;
+        }, variabelen);
+    };
+
+    const licht = dictionary.allTokens.filter((token) => token.path[0] !== 'donker');
+    const donker = dictionary.allTokens
+      .filter((token) => token.path[0] === 'donker')
+      .map((token) => ({ ...token, name: token.path.slice(1).join('-') }));
+
+    return [
+      header.trimEnd(),
+      blok(licht, [':root']),
+      blok(donker, [":root[data-thema='donker']"]),
+      blok(donker, ['@media (prefers-color-scheme: dark)', ":root:not([data-thema='licht'])"]),
+      '',
+    ].join('\n\n');
   },
 });
 
@@ -69,7 +113,7 @@ export function maakConfiguratie(doelmap) {
         files: [
           {
             destination: 'src/styles/tokens.css',
-            format: 'css/variables',
+            format: 'css/kolling',
             options: { outputReferences: true, fileHeader: 'kop/kolling' },
           },
         ],

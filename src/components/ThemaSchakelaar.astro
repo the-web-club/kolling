@@ -1,0 +1,93 @@
+<button
+  class="thema-schakelaar"
+  type="button"
+  data-thema-schakelaar
+  data-onthul="fade"
+  aria-pressed="false"
+  aria-label="Donker thema"
+>
+  <span class="schijf"></span>
+  <span class="woord" data-woord="donker">Donker</span>
+  <span class="woord" data-woord="licht">Licht</span>
+</button>
+
+<style>
+  .thema-schakelaar {
+    --onthul-vertraging: var(--binnenkomst-micro);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--ruimte-stapel-sm);
+    min-block-size: var(--navigatie-aanraakdoel);
+    margin-block: calc((var(--navigatie-aanraakdoel) - 1lh) / -2);
+    padding: 0;
+    border: 0;
+    background: none;
+    font-family: var(--tekst-klein-familie);
+    font-size: var(--tekst-klein-grootte);
+    font-weight: var(--tekst-klein-gewicht);
+    line-height: 1;
+    color: var(--kleur-voorgrond);
+    cursor: pointer;
+  }
+
+  :global(html:not([data-js])) .thema-schakelaar {
+    display: none;
+  }
+
+  .schijf {
+    inline-size: var(--schakelaar-schijf);
+    block-size: var(--schakelaar-schijf);
+    border: var(--schakelaar-rand) solid var(--kleur-voorgrond);
+    border-radius: var(--schakelaar-ronding);
+    background-color: var(--vulling-schijf);
+  }
+
+  /* In het lichte thema is het woord "Donker", in het donkere "Licht":
+     het woord noemt het thema waar je naartoe schakelt. */
+  .woord[data-woord='donker'] {
+    display: var(--zicht-licht);
+  }
+
+  .woord[data-woord='licht'] {
+    display: var(--zicht-donker);
+  }
+
+  .woord {
+    background-image: linear-gradient(var(--kleur-voorgrond), var(--kleur-voorgrond));
+    background-repeat: no-repeat;
+    background-position: 100% 100%;
+    background-size: 0 var(--link-onderstreping-dikte);
+    padding-block-end: var(--link-onderstreping-afstand);
+  }
+
+  .thema-schakelaar:active {
+    opacity: 0.8;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .schijf {
+      transition:
+        background-color var(--beweging-hover),
+        border-color var(--beweging-hover);
+    }
+
+    .woord {
+      transition:
+        background-size var(--beweging-hover),
+        background-position 0s var(--k-beweging-duur-snel);
+    }
+
+    .thema-schakelaar:hover .schijf {
+      background-color: var(--kleur-voorgrond-gedempt);
+      border-color: var(--kleur-voorgrond-gedempt);
+    }
+
+    .thema-schakelaar:hover .woord {
+      background-position: 0 100%;
+      background-size: 100% var(--link-onderstreping-dikte);
+      transition:
+        background-size var(--beweging-hover),
+        background-position 0s;
+    }
+  }
+</style>

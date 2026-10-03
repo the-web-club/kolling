@@ -115,6 +115,14 @@
   }
 }
 
+/* Alleen tijdens een themawissel. De paginaovergang houdt haar eigen duur. */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-thema-wissel]::view-transition-old(root),
+  html[data-thema-wissel]::view-transition-new(root) {
+    animation-duration: var(--k-beweging-duur-overgang);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-js] [data-onthul],
   [data-js] [data-onthul-regel] > span {

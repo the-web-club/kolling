@@ -331,3 +331,43 @@ Waar een token en een groep dezelfde naam zouden krijgen, staat er een koppeltek
 ### Keyframes
 
 1. `kop-dekt` (de band onder de kop die bij het scrollen dekkend wordt)
+
+### Container
+
+1. `scherm` op `body`. Hoogtegrenzen gebruiken deze container, omdat een media query de layoutviewport meet en de browserbalk op een telefoon daar nog bij zit.
+
+## Aangevuld voor het thema
+
+### Domein
+
+1. thema, met waarden `licht` en `donker`
+
+### Componenten
+
+1. `ThemaSchakelaar.astro`, classes `.thema-schakelaar` en `.schijf`
+
+### Bestanden
+
+1. `src/lib/thema.ts`
+2. `tokens/semantisch/donker.json` (de donkere semantische laag, genest onder `donker` zodat de paden niet botsen met het lichte thema)
+3. `tokens/semantisch/dekking.json`
+4. `tokens/componenten/schakelaar.json`
+
+### Tokens
+
+1. Primitief: `kleur.nacht.600` tot `kleur.nacht.900`, `kleur.steen.300`, `kleur.steen.500`, `kleur.fout.400`, `kleur.hout.es.300`, `kleur.hout.noten.600`
+2. Semantisch, in beide thema's: `kleur.selectie.achtergrond`, `kleur.selectie.voorgrond`, `kleur.licht.vlak`, `kleur.licht.schaduw`, `kleur.schema`, `dekking.beeld`, `dekking.korrel`, `dekking.vlak-kern`, `dekking.vlak-rand`, `dekking.schaduw-kern`, `dekking.schaduw-rand`, `menging.korrel`, `filter.woordmerk`, `zicht.licht`, `zicht.donker`, `vulling.schijf`
+3. Vervallen: `kleur.licht.warm` en `kleur.licht.koel`, opgevolgd door `kleur.licht.vlak` en `kleur.licht.schaduw`
+4. Componenten: `beeld.dimmen`, `schakelaar.schijf`, `schakelaar.ronding`, `schakelaar.rand`
+
+### Data-attributen
+
+1. `data-thema="licht | donker"` op `<html>`
+2. `data-thema-schakelaar` op de knop
+3. `data-thema-wissel` op `<html>` zolang de crossfade van een themawissel loopt
+4. `data-woord="licht | donker"` op het woord van de schakelaar
+5. `data-gekoppeld` ook op de schakelaar, naast de klok
+
+### Opslag
+
+1. `kolling-thema` in `localStorage`

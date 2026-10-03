@@ -1,5 +1,6 @@
 ---
 import ContactLink from '@/components/ContactLink.astro';
+import ThemaSchakelaar from '@/components/ThemaSchakelaar.astro';
 import { Envelop, Instagram, Pin, Telefoon, Whatsapp } from '@/components/iconen';
 import { haalInstellingen, isBekend } from '@/lib/content';
 
@@ -62,7 +63,10 @@ const microregel = isBekend(instellingen.kvk)
     </div>
   </div>
 
-  <p class="micro" data-onthul="fade">{microregel}</p>
+  <div class="voetregel">
+    <ThemaSchakelaar />
+    <p class="micro" data-onthul="fade">{microregel}</p>
+  </div>
 </footer>
 
 <style>
@@ -114,7 +118,7 @@ const microregel = isBekend(instellingen.kvk)
     font-weight: var(--tekst-label-gewicht);
     letter-spacing: var(--tekst-label-spatiering);
     text-transform: uppercase;
-    color: var(--kleur-voorgrond-subtiel);
+    color: var(--kleur-voorgrond-gedempt);
   }
 
   .regels {
@@ -136,6 +140,13 @@ const microregel = isBekend(instellingen.kvk)
 
   .noot {
     padding-inline-start: calc(var(--icoon-maat) + var(--icoon-ruimte));
+  }
+
+  .voetregel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--ruimte-stapel-md);
   }
 
   .micro {

@@ -17,8 +17,13 @@
       "es": { "$value": "{primitief.kleur.hout.es.200}", "$type": "color" }
     },
     "licht": {
-      "warm": { "$value": "{primitief.kleur.hout.es.200}", "$type": "color" },
-      "koel": { "$value": "{primitief.kleur.lijn.200}", "$type": "color" }
-    }
+      "vlak": { "$value": "{primitief.kleur.hout.es.200}", "$type": "color" },
+      "schaduw": { "$value": "{primitief.kleur.lijn.200}", "$type": "color" }
+    },
+    "selectie": {
+      "achtergrond": { "$value": "{primitief.kleur.inkt.900}", "$type": "color" },
+      "voorgrond": { "$value": "{primitief.kleur.papier.50}", "$type": "color" }
+    },
+    "schema": { "$value": "light", "$type": "other" }
   }
 }

@@ -3,7 +3,7 @@
     "grootte": { "$value": "{tekst.label.grootte}", "$type": "dimension" },
     "spatiering": { "$value": "{tekst.label.spatiering}", "$type": "dimension" },
     "gewicht": { "$value": "{tekst.label.gewicht}", "$type": "fontWeight" },
-    "voorgrond": { "$value": "{kleur.voorgrond-subtiel}", "$type": "color" },
+    "voorgrond": { "$value": "{kleur.voorgrond-gedempt}", "$type": "color" },
     "ruimte-boven": { "$value": "{primitief.ruimte.3}", "$type": "dimension" }
   },
   "plaatshouder": {

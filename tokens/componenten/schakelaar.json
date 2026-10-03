@@ -1,0 +1,7 @@
+{
+  "schakelaar": {
+    "schijf": { "$value": "0.625rem", "$type": "dimension" },
+    "ronding": { "$value": "50%", "$type": "other" },
+    "rand": { "$value": "{primitief.rand.haarlijn}", "$type": "dimension" }
+  }
+}

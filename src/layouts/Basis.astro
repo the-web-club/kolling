@@ -6,6 +6,7 @@ import logo from '@/assets/merk/woordmerk.png';
 import JsonLd from '@/components/JsonLd.astro';
 import LichtAchtergrond from '@/components/LichtAchtergrond.astro';
 import Seo from '@/components/Seo.astro';
+import { tokens } from '@/design/tokens.gegenereerd';
 import { haalInstellingen } from '@/lib/content';
 import { maakLocalBusiness, maakWebsite } from '@/lib/jsonld';
 import { maakTitel } from '@/lib/seo';
@@ -35,6 +36,14 @@ if (!Astro.site) {
   throw new Error('astro.config.mjs mist de site-URL.');
 }
 
+function tokenWaarde(naam: string): string {
+  const token = tokens.find((regel) => regel.naam === naam);
+  if (!token) throw new Error(`Token ${naam} ontbreekt.`);
+  return token.waarde;
+}
+
+const themaLicht = tokenWaarde('k-kleur-papier-50');
+const themaDonker = tokenWaarde('k-kleur-nacht-900');
 const volledigeTitel = suffix ? maakTitel(titel, instellingen.seo.titelSuffix) : titel;
 const werkplaats = maakLocalBusiness(instellingen, Astro.site, logo.src, beelden);
 const website = maakWebsite(instellingen, Astro.site);
@@ -45,6 +54,25 @@ const website = maakWebsite(instellingen, Astro.site);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content={themaLicht} media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content={themaDonker} media="(prefers-color-scheme: dark)" />
+    <script is:inline>
+      {
+        const zetThema = () => {
+          const wortel = document.documentElement;
+          wortel.setAttribute('data-js', '');
+          let keuze = null;
+          try {
+            keuze = localStorage.getItem('kolling-thema');
+          } catch {
+            keuze = null;
+          }
+          if (keuze === 'licht' || keuze === 'donker') wortel.setAttribute('data-thema', keuze);
+        };
+        zetThema();
+        document.addEventListener('astro:after-swap', zetThema);
+      }
+    </script>
     <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64" />
     <link
       rel="preload"
@@ -75,17 +103,16 @@ const website = maakWebsite(instellingen, Astro.site);
     {jsonLd && <JsonLd schema={werkplaats} />}
     {jsonLd && <JsonLd schema={website} />}
     <ClientRouter />
-    <script is:inline>
-      document.documentElement.setAttribute('data-js', '');
-    </script>
   </head>
   <body>
     <LichtAchtergrond />
     <slot />
     <script>
       import { koppelPaginaovergang } from '@/lib/beweging/paginaovergang';
+      import { koppelThema } from '@/lib/thema';
 
       koppelPaginaovergang();
+      koppelThema();
     </script>
   </body>
 </html>

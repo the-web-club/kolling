@@ -73,9 +73,21 @@ Wisselen naar de licentiefonts:
 4. Draai `pnpm tokens:build`. Verder verandert er niets, want componenten verwijzen alleen naar de tokens.
 5. Zet de repository op privé zodra er licentiebestanden in staan.
 
+## Thema
+
+Twee thema's, `licht` en `donker`, als `data-thema` op `<html>`. Een thema is een set semantische tokens. Componenten verwijzen alleen naar die laag; het donkere thema overschrijft haar in `:root[data-thema="donker"]` en, zonder opgeslagen keuze, in `prefers-color-scheme: dark`. De donkere waarden staan één keer in `tokens/semantisch/donker.json`, genest onder `donker`, en het CSS-formaat laat die sleutel weg zodat de variabelenamen in beide blokken gelijk zijn.
+
+Zonder keuze volgt de pagina het systeem. Een keuze van de bezoeker wint en blijft in `localStorage` onder `kolling-thema`. Het inline script in de `<head>` zet die keuze vóór de eerste paint en opnieuw op `astro:after-swap`, omdat de router de attributen van `<html>` bij een paginawissel vervangt.
+
+Tekst is in het donker nooit zuiver wit en de achtergrond nooit zuiver zwart. Het hout blijft de enige kleur. De schakelaar staat in de voet, naast de microregel.
+
+Invoervelden bestaan nog niet. Als ze er komen erven ze `color-scheme` van de pagina en gebruiken ze `kleur.fout`, zodat het donkere thema dan vanzelf klopt.
+
 ## Logo
 
 Eén variant: `src/assets/merk/d-logo.svg`, zwart op transparant, uitsluitend op lichte achtergronden. Niet inverteren, herkleuren of hertekenen, en niet op een donker vlak zetten.
+
+Het donkere thema heeft nog geen licht woordmerk. Tot dat bestand er is, krijgt het bestaande PNG daar `filter: invert(1)` via `filter.woordmerk`. Dat raakt alleen het woordmerk.
 
 Het bestand is een export met een ingesloten bitmap en een luminantiemasker, geen uitgewerkte paden. Het wordt daarom op zijn eigen formaat of kleiner getoond en nooit opgeschaald. Een outline-SVG mag het later vervangen; alleen dat ene bestand hoeft dan te wisselen.
 

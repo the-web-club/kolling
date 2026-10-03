@@ -425,8 +425,16 @@ Afwijkingen van de opdracht:
 4. **Het woordmerk is kleiner dan het was.** De inkt was 31 px op mobiel en 35 px op desktop; nu is dat 22 en 28 px, de maten uit de opdracht. Terug is één waarde in `merk.hoogte`.
 5. **Geen `data-gescrold`-terugval.** Die vraagt een scroll-listener, en op deze branch kan geen enkele pagina scrollen. De terugval hoort bij de eerste pagina die dat wel doet. `animation-timeline: scroll(root)` zelf werkt in Chrome, Safari en Firefox.
 6. **De animatie staat in longhands.** Als `animation`-shorthand plus `animation-timeline` voegt de minifier beide samen tot `animation: linear both kop-dekt scroll(root)`, en die regel kent de browser niet, waarna de band nooit verschijnt.
-7. **Geen themaschakelaar.** Die bestaat op deze branch niet, dus de koprij heeft vier cellen: woordmerk, navigatie, klok en de knop naar het menu.
+7. **De schakelaar staat in de voet, niet in de kop.** De sticky koprij blijft vier cellen. De knop zit op de regel van de microregel, links, met het woord van het thema waar je naartoe schakelt.
 8. **Twee tokens vervallen.** `pagina.kopruimte-breed` gaf de kop op brede schermen extra ruimte eronder en gaat niet samen met gelijke padding boven en onder. `navigatie.laag` was ongebruikt en is opgevolgd door `kop.laag`.
+
+## Thema gebouwd
+
+De schakelaar staat in de voet. Zonder opgeslagen keuze volgt de pagina `prefers-color-scheme`; een klik bewaart `licht` of `donker` in `kolling-thema` en die keuze wint. Het inline script in de `<head>` zet het attribuut vóór de stylesheet en opnieuw op `astro:after-swap`. Daarmee is ook de bestaande fout weg waarbij `data-js` een client-side navigatie niet overleefde: na een klik op Over draait de binnenkomst weer, in de halve maat.
+
+Gemeten in de preview: achtergrond `#20201f` en voorgrond `#f3f1ec` in het donker, `#faf9f7` en `#1b1a18` in het licht. De schijf is hol in het licht en gevuld in het donker. Het woordmerk krijgt `invert(1)` alleen in het donker. Foto's staan op 0,94, de korrel op `screen` met 0,05. De lichtanimatie liep door over de wissel (currentTime steeg, hij sprong niet terug naar nul). Bij reduced motion wordt `startViewTransition` niet aangeroepen; zonder reduced motion wel, 400 ms. `aria-pressed` is `true` in het donker. Het menu volgt via `kleur.achtergrond-verhoogd` (`#2b2a28`).
+
+De pagina blijft één scherm. Onder de microregel bleef 18 px over op 320 × 568, 16 px op 390 × 844, 27 px op 768 × 1024, en de knop viel binnen het venster op 844 × 390, 1440 × 900 en 1920 × 1080.
 
 ## Wat open staat
 

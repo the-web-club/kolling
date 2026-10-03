@@ -1,0 +1,52 @@
+{
+  "donker": {
+    "kleur": {
+      "achtergrond": { "$value": "{primitief.kleur.nacht.900}", "$type": "color" },
+      "achtergrond-verhoogd": { "$value": "{primitief.kleur.nacht.800}", "$type": "color" },
+      "achtergrond-tint": { "$value": "{primitief.kleur.nacht.850}", "$type": "color" },
+      "voorgrond": { "$value": "{primitief.kleur.papier.100}", "$type": "color" },
+      "voorgrond-gedempt": { "$value": "{primitief.kleur.steen.300}", "$type": "color" },
+      "voorgrond-subtiel": { "$value": "{primitief.kleur.steen.500}", "$type": "color" },
+      "voorgrond-invers": { "$value": "{primitief.kleur.inkt.900}", "$type": "color" },
+      "lijn": { "$value": "{primitief.kleur.nacht.700}", "$type": "color" },
+      "lijn-sterk": { "$value": "{primitief.kleur.papier.100}", "$type": "color" },
+      "accent": { "$value": "{primitief.kleur.papier.100}", "$type": "color" },
+      "fout": { "$value": "{primitief.kleur.fout.400}", "$type": "color" },
+      "plaatshouder": {
+        "eik": { "$value": "{primitief.kleur.hout.eik.400}", "$type": "color" },
+        "noten": { "$value": "{primitief.kleur.hout.noten.600}", "$type": "color" },
+        "es": { "$value": "{primitief.kleur.hout.es.300}", "$type": "color" }
+      },
+      "licht": {
+        "vlak": { "$value": "{primitief.kleur.hout.eik.400}", "$type": "color" },
+        "schaduw": { "$value": "{primitief.kleur.nacht.600}", "$type": "color" }
+      },
+      "selectie": {
+        "achtergrond": { "$value": "{primitief.kleur.papier.100}", "$type": "color" },
+        "voorgrond": { "$value": "{primitief.kleur.nacht.900}", "$type": "color" }
+      },
+      "schema": { "$value": "dark", "$type": "other" }
+    },
+    "dekking": {
+      "beeld": { "$value": "0.94", "$type": "number" },
+      "korrel": { "$value": "0.05", "$type": "number" },
+      "vlak-kern": { "$value": "10%", "$type": "other" },
+      "vlak-rand": { "$value": "4%", "$type": "other" },
+      "schaduw-kern": { "$value": "60%", "$type": "other" },
+      "schaduw-rand": { "$value": "22%", "$type": "other" }
+    },
+    "menging": {
+      "korrel": { "$value": "screen", "$type": "other" }
+    },
+    "filter": {
+      "woordmerk": { "$value": "invert(1)", "$type": "other" }
+    },
+    "zicht": {
+      "licht": { "$value": "none", "$type": "other" },
+      "donker": { "$value": "inline", "$type": "other" }
+    },
+    "vulling": {
+      "schijf": { "$value": "{kleur.voorgrond}", "$type": "color" }
+    }
+  }
+}

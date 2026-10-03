@@ -10,25 +10,37 @@
         "200": { "$value": "#e3e0d9", "$type": "color" }
       },
       "steen": {
-        "400": { "$value": "#9b968d", "$type": "color" }
+        "300": { "$value": "#b5b1a8", "$type": "color" },
+        "400": { "$value": "#9b968d", "$type": "color" },
+        "500": { "$value": "#7e7a72", "$type": "color" }
       },
       "inkt": {
         "700": { "$value": "#4a4844", "$type": "color" },
         "900": { "$value": "#1b1a18", "$type": "color" },
         "1000": { "$value": "#000000", "$type": "color" }
       },
+      "nacht": {
+        "600": { "$value": "#141311", "$type": "color" },
+        "700": { "$value": "#3a3935", "$type": "color" },
+        "800": { "$value": "#2b2a28", "$type": "color" },
+        "850": { "$value": "#262522", "$type": "color" },
+        "900": { "$value": "#20201f", "$type": "color" }
+      },
       "hout": {
         "es": {
-          "200": { "$value": "#e7decf", "$type": "color" }
+          "200": { "$value": "#e7decf", "$type": "color" },
+          "300": { "$value": "#cfc3ac", "$type": "color" }
         },
         "eik": {
           "400": { "$value": "#c7a67a", "$type": "color" }
         },
         "noten": {
+          "600": { "$value": "#7a5a40", "$type": "color" },
           "700": { "$value": "#6a4931", "$type": "color" }
         }
       },
       "fout": {
+        "400": { "$value": "#d9826f", "$type": "color" },
         "600": { "$value": "#a23a29", "$type": "color" }
       }
     }

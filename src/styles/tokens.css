@@ -31,13 +31,23 @@
   --k-kleur-papier-50: #faf9f7;
   --k-kleur-papier-100: #f3f1ec;
   --k-kleur-lijn-200: #e3e0d9;
+  --k-kleur-steen-300: #b5b1a8;
   --k-kleur-steen-400: #9b968d;
+  --k-kleur-steen-500: #7e7a72;
   --k-kleur-inkt-700: #4a4844;
   --k-kleur-inkt-900: #1b1a18;
   --k-kleur-inkt-1000: #000000;
+  --k-kleur-nacht-600: #141311;
+  --k-kleur-nacht-700: #3a3935;
+  --k-kleur-nacht-800: #2b2a28;
+  --k-kleur-nacht-850: #262522;
+  --k-kleur-nacht-900: #20201f;
   --k-kleur-hout-es-200: #e7decf;
+  --k-kleur-hout-es-300: #cfc3ac;
   --k-kleur-hout-eik-400: #c7a67a;
+  --k-kleur-hout-noten-600: #7a5a40;
   --k-kleur-hout-noten-700: #6a4931;
+  --k-kleur-fout-400: #d9826f;
   --k-kleur-fout-600: #a23a29;
   --k-letter-familie-kop: 'Instrument Sans Variable', 'Kop terugval', system-ui, sans-serif;
   --k-letter-familie-tekst: 'Work Sans Variable', 'Tekst terugval', system-ui, sans-serif;
@@ -95,6 +105,18 @@
   --k-verhouding-staand: 4 / 5;
   --k-verhouding-vierkant: 1 / 1;
   --k-verhouding-breed: 16 / 9;
+  --dekking-beeld: 1;
+  --dekking-korrel: 0.035;
+  --dekking-vlak-kern: 35%;
+  --dekking-vlak-rand: 18%;
+  --dekking-schaduw-kern: 50%;
+  --dekking-schaduw-rand: 22%;
+  --menging-korrel: multiply;
+  --filter-woordmerk: none;
+  --zicht-licht: inline;
+  --zicht-donker: none;
+  --vulling-schijf: transparent;
+  --kleur-schema: light;
   --beeld-band-hoogte: 26vh;
   --beeld-band-hoogte-breed: 32vh;
   --beeld-hoogte-kolom: 34vh;
@@ -125,6 +147,8 @@
   --link-onderstreping-afstand: 0.15em;
   --merk-hoogte: 1.375rem;
   --merk-hoogte-breed: 1.75rem;
+  --schakelaar-schijf: 0.625rem;
+  --schakelaar-ronding: 50%;
   --statement-cap: 8.9cqi;
   --statement-cap-breed: 7.4cqi;
   --statement-cap-naast-beeld: 4.4cqi;
@@ -153,8 +177,10 @@
   --kleur-plaatshouder-eik: var(--k-kleur-hout-eik-400);
   --kleur-plaatshouder-noten: var(--k-kleur-hout-noten-700);
   --kleur-plaatshouder-es: var(--k-kleur-hout-es-200);
-  --kleur-licht-warm: var(--k-kleur-hout-es-200);
-  --kleur-licht-koel: var(--k-kleur-lijn-200);
+  --kleur-licht-vlak: var(--k-kleur-hout-es-200);
+  --kleur-licht-schaduw: var(--k-kleur-lijn-200);
+  --kleur-selectie-achtergrond: var(--k-kleur-inkt-900);
+  --kleur-selectie-voorgrond: var(--k-kleur-papier-50);
   --ruimte-sectie: var(--k-ruimte-sectie);
   --ruimte-blok: var(--k-ruimte-16);
   --ruimte-goot: var(--k-ruimte-goot);
@@ -234,6 +260,7 @@
   --beeld-rand-onder: calc(var(--k-ruimte-8) - var(--ruimte-rij-md));
   --beeld-bijschrift-vertraging: var(--k-beweging-duur-snel);
   --beeld-schaal-hover: var(--k-beweging-schaal-hover);
+  --beeld-dimmen: var(--dekking-beeld);
   --bijschrift-ruimte-boven: var(--k-ruimte-3);
   --icoon-ruimte: var(--k-ruimte-2);
   --invoer-padding-inline: var(--k-ruimte-3);
@@ -263,11 +290,12 @@
   --kop-drempel: var(--k-beweging-afstand-sm);
   --kop-laag: var(--k-laag-kop);
   --kop-lijn-dikte: var(--k-rand-haarlijn);
+  --schakelaar-rand: var(--k-rand-haarlijn);
   --beeld-achtergrond: var(--kleur-achtergrond-tint);
   --bijschrift-grootte: var(--tekst-label-grootte);
   --bijschrift-spatiering: var(--tekst-label-spatiering);
   --bijschrift-gewicht: var(--tekst-label-gewicht);
-  --bijschrift-voorgrond: var(--kleur-voorgrond-subtiel);
+  --bijschrift-voorgrond: var(--kleur-voorgrond-gedempt);
   --plaatshouder-label-grootte: var(--tekst-label-grootte);
   --plaatshouder-label-voorgrond: var(--kleur-voorgrond-gedempt);
   --icoon-voorgrond: var(--kleur-voorgrond-subtiel);
@@ -306,3 +334,72 @@
   --kop-achtergrond: var(--kleur-achtergrond);
   --kop-lijn: var(--kleur-lijn);
 }
+
+:root[data-thema='donker'] {
+  --kleur-schema: dark;
+  --dekking-beeld: 0.94;
+  --dekking-korrel: 0.05;
+  --dekking-vlak-kern: 10%;
+  --dekking-vlak-rand: 4%;
+  --dekking-schaduw-kern: 60%;
+  --dekking-schaduw-rand: 22%;
+  --menging-korrel: screen;
+  --filter-woordmerk: invert(1);
+  --zicht-licht: none;
+  --zicht-donker: inline;
+  --kleur-achtergrond: var(--k-kleur-nacht-900);
+  --kleur-achtergrond-verhoogd: var(--k-kleur-nacht-800);
+  --kleur-achtergrond-tint: var(--k-kleur-nacht-850);
+  --kleur-voorgrond: var(--k-kleur-papier-100);
+  --kleur-voorgrond-gedempt: var(--k-kleur-steen-300);
+  --kleur-voorgrond-subtiel: var(--k-kleur-steen-500);
+  --kleur-voorgrond-invers: var(--k-kleur-inkt-900);
+  --kleur-lijn: var(--k-kleur-nacht-700);
+  --kleur-lijn-sterk: var(--k-kleur-papier-100);
+  --kleur-accent: var(--k-kleur-papier-100);
+  --kleur-fout: var(--k-kleur-fout-400);
+  --kleur-plaatshouder-eik: var(--k-kleur-hout-eik-400);
+  --kleur-plaatshouder-noten: var(--k-kleur-hout-noten-600);
+  --kleur-plaatshouder-es: var(--k-kleur-hout-es-300);
+  --kleur-licht-vlak: var(--k-kleur-hout-eik-400);
+  --kleur-licht-schaduw: var(--k-kleur-nacht-600);
+  --kleur-selectie-achtergrond: var(--k-kleur-papier-100);
+  --kleur-selectie-voorgrond: var(--k-kleur-nacht-900);
+  --vulling-schijf: var(--kleur-voorgrond);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-thema='licht']) {
+    --kleur-schema: dark;
+    --dekking-beeld: 0.94;
+    --dekking-korrel: 0.05;
+    --dekking-vlak-kern: 10%;
+    --dekking-vlak-rand: 4%;
+    --dekking-schaduw-kern: 60%;
+    --dekking-schaduw-rand: 22%;
+    --menging-korrel: screen;
+    --filter-woordmerk: invert(1);
+    --zicht-licht: none;
+    --zicht-donker: inline;
+    --kleur-achtergrond: var(--k-kleur-nacht-900);
+    --kleur-achtergrond-verhoogd: var(--k-kleur-nacht-800);
+    --kleur-achtergrond-tint: var(--k-kleur-nacht-850);
+    --kleur-voorgrond: var(--k-kleur-papier-100);
+    --kleur-voorgrond-gedempt: var(--k-kleur-steen-300);
+    --kleur-voorgrond-subtiel: var(--k-kleur-steen-500);
+    --kleur-voorgrond-invers: var(--k-kleur-inkt-900);
+    --kleur-lijn: var(--k-kleur-nacht-700);
+    --kleur-lijn-sterk: var(--k-kleur-papier-100);
+    --kleur-accent: var(--k-kleur-papier-100);
+    --kleur-fout: var(--k-kleur-fout-400);
+    --kleur-plaatshouder-eik: var(--k-kleur-hout-eik-400);
+    --kleur-plaatshouder-noten: var(--k-kleur-hout-noten-600);
+    --kleur-plaatshouder-es: var(--k-kleur-hout-es-300);
+    --kleur-licht-vlak: var(--k-kleur-hout-eik-400);
+    --kleur-licht-schaduw: var(--k-kleur-nacht-600);
+    --kleur-selectie-achtergrond: var(--k-kleur-papier-100);
+    --kleur-selectie-voorgrond: var(--k-kleur-nacht-900);
+    --vulling-schijf: var(--kleur-voorgrond);
+  }
+}
+

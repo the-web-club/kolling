@@ -67,12 +67,25 @@
 }
 
 /* De site is nu één scherm. Deze regels gaan weg zodra de volledige site
-   terugkomt; die scrollt wel. */
+   terugkomt; die scrollt wel.
+   clip, niet hidden: een haarlijn op 100vw mag de scrollbreedte niet oprekken.
+   Doet ze dat wel, dan zoomen iOS en Samsung uit en mist de telefoon de
+   smalle indeling. */
 html,
 body {
   block-size: 100%;
-  overflow: hidden;
+  overflow: clip;
   overscroll-behavior: none;
+}
+
+/* svh is de hoogte mét browserbalk. Een media query en dvh meten op iPhone en
+   Samsung de hogere layoutviewport, zodat de pagina de indeling van een hoger
+   scherm kreeg en de onderkant achter de balk viel. Hoogtegrenzen vragen de
+   container, want die meet deze hoogte. */
+body {
+  block-size: 100dvh;
+  block-size: 100svh;
+  container: scherm / size;
 }
 
 /* Elke pagina is hetzelfde scherm: koprij, middelste rij, contactrij. De
@@ -82,7 +95,7 @@ body {
   display: grid;
   grid-template-rows: auto 1fr auto;
   gap: var(--ruimte-rij-md);
-  block-size: 100dvh;
+  block-size: 100%;
   inline-size: 100%;
   max-inline-size: var(--maat-container);
   margin-inline: auto;
@@ -90,21 +103,24 @@ body {
   padding-block-end: var(--pagina-padding);
 }
 
-@media (min-width: 48rem) {
+/* Pixels, niet rem. In een media query telt rem de systeemlettergrootte mee,
+   en op iPhone en Samsung schuift de grens dan voorbij de telefoon. 768px is
+   schermbreedte.md bij 16px. */
+@media (min-width: 768px) {
   .pagina {
     padding-inline: var(--pagina-padding-breed);
     padding-block-end: var(--pagina-padding-breed);
   }
 }
 
-@media (max-height: 44rem) {
+@container scherm (max-height: 704px) {
   .pagina {
     gap: var(--ruimte-stapel-md);
   }
 }
 
 :root {
-  color-scheme: light;
+  color-scheme: var(--kleur-schema);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -114,7 +130,7 @@ html {
   scroll-padding-block-start: var(--kop-hoogte);
 }
 
-@media (min-width: 48rem) {
+@media (min-width: 768px) {
   html {
     scroll-padding-block-start: var(--kop-hoogte-breed);
   }
@@ -191,8 +207,8 @@ figure {
 }
 
 ::selection {
-  color: var(--kleur-voorgrond-invers);
-  background-color: var(--kleur-voorgrond);
+  color: var(--kleur-selectie-voorgrond);
+  background-color: var(--kleur-selectie-achtergrond);
 }
 
 :focus-visible {

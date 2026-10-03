@@ -1,0 +1,23 @@
+{
+  "dekking": {
+    "beeld": { "$value": "1", "$type": "number" },
+    "korrel": { "$value": "0.035", "$type": "number" },
+    "vlak-kern": { "$value": "35%", "$type": "other" },
+    "vlak-rand": { "$value": "18%", "$type": "other" },
+    "schaduw-kern": { "$value": "50%", "$type": "other" },
+    "schaduw-rand": { "$value": "22%", "$type": "other" }
+  },
+  "menging": {
+    "korrel": { "$value": "multiply", "$type": "other" }
+  },
+  "filter": {
+    "woordmerk": { "$value": "none", "$type": "other" }
+  },
+  "zicht": {
+    "licht": { "$value": "inline", "$type": "other" },
+    "donker": { "$value": "none", "$type": "other" }
+  },
+  "vulling": {
+    "schijf": { "$value": "transparent", "$type": "other" }
+  }
+}
