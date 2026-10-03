@@ -173,6 +173,16 @@ const bronnenKlein = await maakBronnen({
     }
   }
 
+  /* Op een telefoon loopt de foto tot de schermrand. Het bijschrift blijft in
+     de kolom, op de padding van de pagina. */
+  @container scherm (max-width: 767.98px) and (min-height: 780px) {
+    .statement :global(.beeld-groot > picture) {
+      inline-size: calc(100% + 2 * var(--pagina-padding));
+      max-inline-size: none;
+      margin-inline: calc(-1 * var(--pagina-padding));
+    }
+  }
+
   /* Onder 780 px blijft er te weinig over voor een band die nog een meubel
      laat zien. In de rechterkolom kost het beeld geen hoogte; daar is 512 px de
      ondergrens. Leegte is een keuze, scrollen niet. */
