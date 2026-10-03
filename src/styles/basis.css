@@ -68,13 +68,15 @@
 
 /* De site is nu één scherm. Deze regels gaan weg zodra de volledige site
    terugkomt; die scrollt wel.
-   clip, niet hidden: een haarlijn op 100vw mag de scrollbreedte niet oprekken.
-   Doet ze dat wel, dan zoomen iOS en Samsung uit en mist de telefoon de
-   smalle indeling. */
+   clip, niet hidden: een element dat breder is dan het scherm mag de
+   scrollbreedte niet oprekken. Doet het dat wel, dan zoomen iOS en Samsung
+   uit en mist de telefoon de smalle indeling. */
 html,
 body {
   block-size: 100%;
+  max-inline-size: 100%;
   overflow: clip;
+  overflow-x: clip;
   overscroll-behavior: none;
 }
 
@@ -97,10 +99,16 @@ body {
   gap: var(--ruimte-rij-md);
   block-size: 100%;
   inline-size: 100%;
-  max-inline-size: var(--maat-container);
+  min-inline-size: 0;
+  max-inline-size: min(100%, var(--maat-container));
   margin-inline: auto;
   padding-inline: var(--pagina-padding);
   padding-block-end: var(--pagina-padding);
+}
+
+.pagina > * {
+  min-inline-size: 0;
+  max-inline-size: 100%;
 }
 
 /* Pixels, niet rem. In een media query telt rem de systeemlettergrootte mee,

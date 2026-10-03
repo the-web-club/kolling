@@ -9,6 +9,13 @@
   --onthul-weging: var(--binnenkomst-factor-licht);
 }
 
+/* De regelval is layout, geen beweging. Binnen een reduced-motion-query
+   vallen de spans terug naar inline en plakt de kop tot één regel. */
+[data-onthul-regel],
+[data-onthul-regel] > span {
+  display: block;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   [data-laag='licht'] {
     animation: licht-trekt var(--k-beweging-duur-ambient) var(--k-beweging-curve-ambient) infinite
@@ -54,12 +61,10 @@
   }
 
   [data-js] [data-onthul-regel] {
-    display: block;
     clip-path: inset(-0.1em 0 -0.25em 0);
   }
 
   [data-js] [data-onthul-regel] > span {
-    display: block;
     animation: regel-omhoog var(--k-beweging-duur-trager) var(--k-beweging-curve-uit-expo) both;
     animation-delay: calc(var(--onthul-vertraging, 0ms) * var(--onthul-weging));
   }

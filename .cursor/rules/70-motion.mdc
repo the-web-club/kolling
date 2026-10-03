@@ -49,4 +49,8 @@ De drempel is 15 procent zichtbaar. Een element dat bij het laden al in beeld st
 
 ## Reduced motion
 
-Bij `prefers-reduced-motion: reduce` blijven alleen opacity-fades van 200ms over. Geen `translate`, geen `scale`, geen `clip-path`, geen parallax, geen stagger. Alle entrance- en overgangsregels staan daarom in `@media (prefers-reduced-motion: no-preference)` in `src/styles/beweging.css`.
+Bij `prefers-reduced-motion: reduce` blijven alleen opacity-fades van 200ms over. Geen `translate`, geen `scale`, geen `clip-path`, geen parallax, geen stagger. Entrance- en overgangsregels staan daarom in `@media (prefers-reduced-motion: no-preference)` in `src/styles/beweging.css`. Structuur hoort daar niet in; zie Techniek.
+
+## Techniek
+
+1. Structuur staat nooit in een bewegings-mediaquery. Reduced motion zet animaties uit en verandert nooit de layout. `display`, `grid`, `inline-size`, `block-size` en `position` staan buiten `@media (prefers-reduced-motion)`. Binnen die query staan alleen `animation`, `transition`, `clip-path`, `translate`, `scale`, `opacity` als startstaat van een animatie, en `will-change`.

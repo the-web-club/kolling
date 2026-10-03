@@ -93,18 +93,20 @@ const bronnenKlein = await maakBronnen({
     grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: var(--ruimte-stapel-lg) var(--ruimte-goot);
     align-content: center;
+    min-inline-size: 0;
   }
 
-  /* De kop staat op twee regels die niet mogen afbreken. De bovengrens is
-     daarom de kolombreedte (cqi), niet de viewport: voorbij 90rem groeit het
-     raster niet meer mee, een vw-maat wel. */
+  /* De kop staat op twee expliciete blokken. De bovengrens is de kolombreedte
+     (cqi), niet de viewport: voorbij 90rem groeit het raster niet meer mee,
+     een vw-maat wel. Een regel die toch te breed is, breekt af. */
   h1 {
     --cap: var(--statement-cap);
     grid-column: 1 / -1;
+    min-inline-size: 0;
     font-size: min(var(--tekst-display-grootte), var(--cap));
     line-height: var(--tekst-display-regelhoogte);
     letter-spacing: var(--tekst-display-spatiering);
-    text-wrap: nowrap;
+    overflow-wrap: anywhere;
   }
 
   .regel:first-child > span {

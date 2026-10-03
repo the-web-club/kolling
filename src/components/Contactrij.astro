@@ -75,12 +75,12 @@ const microregel = isBekend(instellingen.kvk)
     gap: var(--pagina-micro-ruimte);
   }
 
-  /* De haarlijn loopt door tot de schermranden; de tekst eronder blijft op de
-     padding van de pagina staan. */
+  /* De haarlijn loopt tot de rand van de pagina, niet tot 100vw. Op iOS telt
+     vw een scrollbreedte mee en rekt die het scherm op. */
   .lijn {
     --onthul-vertraging: var(--binnenkomst-lijn);
-    inline-size: 100vw;
-    margin-inline-start: calc(50% - 50vw);
+    inline-size: calc(100% + 2 * var(--pagina-padding));
+    margin-inline-start: calc(-1 * var(--pagina-padding));
     block-size: var(--k-rand-haarlijn);
     background-color: var(--kleur-lijn);
   }
@@ -178,10 +178,16 @@ const microregel = isBekend(instellingen.kvk)
     .blok:nth-child(3) {
       grid-column: 1;
       grid-row: 2;
+      margin-block-start: var(--ruimte-stapel-md);
     }
   }
 
   @media (min-width: 768px) {
+    .lijn {
+      inline-size: calc(100% + 2 * var(--pagina-padding-breed));
+      margin-inline-start: calc(-1 * var(--pagina-padding-breed));
+    }
+
     .blokken {
       gap: var(--pagina-blok-ruimte-breed) var(--ruimte-goot);
     }
