@@ -1,0 +1,74 @@
+---
+interface Props {
+  href: string;
+  variant?: 'onderstreept' | 'intekenend';
+  huidig?: boolean;
+}
+
+const { href, variant = 'onderstreept', huidig = false } = Astro.props;
+---
+
+<a class="tekst-link" data-variant={variant} href={href} aria-current={huidig ? 'page' : undefined}>
+  <slot />
+  {huidig && <span class="indicator" />}
+</a>
+
+<style>
+  .tekst-link {
+    position: relative;
+  }
+
+  .tekst-link[data-variant='onderstreept'] {
+    text-decoration-line: underline;
+    text-decoration-thickness: var(--link-onderstreping-dikte);
+    text-decoration-color: var(--link-onderstreping-kleur);
+    text-underline-offset: var(--link-onderstreping-afstand);
+  }
+
+  .tekst-link[data-variant='intekenend'] {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 100% 100%;
+    background-size: 0 var(--link-onderstreping-dikte);
+    padding-block-end: var(--link-onderstreping-afstand);
+  }
+
+  .indicator {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: calc(100% + var(--navigatie-indicator-afstand));
+    block-size: var(--navigatie-indicator-dikte);
+    background-color: var(--navigatie-lijn-actief);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .tekst-link[data-variant='onderstreept'] {
+      transition: text-decoration-color var(--beweging-hover);
+    }
+
+    .tekst-link[data-variant='intekenend'] {
+      transition:
+        background-size var(--beweging-hover),
+        background-position 0s var(--k-beweging-duur-snel);
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .tekst-link[data-variant='onderstreept']:hover {
+      text-decoration-color: var(--link-onderstreping-kleur-hover);
+    }
+
+    .tekst-link[data-variant='intekenend']:hover {
+      background-position: 0 100%;
+      background-size: 100% var(--link-onderstreping-dikte);
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .tekst-link[data-variant='intekenend']:hover {
+      transition:
+        background-size var(--beweging-hover),
+        background-position 0s;
+    }
+  }
+</style>

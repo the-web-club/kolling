@@ -1,9 +1,10 @@
 ---
 import { Picture } from 'astro:assets';
 import woordmerk from '@/assets/merk/woordmerk.png';
+import Knop from '@/components/Knop.astro';
 import { haalInstellingen } from '@/lib/content';
 
-const { naam, navigatie, telefoon, instagram } = await haalInstellingen();
+const { naam, navigatie, telefoon, instagram, cta } = await haalInstellingen();
 const huidigPad = Astro.url.pathname;
 ---
 
@@ -42,6 +43,7 @@ const huidigPad = Astro.url.pathname;
   </ul>
 
   <div class="menu-voet">
+    <Knop href="/contact" variant="omlijnd" huidig={huidigPad === '/contact'}>{cta.primair}</Knop>
     <a href={`tel:${telefoon.e164}`}>{telefoon.weergave}</a>
     <a href={instagram} rel="noopener">Instagram</a>
   </div>
@@ -161,12 +163,19 @@ const huidigPad = Astro.url.pathname;
   }
 
   .menu-voet {
-    display: flex;
-    gap: var(--navigatie-ruimte);
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: start;
+    gap: var(--ruimte-stapel-sm) var(--navigatie-ruimte);
     font-size: var(--tekst-klein-grootte);
   }
 
-  .menu-voet a {
+  .menu-voet :global(.knop) {
+    grid-column: 1 / -1;
+    inline-size: 100%;
+  }
+
+  .menu-voet a:not(.knop) {
     display: inline-flex;
     align-items: center;
     min-block-size: var(--navigatie-aanraakdoel);

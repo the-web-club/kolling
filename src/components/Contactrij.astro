@@ -1,5 +1,6 @@
 ---
 import ContactLink from '@/components/ContactLink.astro';
+import TekstLink from '@/components/TekstLink.astro';
 import ThemaSchakelaar from '@/components/ThemaSchakelaar.astro';
 import { Envelop, Instagram, Pin, Telefoon, Whatsapp } from '@/components/iconen';
 import { haalInstellingen, isBekend } from '@/lib/content';
@@ -35,7 +36,11 @@ const microregel = isBekend(instellingen.kvk)
     </div>
 
     <div class="blok" data-onthul="omhoog">
-      <h2 class="label">{instellingen.cta.primair}</h2>
+      <h2 class="label">
+        <TekstLink href="/contact" variant="intekenend">
+          {instellingen.cta.primair}
+        </TekstLink>
+      </h2>
       <div class="regels">
         <ContactLink href={`tel:${telefoon.e164}`} tekst={telefoon.weergave}>
           <Telefoon />

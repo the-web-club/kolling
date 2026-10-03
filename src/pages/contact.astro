@@ -1,0 +1,90 @@
+---
+import Contactrij from '@/components/Contactrij.astro';
+import PaginaKop from '@/components/PaginaKop.astro';
+import Basis from '@/layouts/Basis.astro';
+import { paginaovergang } from '@/lib/beweging/paginaovergang';
+
+const beschrijving =
+  'Bespreek je idee met Thomas Kolling. Bel, app of mail de werkplaats in Ommen.';
+---
+
+<Basis titel="Bespreek je idee" beschrijving={beschrijving}>
+  <div class="pagina">
+    <PaginaKop />
+
+    <main class="contactpagina" transition:name="contact" transition:animate={paginaovergang}>
+      <p class="label" data-onthul="fade">Contact</p>
+      <h1 data-onthul="omhoog">Bespreek je idee</h1>
+      <p class="intro" data-onthul="omhoog">
+        Je idee mag nog een beetje scheef zijn. Bel, app of mail Thomas via de gegevens hieronder.
+      </p>
+    </main>
+
+    <Contactrij />
+  </div>
+</Basis>
+
+<style>
+  .contactpagina {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: var(--ruimte-stapel-md) var(--ruimte-goot);
+    align-content: center;
+  }
+
+  .label,
+  h1,
+  .intro {
+    grid-column: 1 / -1;
+  }
+
+  .label {
+    --onthul-vertraging: var(--binnenkomst-kop);
+    font-family: var(--tekst-label-familie);
+    font-size: var(--tekst-label-grootte);
+    font-weight: var(--tekst-label-gewicht);
+    letter-spacing: var(--tekst-label-spatiering);
+    text-transform: uppercase;
+    color: var(--kleur-voorgrond-gedempt);
+  }
+
+  h1 {
+    --onthul-vertraging: var(--binnenkomst-regel-een);
+  }
+
+  .intro {
+    --onthul-vertraging: var(--binnenkomst-intro);
+    font-size: var(--tekst-intro-grootte);
+    line-height: var(--tekst-intro-regelhoogte);
+    color: var(--kleur-voorgrond-gedempt);
+  }
+
+  @media (min-width: 768px) {
+    .label,
+    h1,
+    .intro {
+      grid-column: 2 / span 6;
+    }
+  }
+
+  @container scherm (max-height: 704px) {
+    .intro {
+      font-size: var(--tekst-lopend-grootte);
+    }
+  }
+
+  @container scherm (max-height: 480px) {
+    .contactpagina {
+      gap: var(--ruimte-stapel-sm) var(--ruimte-goot);
+    }
+
+    h1 {
+      font-size: var(--tekst-kop3-grootte);
+      line-height: var(--tekst-kop3-regelhoogte);
+    }
+
+    .intro {
+      font-size: var(--tekst-klein-grootte);
+    }
+  }
+</style>

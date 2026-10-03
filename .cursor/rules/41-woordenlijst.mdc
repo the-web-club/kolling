@@ -237,10 +237,10 @@ Waar een token en een groep dezelfde naam zouden krijgen, staat er een koppeltek
 
 ### Classes
 
-1. `.pagina-kop` (de koprij), `.navigatie` (de zes items in de koprij), `.indicator` (de haarlijn onder het actieve item)
-2. `.menu` (de popover), `.menu-knop` (de tekstknop die het menu opent), `.menu-sluiten` (de tekstknop die het sluit), `.menu-kop` (de bovenste rij in de popover), `.menu-voet` (de contactlinks onderin)
+1. `.pagina-kop` (de koprij), `.navigatie` (de zes items in de koprij), `.indicator` (de haarlijn onder het actieve item), `.kop-rechts` (klok en de CTA, vanaf 1024 px één rij), `.cta` (de link "Bespreek je idee" in de kop)
+2. `.menu` (de popover), `.menu-knop` (de tekstknop die het menu opent), `.menu-sluiten` (de tekstknop die het sluit), `.menu-kop` (de bovenste rij in de popover), `.menu-voet` (de aanvraagknop en de contactlinks onderin)
 3. `.contactrij` (de onderste rij, voorheen `.contact`), `.klok` (plaatsnaam met tijd, voorheen `.plaats`)
-4. `.binnenkort` (de middelste rij van een sectiepagina)
+4. `.binnenkort` (de middelste rij van een sectiepagina), `.contactpagina` (de middelste rij van `/contact`)
 
 ### Data-attributen
 
@@ -254,7 +254,7 @@ Waar een token en een groep dezelfde naam zouden krijgen, staat er een koppeltek
 
 1. `transition:persist="licht | klok | contactrij"` op de drie elementen die blijven staan
 2. `transition:name="menu-indicator"` op de haarlijn onder het actieve item
-3. `transition:name="statement | binnenkort | verdwaald"` op de middelste rij van respectievelijk de voorpagina, een sectiepagina en de 404
+3. `transition:name="statement | binnenkort | verdwaald | contact"` op de middelste rij van respectievelijk de voorpagina, een sectiepagina, de 404 en `/contact`
 
 ### Lokale custom properties
 

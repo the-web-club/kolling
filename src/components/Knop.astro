@@ -1,0 +1,88 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'gevuld' | 'omlijnd';
+  type?: 'button' | 'submit';
+  disabled?: boolean;
+  huidig?: boolean;
+}
+
+const { href, variant = 'gevuld', type = 'button', disabled = false, huidig = false } = Astro.props;
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  class="knop"
+  data-variant={variant}
+  href={href}
+  type={href ? undefined : type}
+  disabled={href ? undefined : disabled}
+  aria-current={huidig ? 'page' : undefined}
+>
+  <slot />
+</Tag>
+
+<style>
+  .knop {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: var(--knop-hoogte);
+    padding-inline: var(--knop-padding-inline);
+    font-family: var(--tekst-lopend-familie);
+    font-size: var(--knop-grootte);
+    font-weight: var(--knop-gewicht);
+    letter-spacing: var(--knop-spatiering);
+    text-transform: uppercase;
+    text-decoration-line: none;
+    border: var(--k-rand-haarlijn) solid transparent;
+    border-radius: var(--knop-radius);
+    cursor: pointer;
+  }
+
+  .knop[data-variant='gevuld'] {
+    color: var(--knop-gevuld-voorgrond);
+    background-color: var(--knop-gevuld-achtergrond);
+  }
+
+  .knop[data-variant='omlijnd'] {
+    color: var(--knop-omlijnd-voorgrond);
+    background-color: transparent;
+    border-color: var(--knop-omlijnd-rand);
+  }
+
+  .knop:active {
+    opacity: 0.8;
+  }
+
+  .knop:disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .knop {
+      transition:
+        color var(--beweging-hover),
+        background-color var(--beweging-hover),
+        border-color var(--beweging-hover);
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .knop[data-variant='gevuld']:hover {
+      background-color: var(--knop-gevuld-achtergrond-hover);
+    }
+
+    .knop[data-variant='omlijnd']:hover {
+      color: var(--knop-gevuld-voorgrond);
+      background-color: var(--knop-gevuld-achtergrond);
+    }
+  }
+
+  @media print {
+    .knop {
+      display: none;
+    }
+  }
+</style>
