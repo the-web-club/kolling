@@ -458,3 +458,5 @@ Gecontroleerd in `astro dev`: de koprijlink, de footerlink en de menuknop komen 
 2. **KvK-nummer.** Nog `[VUL IN]` in `site.json`. De microregel voegt het er zelf bij zodra het bekend is.
 3. **Licentiefonts.** Mint Grotesk en Apercu vervangen Instrument Sans en Work Sans met één tokenwijziging plus twee bestanden in `public/fonts`. De metrische correcties op de terugvalstack horen dan opnieuw bepaald te worden.
 4. **Lighthouse.** Meten op de productie-URL, volgens `docs/DEPLOY.md`.
+
+De één-scherm-eis is vervallen; pagina's scrollen.

@@ -1,5 +1,6 @@
-/* Beweging volgens 70-motion.mdc. Eén scherm, dus geen IntersectionObserver:
-   de choreografie loopt op animation-delay. */
+/* Beweging volgens 70-motion.mdc. De choreografie op animation-delay geldt
+   voor wat bij het laden in beeld staat. Onder de vouw wacht een element met
+   data-wacht tot onthul.ts data-in-beeld zet. */
 
 :root {
   --onthul-weging: var(--binnenkomst-factor);
@@ -69,6 +70,44 @@
     animation-delay: calc(var(--onthul-vertraging, 0ms) * var(--onthul-weging));
   }
 
+  [data-js] [data-wacht]:not([data-in-beeld]),
+  [data-js] [data-wacht]:not([data-in-beeld]) > span,
+  [data-js] [data-wacht]:not([data-in-beeld]) .afbeelding {
+    animation: none;
+  }
+
+  [data-js] [data-wacht]:not([data-in-beeld])[data-onthul='omhoog'] {
+    opacity: 0;
+    translate: 0 var(--k-beweging-afstand-md);
+  }
+
+  [data-js] [data-wacht]:not([data-in-beeld])[data-onthul='fade'] {
+    opacity: 0;
+  }
+
+  [data-js] [data-wacht]:not([data-in-beeld])[data-onthul='gordijn'] {
+    clip-path: inset(0 0 var(--k-beweging-afstand-masker) 0);
+  }
+
+  [data-js] [data-wacht]:not([data-in-beeld])[data-onthul='gordijn'] .afbeelding {
+    scale: var(--k-beweging-schaal-onthul);
+  }
+
+  [data-js] [data-wacht]:not([data-in-beeld])[data-onthul='lijn'] {
+    scale: 0 1;
+    transform-origin: left center;
+  }
+
+  [data-js] [data-wacht]:not([data-in-beeld])[data-onthul-regel] > span {
+    translate: 0 110%;
+  }
+
+  [data-js] [data-wacht][data-in-beeld],
+  [data-js] [data-wacht][data-in-beeld] > span,
+  [data-js] [data-wacht][data-in-beeld] .afbeelding {
+    animation-delay: 0s;
+  }
+
   /* De items in het menu komen onder een masker omhoog zodra de popover van
      display: none naar display: grid gaat. */
   [data-menu]:popover-open li {
@@ -132,6 +171,12 @@
   [data-js] [data-onthul],
   [data-js] [data-onthul-regel] > span {
     animation: verschijn 200ms linear both;
+  }
+
+  [data-js] [data-wacht]:not([data-in-beeld]),
+  [data-js] [data-wacht]:not([data-in-beeld]) > span {
+    animation: none;
+    opacity: 0;
   }
 
   [data-menu],

@@ -197,20 +197,6 @@ const huidigPad = Astro.url.pathname;
     }
   }
 
-  @container scherm (max-height: 600px) {
-    ul a {
-      font-size: var(--menu-grootte-kort);
-    }
-  }
-
-  /* Een liggende telefoon is te laag voor zes regels van 44 px. De lijst gaat
-     daar in twee kolommen, in dezelfde leesrichting. */
-  @container scherm (max-height: 480px) {
-    ul {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
   @media (min-width: 1024px) {
     .menu-knop {
       display: none;

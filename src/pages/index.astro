@@ -133,7 +133,6 @@ const bronnenKlein = await maakBronnen({
      statement; de planken staan daar niet. */
   .statement :global(.beeld-groot) {
     --beeld-vertraging: var(--binnenkomst-beeld-groot);
-    --beeld-max-hoogte: var(--beeld-band-hoogte);
     grid-column: 1 / -1;
   }
 
@@ -141,98 +140,19 @@ const bronnenKlein = await maakBronnen({
     display: none;
   }
 
-  /* De band krijgt de hoogte die na kop, bijschrift en intro overblijft, met
-     de bandhoogte als bovengrens. Een vaste blokhoogte van 26vh telt de
-     layoutviewport; de pagina is svh. Met de browserbalk open past die hoogte
-     niet en schuift het bijschrift over de kop. De foto vult daarom de rij en
-     krimpt mee. De negatieve marge heft de rijafstand op, zodat de band de
-     kop raakt. */
-  @container scherm (max-width: 1023.98px) and (min-height: 481px) {
+  /* De band raakt de kop. Op een telefoon loopt de foto tot de schermrand;
+     het bijschrift blijft in de kolom, op de padding van de pagina. */
+  @container scherm (max-width: 1023.98px) {
     .statement {
-      grid-template-rows: minmax(0, 1fr) auto auto;
-      min-block-size: 0;
       margin-block-start: calc(-1 * var(--ruimte-rij-md));
-    }
-
-    h1 {
-      grid-row: 2;
-    }
-
-    .intro {
-      grid-row: 3;
-    }
-
-    /* Flex, niet een vaste rij: de foto groeit tot de bandhoogte en krimpt
-       zodra kop en contact de rest vragen. De vrije hoogte blijft onder het
-       bijschrift. Zonder min-block-size: 0 houdt de automatische
-       minimumhoogte het kader op zijn volle maat. */
-    .statement :global(.beeld.beeld-groot) {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      grid-row: 1;
-      min-block-size: 0;
-    }
-
-    /* De verhouding bepaalt de uitsnede, niet de rijhoogte. De afbeelding
-       draagt geen intrinsieke maat bij, anders houdt het kader de 3:2 aan. */
-    .statement :global(.beeld-groot > picture) {
-      --beeld-verhouding-liggend: auto;
-      position: relative;
-      flex: 1 1 0px;
-      min-block-size: 0;
-      max-block-size: var(--beeld-max-hoogte);
-      overflow: hidden;
-    }
-
-    .statement :global(.beeld-groot > picture > .afbeelding) {
-      position: absolute;
-      inset: 0;
     }
   }
 
-  /* Op een telefoon loopt de foto tot de schermrand. Het bijschrift blijft in
-     de kolom, op de padding van de pagina. */
-  @container scherm (max-width: 767.98px) and (min-height: 481px) {
+  @container scherm (max-width: 767.98px) {
     .statement :global(.beeld-groot > picture) {
       inline-size: calc(100% + 2 * var(--pagina-padding));
       max-inline-size: none;
       margin-inline: calc(-1 * var(--pagina-padding));
-    }
-  }
-
-  /* Een staande telefoon meet met de browserbalk vaak onder 780 px. De band
-     hoort daar wel. Alleen een liggend scherm is te laag. In de rechterkolom
-     kost het beeld geen hoogte; daar is 512 px de ondergrens. */
-  @container scherm (max-width: 1023.98px) and (max-height: 480px) {
-    .statement :global(.beeld-groot) {
-      display: none;
-    }
-  }
-
-  /* Op een smal scherm onder 620 px blijft er geen band over. De kop schuift
-     dan naar de eerste rij, anders houdt de lege band de tekst omlaag. */
-  @container scherm (max-width: 354px) and (max-height: 619px) {
-    .statement {
-      grid-template-rows: auto auto;
-    }
-
-    h1 {
-      grid-row: 1;
-    }
-
-    .intro {
-      grid-row: 2;
-    }
-
-    .statement :global(.beeld.beeld-groot) {
-      display: none;
-    }
-  }
-
-  @container scherm (min-width: 1024px) and (max-height: 511px) {
-    .statement :global(.beeld-groot) {
-      display: none;
     }
   }
 
@@ -245,14 +165,10 @@ const bronnenKlein = await maakBronnen({
     .intro {
       grid-column: 2 / span 8;
     }
-
-    .statement :global(.beeld-groot) {
-      --beeld-max-hoogte: var(--beeld-band-hoogte-breed);
-    }
   }
 
   /* Vanaf 1024 px staat het statement op de linkerhelft en het dressoir in de
-     rechterkolom, met de hoogte van de middelste rij als bovengrens. */
+     rechterkolom. De planken liggen eronder, met beide randen op een rasterlijn. */
   @media (min-width: 1024px) {
     .statement {
       grid-template-rows: auto 1fr auto;
@@ -272,17 +188,12 @@ const bronnenKlein = await maakBronnen({
     }
 
     .statement :global(.beeld-groot) {
-      --beeld-max-hoogte: var(--beeld-hoogte-kolom);
       grid-column: 9 / span 4;
       grid-row: 1 / -1;
       align-self: end;
       margin-block-end: var(--beeld-rand-onder);
     }
-  }
 
-  /* Subgrid houdt beide randen van de planken op een rasterlijn: het beeld op
-     kolom 2 en 3, het bijschrift op 4 en 5. */
-  @container scherm (min-width: 1024px) and (min-height: 820px) {
     .statement :global(.beeld-klein) {
       --beeld-vertraging: var(--binnenkomst-beeld-klein);
       display: grid;
@@ -296,40 +207,6 @@ const bronnenKlein = await maakBronnen({
     .statement :global(.beeld-klein > picture),
     .statement :global(.beeld-klein > .bijschrift) {
       grid-column: span 2;
-    }
-  }
-
-  /* Korte schermen: typografie en afstanden één stap kleiner, zodat de pagina
-     nooit hoeft te scrollen. De tweede stap vangt een liggende telefoon op. */
-  @container scherm (max-height: 704px) {
-    h1 {
-      font-size: min(var(--tekst-display-kort-grootte), var(--cap));
-      line-height: var(--tekst-display-kort-regelhoogte);
-      letter-spacing: var(--tekst-display-kort-spatiering);
-    }
-
-    .intro {
-      font-size: var(--tekst-lopend-grootte);
-    }
-
-    .statement {
-      gap: var(--ruimte-stapel-md) var(--ruimte-goot);
-    }
-  }
-
-  @container scherm (max-height: 480px) {
-    h1 {
-      font-size: min(var(--tekst-kop3-grootte), var(--cap));
-      line-height: var(--tekst-kop3-regelhoogte);
-      letter-spacing: var(--tekst-kop3-spatiering);
-    }
-
-    .intro {
-      font-size: var(--tekst-klein-grootte);
-    }
-
-    .statement {
-      gap: var(--ruimte-stapel-sm) var(--ruimte-goot);
     }
   }
 </style>

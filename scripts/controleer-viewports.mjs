@@ -10,16 +10,17 @@ const SCHERMEN = [
   [320, 568],
   [360, 800],
   [375, 667],
+  [390, 844],
   [393, 852],
   [412, 915],
   [430, 932],
   [768, 1024],
   [844, 390],
+  [1440, 900],
 ];
 
 function meetInPagina(selectoren) {
   const breedte = window.innerWidth;
-  const hoogte = window.innerHeight;
   const wortel = document.documentElement;
   const regels = [...document.querySelectorAll('h1 .regel')];
   const zelfdeRegel =
@@ -32,7 +33,6 @@ function meetInPagina(selectoren) {
 
   return {
     teBreed: wortel.scrollWidth > breedte,
-    teHoog: wortel.scrollHeight > hoogte,
     zelfdeRegel,
     uitstekers,
   };
@@ -81,7 +81,6 @@ async function controleer(browser, scherm, beweging, pad) {
 
   const problemen = [];
   if (meting.teBreed) problemen.push('scrollWidth');
-  if (meting.teHoog) problemen.push('scrollHeight');
   if (meting.zelfdeRegel) problemen.push('regels op een regel');
   problemen.push(...meting.uitstekers);
   return problemen;

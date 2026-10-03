@@ -108,11 +108,14 @@ const website = maakWebsite(instellingen, Astro.site);
     <LichtAchtergrond />
     <slot />
     <script>
+      import { startOnthullen } from '@/lib/beweging/onthul';
       import { koppelPaginaovergang } from '@/lib/beweging/paginaovergang';
       import { koppelThema } from '@/lib/thema';
 
       koppelPaginaovergang();
       koppelThema();
+      startOnthullen();
+      document.addEventListener('astro:page-load', startOnthullen);
     </script>
   </body>
 </html>

@@ -12,7 +12,7 @@ Beweging laat zien dat iets met aandacht is gemaakt. Ze trekt nooit de aandacht 
 
 1. Binnenkomst van de pagina: alleen de hero, direct bij het laden, zonder op JavaScript te wachten. CSS-animatie met `var(--beweging-binnenkomst-hero)`.
 2. Paginaovergang: crossfade via `ClientRouter`. `PaginaKop` en `PaginaVoet` blijven staan met `transition:persist`.
-3. Onthullen bij scrollen: `data-onthul` op een element, gezet door `src/lib/beweging/onthul.ts` via `IntersectionObserver`.
+3. Onthullen bij scrollen: alles onder de vouw via `src/lib/beweging/onthul.ts` met `IntersectionObserver`. De choreografie op `animation-delay` blijft alleen voor wat bij het laden in beeld staat.
 4. Scroll-gestuurde beweging: parallax binnen een beeldkader via `data-parallax`, en de band met haarlijn die na acht pixels scrollen onder `PaginaKop` verschijnt. De kop is op alle apparaten sticky en altijd zichtbaar; hij verbergt zich nooit.
 5. Hover en focus: per component, in de scoped CSS van dat component.
 
@@ -34,7 +34,7 @@ Beweging laat zien dat iets met aandacht is gemaakt. Ze trekt nooit de aandacht 
 
 `data-onthul-groep` zet de stagger aan voor directe kinderen, maximaal vier per groep, met `var(--k-beweging-trap-basis)`. `data-onthul-vertraging` verschuift één element, in stappen van de trap-token.
 
-De drempel is 15 procent zichtbaar. Een element dat bij het laden al in beeld staat, onthult direct zonder vertraging.
+De drempel is 15 procent zichtbaar. Wat bij het laden al in beeld staat, houdt de choreografie op `animation-delay`. Alles daaronder onthult eenmalig via de observer.
 
 ## Hover
 

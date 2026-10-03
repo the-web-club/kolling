@@ -121,9 +121,10 @@ Tailwind `@theme inline` (namespace Engels, naam Nederlands): `--color-voorgrond
 4. `data-variant="gevuld | omlijnd"` (knop)
 5. `data-onthul="omhoog | regels | gordijn | lijn"`, `data-onthul-groep`, `data-onthul-vertraging`
 6. `data-in-beeld` (gezet door `onthul.ts`)
-7. `data-parallax` op `Beeld`
-8. `data-gescrold` op `<html>` als fallback voor de header-haarlijn
-9. `data-plaatshouder` op voorbeeldprojecten
+7. `data-wacht` (onder de vouw, tot `onthul.ts` `data-in-beeld` zet)
+8. `data-parallax` op `Beeld`
+9. `data-gescrold` op `<html>` als fallback voor de header-haarlijn
+10. `data-plaatshouder` op voorbeeldprojecten
 
 ## Env-variabelen
 

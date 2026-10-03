@@ -66,38 +66,27 @@
   line-gap-override: 0%;
 }
 
-/* De site is nu één scherm. Deze regels gaan weg zodra de volledige site
-   terugkomt; die scrollt wel.
-   clip, niet hidden: een element dat breder is dan het scherm mag de
-   scrollbreedte niet oprekken. Doet het dat wel, dan zoomen iOS en Samsung
-   uit en mist de telefoon de smalle indeling. */
+/* Een korte pagina houdt de voet onderaan. Een langere pagina scrolt.
+   max-inline-size houdt een te breed element binnen het scherm, zodat iOS en
+   Samsung niet uitzoomen en de smalle indeling missen. */
 html,
 body {
-  block-size: 100%;
   max-inline-size: 100%;
-  overflow: clip;
-  overflow-x: clip;
-  overscroll-behavior: none;
 }
 
-/* svh is de hoogte mét browserbalk. Een media query en dvh meten op iPhone en
-   Samsung de hogere layoutviewport, zodat de pagina de indeling van een hoger
-   scherm kreeg en de onderkant achter de balk viel. Hoogtegrenzen vragen de
-   container, want die meet deze hoogte. */
 body {
-  block-size: 100dvh;
-  block-size: 100svh;
-  container: scherm / size;
+  min-block-size: 100svh;
+  container: scherm / inline-size;
 }
 
-/* Elke pagina is hetzelfde scherm: koprij, middelste rij, contactrij. De
-   koprij draagt zelf haar bovenpadding, zodat ze bij het scrollen op haar
+/* Koprij, middelste rij, contactrij. De middelste rij vult wat overblijft.
+   De koprij draagt zelf haar bovenpadding, zodat ze bij het scrollen op haar
    rustpositie blijft plakken in plaats van naar de bovenrand te verspringen. */
 .pagina {
   display: grid;
   grid-template-rows: auto 1fr auto;
   gap: var(--ruimte-rij-md);
-  block-size: 100%;
+  min-block-size: 100svh;
   inline-size: 100%;
   min-inline-size: 0;
   max-inline-size: min(100%, var(--maat-container));
@@ -118,12 +107,6 @@ body {
   .pagina {
     padding-inline: var(--pagina-padding-breed);
     padding-block-end: var(--pagina-padding-breed);
-  }
-}
-
-@container scherm (max-height: 704px) {
-  .pagina {
-    gap: var(--ruimte-stapel-md);
   }
 }
 

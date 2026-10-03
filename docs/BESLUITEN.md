@@ -8,6 +8,10 @@ De opdracht staat in `docs/STARTPROMPT.md`. Hieronder staat waar deze implementa
 
 Op deze branch zijn daarom ook de Vercel-adapter, het `astro:env`-schema, zod en Vitest weggehaald. Zonder server-route is er geen adapter nodig en worden er geen functies gebouwd. Ze komen met de volledige site terug. De punten hieronder blijven gelden voor die site.
 
+## Scrollen
+
+De één-scherm-eis is vervallen; pagina's scrollen.
+
 ## Techniek
 
 1. Astro 7 met pnpm, TypeScript strict en Node 22. De startprompt liet de versie open.

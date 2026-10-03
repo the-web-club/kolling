@@ -98,31 +98,4 @@ const beschrijving =
       font-size: min(var(--tekst-display-grootte), var(--binnenkort-cap-breed));
     }
   }
-
-  @container scherm (max-height: 704px) {
-    h1 {
-      font-size: min(var(--tekst-display-kort-grootte), var(--binnenkort-cap-breed));
-      line-height: var(--tekst-display-kort-regelhoogte);
-      letter-spacing: var(--tekst-display-kort-spatiering);
-    }
-
-    .intro {
-      font-size: var(--tekst-lopend-grootte);
-    }
-  }
-
-  @container scherm (max-height: 480px) {
-    .binnenkort {
-      gap: var(--ruimte-stapel-sm) var(--ruimte-goot);
-    }
-
-    h1 {
-      font-size: min(var(--tekst-kop3-grootte), var(--binnenkort-cap-breed));
-      line-height: var(--tekst-kop3-regelhoogte);
-    }
-
-    .intro {
-      font-size: var(--tekst-klein-grootte);
-    }
-  }
 </style>
