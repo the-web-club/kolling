@@ -436,6 +436,14 @@ Gemeten in de preview: achtergrond `#20201f` en voorgrond `#f3f1ec` in het donke
 
 De pagina blijft één scherm. Onder de microregel bleef 18 px over op 320 × 568, 16 px op 390 × 844, 27 px op 768 × 1024, en de knop viel binnen het venster op 844 × 390, 1440 × 900 en 1920 × 1080.
 
+## Telefoonweergave
+
+`display: block` op de twee regelspans stond in de query voor `prefers-reduced-motion: no-preference`. Met verminderde beweging bleven de spans inline. Astro haalt de witruimte ertussen weg, dus de kop werd "meubelsuit Ommen." `text-wrap: nowrap` maakte daar één onbreekbare regel van, breder dan de telefoon. iOS Safari en Samsung Internet rekken de layoutviewport dan op, ook met `overflow: clip`, en Menu, de microregel en de haarlijn vallen buiten beeld.
+
+`display: block` staat nu buiten die query, zonder `data-js`. De kop mag afbreken (`min-inline-size: 0`, `overflow-wrap: anywhere`). `html` en `body` blijven binnen `100%`. De haarlijn gebruikt de paginapadding in plaats van `100vw` en stopt bij de rand van de pagina. In de linkerkolom van de contactrij, van 360 tot 768 px, staat `ruimte.stapel.md` tussen "Bezoek op afspraak" en "Volg het werk".
+
+`pnpm test:viewports` is schoon. `/` en `/collectie`, acht viewports (320×568, 360×800, 375×667, 393×852, 412×915, 430×932, 768×1024, 844×390), elk met `reduce` en `no-preference`: geen `scrollWidth` of `scrollHeight` voorbij het venster, de twee kopregels niet op dezelfde regel, en kop, intro, contactrij en microregel binnen de rechterrand.
+
 ## Wat open staat
 
 1. **Woordmerk als SVG.** Het huidige `d-logo.svg` is een export met een ingesloten bitmap van 1065 px breed en een luminantiemasker. `pnpm og` rendert daaruit `woordmerk.png` op 480 px, het OG-beeld en het favicon. Een echte outline-SVG maakt die stap onnodig en is scherper op elk formaat.

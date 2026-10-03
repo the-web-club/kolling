@@ -8,3 +8,4 @@ dist/
 src/assets/fonts/licensed/
 docs/FEITENCHECK.md
 .DS_Store
+.playwright/

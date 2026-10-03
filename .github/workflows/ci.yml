@@ -34,3 +34,20 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: Chromium voor de viewportcontrole
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Viewports
+        run: |
+          pnpm preview &
+          preview_pid=$!
+          trap 'kill "$preview_pid"' EXIT
+          for i in $(seq 1 30); do
+            if curl -sf http://127.0.0.1:4321 >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+          curl -sf http://127.0.0.1:4321 >/dev/null
+          pnpm test:viewports
