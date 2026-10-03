@@ -179,7 +179,7 @@ const bronnenKlein = await maakBronnen({
     .statement :global(.beeld-groot > picture) {
       --beeld-verhouding-liggend: auto;
       position: relative;
-      flex: 1 1 0;
+      flex: 1 1 0px;
       min-block-size: 0;
       max-block-size: var(--beeld-max-hoogte);
       overflow: hidden;
@@ -206,6 +206,26 @@ const bronnenKlein = await maakBronnen({
      kost het beeld geen hoogte; daar is 512 px de ondergrens. */
   @container scherm (max-width: 1023.98px) and (max-height: 480px) {
     .statement :global(.beeld-groot) {
+      display: none;
+    }
+  }
+
+  /* Op een smal scherm onder 620 px blijft er geen band over. De kop schuift
+     dan naar de eerste rij, anders houdt de lege band de tekst omlaag. */
+  @container scherm (max-width: 354px) and (max-height: 619px) {
+    .statement {
+      grid-template-rows: auto auto;
+    }
+
+    h1 {
+      grid-row: 1;
+    }
+
+    .intro {
+      grid-row: 2;
+    }
+
+    .statement :global(.beeld.beeld-groot) {
       display: none;
     }
   }
