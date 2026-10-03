@@ -1,10 +1,10 @@
 ---
-description: Copy, contentmodel, feitencheck en SEO zonder doorway abuse
-globs: src/content/**,src/pages/**,src/lib/seo.ts,src/lib/jsonld.ts
+description: Copy, contentmodel, feitencheck, SEO en GEO (vindbaarheid in zoekmachines en AI-antwoordmachines) zonder doorway abuse
+globs: src/content/**,src/pages/**,src/components/Seo.astro,src/components/JsonLd.astro,src/lib/seo.ts,src/lib/jsonld.ts,public/**,vercel.json
 alwaysApply: false
 ---
 
-# Content en SEO
+# Content, SEO en GEO
 
 ## Copy
 
@@ -28,20 +28,52 @@ De stem, de toon en de redactieregels staan in `80-copy.mdc`. Dat bestand is lei
 3. Voor lancering is die lijst leeg of bewust geaccepteerd.
 4. Twijfel je of iets een feit is, dan is het een bewering.
 
-## SEO
+## Eén adres per pagina
 
-1. Unieke `title` van maximaal 60 tekens met suffix " | Kolling". Unieke `description` van 140 tot 160 tekens.
-2. Absolute canonical op elke pagina. `lang="nl"`. Eén `og:image`.
-3. Alt-teksten beschrijven wat er te zien is. Bij een plaatshouder beschrijft de alt-tekst het beeld dat gaat komen.
-4. Interne links zijn gewone crawlbare `<a href>`. Geen navigatie via JavaScript.
-5. De sitemap bevat uitsluitend indexeerbare pagina's en wordt uit de content opgebouwd, niet met de hand.
-6. `noindex` voor `/design-system`, `/bedankt`, plaatshouderprojecten en niet-gepubliceerde locaties.
-7. Preview-deployments (`VERCEL_ENV=preview`) zijn volledig `noindex` met een afschermende `robots.txt`. Productie erft dat nooit.
+1. De canonieke host is `https://kolling.nl`, zonder `www`. `www.kolling.nl` antwoordt met een 308 naar dezelfde URL op de apex, ingesteld op hostniveau bij Vercel, nooit alleen met een canonical-tag.
+2. Geen trailing slash, behalve de homepage (`https://kolling.nl/`). `trailingSlash: 'never'` in Astro en de redirect van `/pad/` naar `/pad` bij Vercel horen bij elkaar; controleer beide.
+3. Canonical, `og:url`, de URL in de sitemap en de URL in structured data zijn op elke pagina letterlijk gelijk.
+4. Elke pagina heeft precies één indexeerbare URL. Querystrings zoals `?aanvraag=editie` canonicaliseren naar het pad zonder query.
+
+## Metadata
+
+1. Unieke `title` van maximaal 60 tekens: onderwerp en plaats eerst, dan de suffix " | Kolling". Unieke `description` van 140 tot 160 tekens die het antwoord geeft, niet de vraag herhaalt.
+2. Absolute canonical op elke pagina. `lang="nl"`, `og:locale` `nl_NL`, `og:site_name` "Kolling".
+3. `robots`: `index, follow, max-snippet:-1, max-image-preview:large` op indexeerbare pagina's; `noindex, follow` op de rest. Nooit `nofollow` op productie.
+4. Eén `og:image` per pagina, 1200 bij 630, met `og:image:alt`; standaard de site-brede, specifiek waar de pagina een eigen beeld heeft.
+5. Alt-teksten beschrijven wat er te zien is. Bij een plaatshouder beschrijft de alt-tekst het beeld dat gaat komen.
+6. Interne links zijn gewone crawlbare `<a href>`. Geen navigatie via JavaScript, geen links in `onclick`.
+7. Favicon in maten die Google toont: `favicon.svg`, `favicon.ico` van 48px en een PNG van 96px, plus `apple-touch-icon.png` van 180px.
+
+## Indexeren
+
+1. De sitemap bevat uitsluitend indexeerbare pagina's met `lastmod` en wordt uit de content en de routes opgebouwd, met dezelfde controle als de `robots`-meta van de pagina zelf. Nooit met de hand.
+2. `robots.txt` noemt de sitemap, staat alles toe wat indexeerbaar is en sluit `/api/` uit.
+3. `noindex` voor `/design-system`, `/bedankt`, de 404, "Binnenkort"-pagina's zonder inhoud, plaatshouderprojecten en niet-gepubliceerde locaties.
+4. Preview-deployments (`VERCEL_ENV=preview`) zijn volledig `noindex` met een afschermende `robots.txt` en zonder sitemap. Productie erft dat nooit; controleer na elke productiedeploy `robots.txt` en één canonical.
+5. De 404 antwoordt met statuscode 404, niet met een 200 die "niet gevonden" toont.
 
 ## Structured data
 
-1. `LocalBusiness` en `WebSite` vanuit `instellingen/site.json`. `BreadcrumbList` op onderliggende pagina's. `FAQPage` waar vragen staan.
-2. Alleen bekende feiten. Geen `geo` tot de coördinaten bevestigd zijn, geen `aggregateRating`, geen reviews, geen `Product` of `Offer` zolang er geen edities zijn.
+1. Op elke pagina `LocalBusiness` en `WebSite` uit `instellingen/site.json`, met een vast `@id` zodat alle pagina's naar dezelfde entiteit verwijzen. Daarnaast per pagina een `WebPage` (of `ContactPage`, `AboutPage`, `CollectionPage`) met `isPartOf` naar de `WebSite` en `about` naar de `LocalBusiness`.
+2. `Person` voor Thomas Kolling met `jobTitle` "Meubelmaker", `worksFor` naar de `LocalBusiness` en `sameAs` naar Instagram, zodra `/over` bestaat.
+3. `BreadcrumbList` op onderliggende pagina's. `FAQPage` alleen waar de vragen zichtbaar op de pagina staan.
+4. Alleen bekende feiten. Geen `geo` tot de coördinaten bevestigd zijn, geen `aggregateRating`, geen reviews, geen `Product` of `Offer` zolang er geen edities zijn, geen `openingHours` zolang bezoek op afspraak is.
+5. Wat `[VUL IN]` is in `site.json`, bestaat niet in de structured data. De code laat een onbekend veld weg in plaats van iets te verzinnen.
+6. Alle structured data gaat na elke wijziging door de Rich Results Test en de Schema Markup Validator.
+
+## GEO: vindbaar en citeerbaar voor AI-antwoordmachines
+
+1. Entiteit eerst. Overal dezelfde naam voor dezelfde dingen: "Kolling" (het bedrijf), "Thomas Kolling, meubelmaker in Ommen" (de maker), "de werkplaats aan de Strangeweg in Ommen" (de plek). Geen varianten, geen afkortingen.
+2. Elke indexeerbare pagina begint met een kernalinea van 40 tot 70 woorden die in volledige zinnen zegt wie, wat, waar en voor wie, zonder voornaamwoorden in de eerste zin. Dit is de alinea die een antwoordmachine citeert; hij staat in de HTML, niet in een afbeelding en niet achter JavaScript.
+3. Vragen worden geformuleerd zoals mensen ze stellen ("Wat kost een eettafel op maat bij Kolling?") en het antwoord staat in de eerste twee zinnen, 40 tot 60 woorden, feitelijk. Alleen vragen die Thomas heeft bevestigd (feitencheck).
+4. Feiten die geciteerd kunnen worden, staan één keer en consequent: adres, telefoon, werkgebied, materialen, oplages, levertijden. Als een feit verandert, verandert het op één plek (`site.json` of het contentbestand) en overal tegelijk.
+5. `/llms.txt` beschrijft de site in Markdown: naam, één regel wat Kolling is en waar, de indexeerbare pagina's met één regel uitleg per pagina, contactgegevens. Gegenereerd uit dezelfde bron als de sitemap.
+6. AI-crawlers mogen de site lezen. `robots.txt` blokkeert geen `GPTBot`, `OAI-SearchBot`, `ClaudeBot`, `Claude-SearchBot`, `PerplexityBot`, `Google-Extended` of `Applebot-Extended`. Dit is een bewust besluit in `docs/BESLUITEN.md`; wie het terugdraait, documenteert waarom.
+7. Bing telt mee: Copilot en ChatGPT zoeken via de Bing-index. Bing Webmaster Tools is ingericht en nieuwe of gewijzigde pagina's worden via IndexNow aangemeld (sleutelbestand in `public/`, aanmelding na een productiedeploy).
+8. Actualiteit is zichtbaar: `dateModified` in `WebPage` komt uit de laatste wijziging van de bron en staat ook leesbaar op nieuws- en projectpagina's.
+9. Beeld heeft tekst: elke projectfoto heeft een alt-tekst en een bijschrift met materiaal, maat en jaar, zodat ook het werk zelf citeerbaar is.
+10. Geen trucs: geen verborgen tekst voor bots, geen keyword-lijsten, geen nepvragen, geen door AI gegenereerde reviews of quotes. Wat een antwoordmachine citeert, moet Thomas kunnen onderschrijven.
 
 ## Lokale SEO zonder doorway abuse
 
@@ -49,3 +81,9 @@ De stem, de toon en de redactieregels staan in `80-copy.mdc`. Dat bestand is lei
 2. `/werkgebied/ommen` is zelfstandig nuttig: werkplaatsadres, bezoek, mogelijkheden, aanpak van een aanvraag en praktische vragen. Geen homepage met een plaatsnaam erin.
 3. Geen reeks vergelijkbare plaatspagina's. Het schema van `locaties` dwingt af dat een locatie eigen secties, eigen logistiek en eigen vragen heeft voordat ze gepubliceerd mag worden.
 4. Een nieuwe locatiepagina komt er alleen als er echte, plaatsgebonden inhoud is.
+5. NAP (naam, adres, telefoon) is op de site, in Google Business Profile, op Instagram en in elke vermelding letterlijk gelijk aan `site.json`.
+
+## Controle
+
+1. `pnpm test:seo` controleert op de gebouwde site: één H1 per pagina, titellengte, descriptionlengte, canonical gelijk aan `og:url`, `noindex` op de juiste pagina's en nergens anders, sitemap zonder `noindex`-pagina's, `robots.txt` met sitemap-regel, geldige JSON-LD op elke pagina, kernalinea aanwezig op indexeerbare pagina's.
+2. Na elke productiedeploy: `www` en trailing slash geven een 308, `robots.txt` staat open, de sitemap is bereikbaar, Lighthouse SEO minimaal 0.98.
