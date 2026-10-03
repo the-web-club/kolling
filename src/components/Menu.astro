@@ -163,16 +163,15 @@ const huidigPad = Astro.url.pathname;
   }
 
   .menu-voet {
-    display: grid;
-    grid-template-columns: auto auto;
-    justify-content: start;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     gap: var(--ruimte-stapel-sm) var(--navigatie-ruimte);
     font-size: var(--tekst-klein-grootte);
   }
 
   .menu-voet :global(.knop) {
-    grid-column: 1 / -1;
-    inline-size: 100%;
+    flex: 1 0 100%;
   }
 
   .menu-voet a:not(.knop) {

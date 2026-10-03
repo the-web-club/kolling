@@ -3,7 +3,7 @@ import { chromium } from 'playwright';
 
 const BASIS = 'http://localhost:4321';
 const MAP = '.playwright';
-const PADEN = ['/', '/collectie'];
+const PADEN = ['/', '/collectie', '/contact'];
 const BEWEGING = ['reduce', 'no-preference'];
 const SELECTOREN = ['.pagina-kop > *', 'h1', '.intro', '.contactrij', '.micro'];
 const SCHERMEN = [

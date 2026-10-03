@@ -444,6 +444,14 @@ De pagina blijft één scherm. Onder de microregel bleef 18 px over op 320 × 56
 
 `pnpm test:viewports` is schoon. `/` en `/collectie`, acht viewports (320×568, 360×800, 375×667, 393×852, 412×915, 430×932, 768×1024, 844×390), elk met `reduce` en `no-preference`: geen `scrollWidth` of `scrollHeight` voorbij het venster, de twee kopregels niet op dezelfde regel, en kop, intro, contactrij en microregel binnen de rechterrand.
 
+## Bespreek je idee bereikbaar
+
+"Bespreek je idee" gaat naar `/contact` vanaf drie plekken. In de contactrij is het kapitaallabel zelf de link. In het menu staat hij als omlijnde knop over de volle breedte, boven telefoon en Instagram. Vanaf 1024 px staat hij ook in de koprij, rechts van de klok; daaronder is de koprij vol en opent het menu hem. Op `/contact` krijgt de link in de kop `aria-current="page"` en de haarlijn.
+
+`/contact` is voorlopig één scherm: label, kop en een zin die naar de gegevens in de contactrij wijst. Het formulier staat er nog niet.
+
+Gecontroleerd in `astro dev`: de koprijlink, de footerlink en de menuknop komen alle drie op `/contact`. Op 320 × 568 past de homepage en het menu (de knop is 288 px breed, gelijk aan de menuvoet, en de onderkant van het menu valt op 568). Op 390 × 844 past `/contact` zonder scroll. Op 1024 en 1440 overlapt de koprijlink de navigatie of de klok niet.
+
 ## Wat open staat
 
 1. **Woordmerk als SVG.** Het huidige `d-logo.svg` is een export met een ingesloten bitmap van 1065 px breed en een luminantiemasker. `pnpm og` rendert daaruit `woordmerk.png` op 480 px, het OG-beeld en het favicon. Een echte outline-SVG maakt die stap onnodig en is scherper op elk formaat.
