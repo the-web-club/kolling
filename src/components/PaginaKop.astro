@@ -56,8 +56,8 @@ const { naam, adres } = await haalInstellingen();
 
 <style>
   /* Vier cellen op elke breedte: woordmerk, navigatie, klok en de knop naar het
-     menu. Onder 64 rem staan de zes items in het menu en blijft hun cel leeg;
-     vanaf 64 rem verdwijnt de knop en schuift de klok naar de rechterrand.
+     menu. Onder 1024 px staan de zes items in het menu en blijft hun cel leeg;
+     vanaf 1024 px verdwijnt de knop en schuift de klok naar de rechterrand.
 
      De rij is zo hoog als het woordmerk, zodat het aanraakdoel van 44 px van
      de knop naar het menu de kop niet hoger maakt. Het overschot valt in de
@@ -141,13 +141,13 @@ const { naam, adres } = await haalInstellingen();
     color: var(--kleur-voorgrond-gedempt);
   }
 
-  @media (max-width: 22.4375rem) {
+  @media (max-width: 359.98px) {
     .klok {
       display: none;
     }
   }
 
-  @media (min-width: 48rem) {
+  @media (min-width: 768px) {
     .pagina-kop {
       grid-template-rows: var(--merk-hoogte-breed);
     }
@@ -161,7 +161,7 @@ const { naam, adres } = await haalInstellingen();
     }
   }
 
-  @media (min-width: 64rem) {
+  @media (min-width: 1024px) {
     .pagina-kop {
       grid-template-columns: auto 1fr auto;
     }

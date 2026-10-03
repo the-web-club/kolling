@@ -160,7 +160,7 @@ const microregel = isBekend(instellingen.kvk)
   /* Twee kolommen zodra het past, zodat de voet een rij korter wordt en er
      ruimte vrijkomt voor het beeld. De leesvolgorde blijft de DOM-volgorde:
      werkplaats, contact, Instagram. */
-  @media (min-width: 22.5rem) and (max-width: 47.9375rem) {
+  @media (min-width: 360px) and (max-width: 767.98px) {
     .blokken {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -181,7 +181,7 @@ const microregel = isBekend(instellingen.kvk)
     }
   }
 
-  @media (min-width: 48rem) {
+  @media (min-width: 768px) {
     .blokken {
       gap: var(--pagina-blok-ruimte-breed) var(--ruimte-goot);
     }
@@ -199,7 +199,7 @@ const microregel = isBekend(instellingen.kvk)
     }
   }
 
-  @media (max-height: 44rem) {
+  @container scherm (max-height: 704px) {
     .blokken {
       gap: var(--ruimte-5) var(--ruimte-goot);
     }
@@ -209,7 +209,7 @@ const microregel = isBekend(instellingen.kvk)
     }
   }
 
-  @media (max-height: 30rem) {
+  @container scherm (max-height: 480px) {
     .contactrij {
       gap: var(--ruimte-stapel-md);
     }

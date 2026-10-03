@@ -61,14 +61,14 @@ import { paginaovergang } from '@/lib/beweging/paginaovergang';
     color: var(--kleur-voorgrond-gedempt);
   }
 
-  @media (min-width: 48rem) {
+  @media (min-width: 768px) {
     h1,
     .intro {
       grid-column: 2 / span 8;
     }
   }
 
-  @media (max-height: 44rem) {
+  @container scherm (max-height: 704px) {
     h1 {
       font-size: var(--tekst-kop2-grootte);
       line-height: var(--tekst-kop2-regelhoogte);
@@ -79,7 +79,7 @@ import { paginaovergang } from '@/lib/beweging/paginaovergang';
     }
   }
 
-  @media (max-height: 30rem) {
+  @container scherm (max-height: 480px) {
     h1 {
       font-size: var(--tekst-kop3-grootte);
     }

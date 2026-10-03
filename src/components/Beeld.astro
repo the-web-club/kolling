@@ -16,9 +16,9 @@ interface Props {
   class?: string;
 }
 
-// Gelijk aan primitief.schermbreedte.lg. Een media-querygrens kan geen
-// CSS-variabele zijn; dat is de uitzondering uit 10-design-system.
-const DESKTOP = '(min-width: 64rem)';
+// Gelijk aan primitief.schermbreedte.lg bij 16px. Een media-querygrens kan
+// geen CSS-variabele zijn, en rem schuift mee met de systeemlettergrootte.
+const DESKTOP = '(min-width: 1024px)';
 
 const {
   beeld,
@@ -166,7 +166,7 @@ const toelichting = staart.join(',').trim();
     color: var(--kleur-voorgrond-gedempt);
   }
 
-  @media (max-width: 63.9375rem) {
+  @media (max-width: 1023.98px) {
     picture[data-verhouding-mobiel='liggend'] {
       aspect-ratio: var(--beeld-verhouding-liggend);
     }

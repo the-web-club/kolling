@@ -16,7 +16,7 @@ const statement = ['Houtwerken & meubels', 'uit Ommen.'];
 const intro =
   'Op maat gemaakt in eigen werkplaats aan de Strangeweg. De website volgt. Een idee bespreken kan nu al.';
 
-const MATEN_GROOT = '(min-width: 64rem) 34vw, 100vw';
+const MATEN_GROOT = '(min-width: 1024px) 34vw, 100vw';
 const MATEN_KLEIN = '16vw';
 const BREEDTES_KLEIN = [320, 480];
 
@@ -127,7 +127,7 @@ const bronnenKlein = await maakBronnen({
      van de scoped CSS van deze pagina. Het pad erheen blijft beperkt tot de
      middelste rij.
 
-     Het dressoir is tot 64 rem een band over de volle breedte boven het
+     Het dressoir is tot 1024 px een band over de volle breedte boven het
      statement; de planken staan daar niet. */
   .statement :global(.beeld-groot) {
     --beeld-vertraging: var(--binnenkomst-beeld-groot);
@@ -141,8 +141,9 @@ const bronnenKlein = await maakBronnen({
 
   /* De band krijgt de hoogte die na kop en intro overblijft, met de bandhoogte
      als bovengrens. Daarmee kan hij de pagina niet langer maken dan het scherm,
-     hoe vaak de tekst ook afbreekt. */
-  @media (max-width: 63.9375rem) and (min-height: 48.75rem) {
+     hoe vaak de tekst ook afbreekt. De container is de zichtbare hoogte, niet
+     de layoutviewport. */
+  @container scherm (max-width: 1023.98px) and (min-height: 780px) {
     .statement {
       grid-template-rows: minmax(0, 1fr) auto auto;
       min-block-size: 0;
@@ -167,19 +168,19 @@ const bronnenKlein = await maakBronnen({
   /* Onder 780 px blijft er te weinig over voor een band die nog een meubel
      laat zien. In de rechterkolom kost het beeld geen hoogte; daar is 512 px de
      ondergrens. Leegte is een keuze, scrollen niet. */
-  @media (max-width: 63.9375rem) and (max-height: 48.6875rem) {
+  @container scherm (max-width: 1023.98px) and (max-height: 779.98px) {
     .statement :global(.beeld-groot) {
       display: none;
     }
   }
 
-  @media (min-width: 64rem) and (max-height: 31.9375rem) {
+  @container scherm (min-width: 1024px) and (max-height: 511px) {
     .statement :global(.beeld-groot) {
       display: none;
     }
   }
 
-  @media (min-width: 48rem) {
+  @media (min-width: 768px) {
     h1 {
       --cap: var(--statement-cap-breed);
       grid-column: 2 / span 10;
@@ -194,9 +195,9 @@ const bronnenKlein = await maakBronnen({
     }
   }
 
-  /* Vanaf 64 rem staat het statement op de linkerhelft en het dressoir in de
+  /* Vanaf 1024 px staat het statement op de linkerhelft en het dressoir in de
      rechterkolom, met de hoogte van de middelste rij als bovengrens. */
-  @media (min-width: 64rem) {
+  @media (min-width: 1024px) {
     .statement {
       grid-template-rows: auto 1fr auto;
     }
@@ -225,7 +226,7 @@ const bronnenKlein = await maakBronnen({
 
   /* Subgrid houdt beide randen van de planken op een rasterlijn: het beeld op
      kolom 2 en 3, het bijschrift op 4 en 5. */
-  @media (min-width: 64rem) and (min-height: 51.25rem) {
+  @container scherm (min-width: 1024px) and (min-height: 820px) {
     .statement :global(.beeld-klein) {
       --beeld-vertraging: var(--binnenkomst-beeld-klein);
       display: grid;
@@ -244,7 +245,7 @@ const bronnenKlein = await maakBronnen({
 
   /* Korte schermen: typografie en afstanden één stap kleiner, zodat de pagina
      nooit hoeft te scrollen. De tweede stap vangt een liggende telefoon op. */
-  @media (max-height: 44rem) {
+  @container scherm (max-height: 704px) {
     h1 {
       font-size: min(var(--tekst-display-kort-grootte), var(--cap));
       line-height: var(--tekst-display-kort-regelhoogte);
@@ -260,7 +261,7 @@ const bronnenKlein = await maakBronnen({
     }
   }
 
-  @media (max-height: 30rem) {
+  @container scherm (max-height: 480px) {
     h1 {
       font-size: min(var(--tekst-kop3-grootte), var(--cap));
       line-height: var(--tekst-kop3-regelhoogte);

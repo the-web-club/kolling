@@ -98,6 +98,7 @@ const huidigPad = Astro.url.pathname;
     display: grid;
     gap: var(--ruimte-rij-md);
     max-block-size: 100dvh;
+    max-block-size: 100svh;
     overflow-y: auto;
   }
 
@@ -173,7 +174,7 @@ const huidigPad = Astro.url.pathname;
     text-decoration-line: underline;
   }
 
-  @media (min-width: 48rem) {
+  @media (min-width: 768px) {
     .menu {
       padding-inline: var(--pagina-padding-breed);
       padding-block-end: var(--pagina-padding-breed);
@@ -188,7 +189,7 @@ const huidigPad = Astro.url.pathname;
     }
   }
 
-  @media (max-height: 37.5rem) {
+  @container scherm (max-height: 600px) {
     ul a {
       font-size: var(--menu-grootte-kort);
     }
@@ -196,13 +197,13 @@ const huidigPad = Astro.url.pathname;
 
   /* Een liggende telefoon is te laag voor zes regels van 44 px. De lijst gaat
      daar in twee kolommen, in dezelfde leesrichting. */
-  @media (max-height: 30rem) {
+  @container scherm (max-height: 480px) {
     ul {
       grid-template-columns: 1fr 1fr;
     }
   }
 
-  @media (min-width: 64rem) {
+  @media (min-width: 1024px) {
     .menu-knop {
       display: none;
     }

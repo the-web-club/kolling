@@ -22,7 +22,7 @@ const huidigPad = Astro.url.pathname;
 
 <style>
   /* De navigatie kent haar plek in het raster van PaginaKop: de middelste cel,
-     en alleen vanaf 64 rem. Daaronder staan de items in het menu. */
+     en alleen vanaf 1024 px. Daaronder staan de items in het menu. */
   .navigatie {
     --onthul-vertraging: var(--binnenkomst-kop);
     display: none;
@@ -75,7 +75,7 @@ const huidigPad = Astro.url.pathname;
     }
   }
 
-  @media (min-width: 64rem) {
+  @media (min-width: 1024px) {
     .navigatie {
       display: block;
       grid-column: 2;

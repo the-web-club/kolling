@@ -87,7 +87,7 @@ const beschrijving =
     color: var(--kleur-voorgrond-gedempt);
   }
 
-  @media (min-width: 48rem) {
+  @media (min-width: 768px) {
     .label,
     h1,
     .intro {
@@ -99,7 +99,7 @@ const beschrijving =
     }
   }
 
-  @media (max-height: 44rem) {
+  @container scherm (max-height: 704px) {
     h1 {
       font-size: min(var(--tekst-display-kort-grootte), var(--binnenkort-cap-breed));
       line-height: var(--tekst-display-kort-regelhoogte);
@@ -111,7 +111,7 @@ const beschrijving =
     }
   }
 
-  @media (max-height: 30rem) {
+  @container scherm (max-height: 480px) {
     .binnenkort {
       gap: var(--ruimte-stapel-sm) var(--ruimte-goot);
     }
